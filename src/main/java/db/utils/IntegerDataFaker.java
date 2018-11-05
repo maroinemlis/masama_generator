@@ -7,18 +7,17 @@ package db.utils;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class IntegerDataFaker extends DataFaker {
 
     private int from;
     private int to;
 
-    public IntegerDataFaker(String from, String to, int howMuch, boolean unique, String generatorDataType, String specificType) {
-        super(from, to, howMuch, unique, generatorDataType, specificType);
-        this.from = Integer.parseInt(from);
-        this.to = Integer.parseInt(to);
-
+    public IntegerDataFaker() {
+        super();
+        this.from = Integer.parseInt(super.from);
+        this.to = Integer.parseInt(super.from);
     }
 
     @Override

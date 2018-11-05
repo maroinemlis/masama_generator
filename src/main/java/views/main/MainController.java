@@ -5,14 +5,12 @@ package views.main;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import views.main.mViews.AddView;
-import views.main.mViews.InetializerView;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
-import db.bean.SQLSchema;
-import db.bean.Table;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,7 +18,6 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -32,7 +29,6 @@ import javafx.scene.layout.VBox;
  */
 public class MainController implements Initializable {
 
-    SQLSchema schema;
     @FXML
     private Pane idPane;
     @FXML
@@ -55,7 +51,6 @@ public class MainController implements Initializable {
     private Spinner<Integer> spinerNbrIntegerNulls1;
     @FXML
     private JFXComboBox<String> comboBoxValeuOfString;
-
     @FXML
     private TableView<?> tableContain;
     @FXML
@@ -68,14 +63,10 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // configuer the spiner
-        InetializerView initInetializerView = new InetializerView();
-        initInetializerView.initializeSpiner(spinerNbrTuples, 0, 20000000, DefaultValue.NUMBER_LINE_TO_GENERATE);
-
-        // configuer the Combobox // this code it will exute only when chose String tab
-        initInetializerView.initializeCombobox(comboBoxValeuOfString, DefaultValue.TYPE_OF_CHAR);
-        comboBoxValeuOfString.getSelectionModel().selectFirst();
-
+        try {
+        } catch (Exception ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML

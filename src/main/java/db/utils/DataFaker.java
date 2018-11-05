@@ -6,9 +6,11 @@
 package db.utils;
 
 import com.github.javafaker.Faker;
-import com.github.javafaker.service.RandomService;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *
@@ -18,22 +20,23 @@ public abstract class DataFaker {
 
     protected String generatorType;
     protected Faker faker;
-    protected RandomService random;
     protected boolean unique;
     protected int howMuch;
     protected String from;
     protected String to;
-
     protected String generatorDataType;
     protected String specificType;
+    protected int nullsRate;
 
-    public DataFaker(String from, String to, int howMuch, boolean unique, String generatorDataType, String specificType) {
+    public DataFaker() {
         this.faker = new Faker();
-        this.random = faker.random();
-        this.howMuch = howMuch;
-        this.unique = unique;
-        this.generatorDataType = generatorDataType;
-        this.specificType = specificType;
+        this.unique = false;
+        this.howMuch = 10;
+        this.from = "3";
+        this.to = "10";
+        this.generatorDataType = null;
+        this.specificType = null;
+        this.nullsRate = 10;
     }
 
     public abstract String generateValue();
@@ -66,28 +69,15 @@ public abstract class DataFaker {
         }
     }
 
-    public void setGeneratorType(String generatorType) {
-        this.generatorType = generatorType;
-    }
-
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
-
-    public void setHowMuch(int howMuch) {
-        this.howMuch = howMuch;
-    }
-
-    public void setFrom(String from) {
+    public void setConfiguration(String from, String to, int howMuch,
+            String generatorDataType, String specificType, int nullsRate) {
         this.from = from;
-    }
-
-    public void setTo(String to) {
         this.to = to;
-    }
-
-    public void setGeneratorDataType(String generatorDataType) {
+        this.howMuch = howMuch;
         this.generatorDataType = generatorDataType;
+        this.specificType = specificType;
+        this.nullsRate = nullsRate;
+
     }
 
 }

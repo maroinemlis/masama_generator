@@ -9,25 +9,25 @@ import java.util.ArrayList;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class DataFakerWraper {
 
     DataFaker dataFaker;
 
-    public DataFakerWraper(String dataType, String from, String to, int howMuch, boolean unique, String generatorDataType, String specificType) {
+    public DataFakerWraper(String dataType) {
         switch (dataType) {
             case "TEXT":
-                dataFaker = new TextDataFaker(from, to, howMuch, unique, generatorDataType, specificType);
+                dataFaker = new TextDataFaker();
                 break;
             case "DATE":
-                dataFaker = new DateDataFaker(from, to, howMuch, unique, generatorDataType, specificType);
+                dataFaker = new DateDataFaker();
                 break;
             case "INT":
             case "INTEGER":
             case "DOUBLE":
             case "FLOAT":
-                dataFaker = new IntegerDataFaker(from, to, howMuch, unique, generatorDataType, specificType);
+                dataFaker = new IntegerDataFaker();
                 break;
         }
     }
@@ -36,30 +36,8 @@ public class DataFakerWraper {
         return dataFaker.values();
     }
 
-    public void setGeneratorType(String generatorType) {
-        dataFaker.generatorType = generatorType;
-    }
-
-    public void setUnique(boolean unique) {
-        dataFaker.setUnique(unique);
-    }
-
-    public void setHowMuch(int howMuch) {
-        dataFaker.setHowMuch(howMuch);
-    }
-
-    public void setFrom(String from) {
-        dataFaker.setFrom(from);
-
-        dataFaker.from = from;
-    }
-
-    public void setTo(String to) {
-        dataFaker.setTo(to);
-    }
-
-    public void setGeneratorDataType(String generatorDataType) {
-        dataFaker.setGeneratorDataType(generatorDataType);
-
+    public void setConfiguration(String from, String to, int howMuch,
+            String generatorDataType, String specificType, int nullsRate) {
+        dataFaker.setConfiguration(from, to, howMuch, generatorDataType, specificType, nullsRate);
     }
 }

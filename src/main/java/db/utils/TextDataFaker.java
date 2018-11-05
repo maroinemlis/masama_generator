@@ -5,31 +5,25 @@
  */
 package db.utils;
 
-import com.github.javafaker.Address;
-import com.github.javafaker.Artist;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class TextDataFaker extends DataFaker {
 
     private int from;
     private int to;
 
-    public TextDataFaker(String from, String to, int howMuch, boolean unique, String generatorDataType, String specificType) {
-        super(from, to, howMuch, unique, generatorDataType, specificType);
-        this.from = Integer.parseInt(from);
-        this.to = Integer.parseInt(to);
+    public TextDataFaker() {
+        super();
+        this.from = Integer.parseInt(super.from);
+        this.to = Integer.parseInt(super.from);
     }
 
     @Override
     public String generateValue() {
         String str = null;
-        int length = random.nextInt(from, to);
+        int length = faker.random().nextInt(from, to);
         if (generatorDataType == null) {
             str = faker.regexify("[a-zA-Z]{" + length + "}");
 

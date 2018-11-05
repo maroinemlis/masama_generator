@@ -5,12 +5,12 @@
  */
 package db.utils;
 
-import db.bean.Attribute;
+import db.beans.Attribute;
 import java.util.List;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class StringUtil {
 

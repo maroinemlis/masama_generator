@@ -18,28 +18,42 @@ import java.sql.*;
  * An object represente an SQL Connection, it serves to get the meta data infos
  * (bdMetaDate object)
  *
- * @author tamac
+ * @author Maroine
  */
 public final class SQLConnection {
 
-    private String url = "jdbc:sqlite:";
-    private String user = "";
-    private String password = "";
+    private String url;
+    private String user;
+    private String password;
     private Connection connection;
     private static DatabaseMetaData bdMetaDate;
     private Statement stm;
 
-    public SQLConnection() throws ClassNotFoundException, SQLException, IOException {
+    private void connect() throws Exception {
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection(url, user, password);
         bdMetaDate = connection.getMetaData();
         stm = connection.createStatement();
-        executeSQLFile("");
     }
 
-    private String readFile(String path, Charset encoding)
+    public SQLConnection(String fileUrl) throws Exception {
+        this.url = "jdbc:sqlite:";
+        this.url = "";
+        this.password = "";
+        connect();
+        executeSQLFile(fileUrl);
+    }
+
+    public SQLConnection(String url, String user, String password) throws Exception {
+        this.url = url;
+        this.user = user;
+        this.password = password;
+        connect();
+    }
+
+    private String readFile(String fileUrl, Charset encoding)
             throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        byte[] encoded = Files.readAllBytes(Paths.get(fileUrl));
         return new String(encoded, encoding);
     }
 

@@ -1,0 +1,17 @@
+/*
+.split-pane:horizontal > .split-pane-divider {
+   -fx-background-color: transparent;
+}
+
+.split-pane:vertical > .split-pane-divider {
+   -fx-background-color: transparent;
+}
+*/
+.split-pane
+{
+    -fx-box-border: transparent;
+}
+
+#tabPaneDeffirentData *.tab-header-background .split-pane{
+    -fx-background-color: transparent;
+}

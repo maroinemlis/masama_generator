@@ -29,7 +29,8 @@ public class LuncherApp extends Application {
     }
     
     public void startMainInterface(Stage primaryStage)throws Exception{
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/main2.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/main2.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/main.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add("styles/main.css");
         primaryStage.setScene(scene);

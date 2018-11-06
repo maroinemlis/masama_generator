@@ -5,8 +5,11 @@
  */
 package db.bean;
 
+import db.utils.DataFaker;
+import db.utils.DateDataFaker;
+import db.utils.IntegerDataFaker;
+import db.utils.TextDataFaker;
 import java.util.ArrayList;
-import db.utils.DataFakerWraper;
 
 /**
  * A object represent a column of SQL table
@@ -22,7 +25,8 @@ public class Attribute implements Comparable<Attribute> {
     private boolean isUnique;
     private boolean isNull;
     private ArrayList<String> instances;
-    private DataFakerWraper dataFakerWraper;
+    private DataFaker dataFaker;
+    private String nullable;
 
     /**
      *
@@ -36,8 +40,22 @@ public class Attribute implements Comparable<Attribute> {
         this.isPrimary = false;
         this.isRoot = true;
         this.isUnique = false;
-        dataFakerWraper = new DataFakerWraper(dataType);
+        this.nullable = nullable;
         instances = new ArrayList<>();
+        switch (dataType) {
+            case "TEXT":
+                dataFaker = new TextDataFaker();
+                break;
+            case "DATE":
+                dataFaker = new DateDataFaker();
+                break;
+            case "INT":
+            case "INTEGER":
+            case "DOUBLE":
+            case "FLOAT":
+                dataFaker = new IntegerDataFaker();
+                break;
+        }
     }
 
     /**
@@ -96,7 +114,7 @@ public class Attribute implements Comparable<Attribute> {
 
     public void startToGenerateRootValues() {
         if (this.isRoot) {
-            this.instances = dataFakerWraper.values();
+            this.instances = dataFaker.values();
         }
     }
 
@@ -118,5 +136,10 @@ public class Attribute implements Comparable<Attribute> {
 
     public void setInstances(ArrayList<String> instances) {
         this.instances = instances;
+    }
+
+    public void setConfiguration(String from, String to, int howMuch,
+            String generatorDataType, String specificType, int nullsRate) {
+        this.dataFaker.setConfiguration(from, to, howMuch, generatorDataType, specificType, nullsRate);
     }
 }

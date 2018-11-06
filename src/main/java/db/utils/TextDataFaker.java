@@ -24,7 +24,7 @@ public class TextDataFaker extends DataFaker {
     public String generateValue() {
         String str = null;
         int length = faker.random().nextInt(from, to);
-        if (generatorDataType == null) {
+        if (generatorDataType.equals("System")) {
             str = faker.regexify("[a-zA-Z]{" + length + "}");
 
         } else {

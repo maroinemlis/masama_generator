@@ -22,3 +22,12 @@
 .json{
     -fx-graphic: url('../images/json.png');
 }
+
+.play{
+    -fx-graphic: url('../images/play.png');
+    -fx-background-size: 30px;
+}
+
+.jfx-check-box{
+    -jfx-checked-color: gray;
+}

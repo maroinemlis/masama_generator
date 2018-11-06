@@ -19,6 +19,8 @@ public class DateDataFaker extends DataFaker {
 
     public DateDataFaker() {
         super();
+        this.from = "01-01-1995";
+        this.to = "01-01-2018";
     }
 
     @Override

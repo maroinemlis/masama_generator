@@ -1,30 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="1500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="views.main.MainController">
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.main.MainController">
    <children>
-      <BorderPane layoutY="31.0" prefHeight="614.0" prefWidth="1500.0">
+      <BorderPane layoutY="31.0" prefHeight="700.0" prefWidth="1500.0">
          <top>
             <HBox prefHeight="32.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
-                  <JFXButton styleClass="folder" />
+                  <JFXButton onAction="#onOpenFile" styleClass="folder" />
                   <JFXButton styleClass="json" />
+                  <JFXButton layoutX="62.0" layoutY="10.0" styleClass="play" />
                </children>
             </HBox>
          </top>
          <left>
-            <VBox fx:id="left" prefHeight="582.0" prefWidth="385.0" BorderPane.alignment="CENTER" />
+            <VBox prefHeight="582.0" prefWidth="385.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Accordion fx:id="left" />
+               </children></VBox>
          </left>
          <center>
             <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -33,12 +39,24 @@
                     <tabs>
                       <Tab text="Configuration sur les tables">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TextField layoutX="174.0" layoutY="41.0" />
+                                    <Label layoutX="14.0" layoutY="45.0" text="Nombre des lignes" />
+                                    <TextField layoutX="174.0" layoutY="86.0" />
+                                    <Label layoutX="14.0" layoutY="90.0" text="Pourcentage des nulls" />
+                                 </children></AnchorPane>
                         </content>
                       </Tab>
                       <Tab text="Configuration sur les attributes">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="31.0" layoutY="31.0" text="Allant de" />
+                                    <Label layoutX="30.0" layoutY="82.0" text="Jusqu'à" />
+                                    <TextField layoutX="164.0" layoutY="27.0" />
+                                    <TextField layoutX="164.0" layoutY="78.0" />
+                                 </children></AnchorPane>
                         </content>
                       </Tab>
                     </tabs>
@@ -47,26 +65,11 @@
                <center>
                   <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
                     <tabs>
-                      <Tab text="Table1">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </Tab>
-                      <Tab text="Table2">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </Tab>
-                        <Tab text="Table3">
+                      <Tab fx:id="tabName" text="Table1">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              <VBox fx:id="insertTab" prefHeight="200.0" prefWidth="100.0" />
                            </content>
-                        </Tab>
-                        <Tab text="Table4">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                           </content>
-                        </Tab>
+                      </Tab>
                     </tabs>
                   </TabPane>
                </center>
@@ -77,7 +80,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="Fichier">
             <items>
-              <MenuItem mnemonicParsing="false" text="Nouveau connexion" />
+              <MenuItem mnemonicParsing="false" onAction="#onOpenFile" text="Nouveau connexion" />
                   <Menu mnemonicParsing="false" text="Exporter">
                      <items>
                         <MenuItem mnemonicParsing="false" text="Sql" />

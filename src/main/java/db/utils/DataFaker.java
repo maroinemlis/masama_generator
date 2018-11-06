@@ -8,6 +8,7 @@ package db.utils;
 import com.github.javafaker.Faker;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,31 +35,40 @@ public abstract class DataFaker {
         this.howMuch = 10;
         this.from = "3";
         this.to = "10";
-        this.generatorDataType = null;
-        this.specificType = null;
+        this.generatorDataType = "System";
+        this.specificType = "System";
         this.nullsRate = 10;
     }
 
     public abstract String generateValue();
 
-    private ArrayList<String> generateValues() {
-        ArrayList<String> keys = new ArrayList<>();
-        for (int i = 0; i < howMuch; i++) {
-            keys.add(generateValue());
+    private void generateNulls(Collection<String> values) {
+        int nulls = (nullsRate * howMuch / 100);
+        for (int i = 0; i < nulls; i++) {
+            values.add("NULL");
         }
-        return keys;
+    }
+
+    private ArrayList<String> generateValues() {
+        ArrayList<String> values = new ArrayList<>();
+        generateNulls(values);
+        for (int i = 0; i < howMuch - (nullsRate * howMuch / 100); i++) {
+            values.add(generateValue());
+        }
+        return values;
     }
 
     private ArrayList<String> generateUniqueValues() {
-        HashSet<String> keys = new HashSet<>();
+        HashSet<String> values = new HashSet<>();
+        generateNulls(values);
         for (int i = 0; i < howMuch; i++) {
             String value = null;
             do {
                 value = generateValue();
-            } while (keys.contains(value));
-            keys.add(value);
+            } while (values.contains(value));
+            values.add(value);
         }
-        return new ArrayList<>(keys);
+        return new ArrayList<>(values);
     }
 
     public ArrayList<String> values() {
@@ -77,7 +87,42 @@ public abstract class DataFaker {
         this.generatorDataType = generatorDataType;
         this.specificType = specificType;
         this.nullsRate = nullsRate;
+    }
 
+    public String getGeneratorType() {
+        return generatorType;
+    }
+
+    public Faker getFaker() {
+        return faker;
+    }
+
+    public boolean isUnique() {
+        return unique;
+    }
+
+    public int getHowMuch() {
+        return howMuch;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public String getGeneratorDataType() {
+        return generatorDataType;
+    }
+
+    public String getSpecificType() {
+        return specificType;
+    }
+
+    public int getNullsRate() {
+        return nullsRate;
     }
 
 }

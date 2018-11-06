@@ -5,6 +5,7 @@ package db.models;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import com.github.javafaker.Faker;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
@@ -42,6 +43,30 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             return JFXCheckBox;
         }
         return null;
+    }
+
+    public String getGeneratorType() {
+        return attribute.getDataFaker().getGeneratorType();
+    }
+
+    public boolean isUnique() {
+        return attribute.getDataFaker().isUnique();
+    }
+
+    public String getFrom() {
+        return attribute.getDataFaker().getFrom();
+    }
+
+    public String getTo() {
+        return attribute.getDataFaker().getTo();
+    }
+
+    public String getGeneratorDataType() {
+        return attribute.getDataFaker().getGeneratorDataType();
+    }
+
+    public String getSpecificType() {
+        return attribute.getDataFaker().getSpecificType();
     }
 
 }

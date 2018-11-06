@@ -21,7 +21,7 @@ public final class Table {
     private String tableName;
     private List<Attribute> attributes = new ArrayList();
     private PrimaryKey primaryKey = new PrimaryKey();
-    private List<ForeignKey> foreignKeys = new ArrayList<ForeignKey>();
+    private List<ForeignKey> foreignKeys = new ArrayList<>();
     private boolean rootTable = true;
     private boolean generated = false;
 
@@ -55,6 +55,10 @@ public final class Table {
      */
     public List<Attribute> getAttributes() {
         return attributes;
+    }
+
+    public List<ForeignKey> getForeignKeys() {
+        return foreignKeys;
     }
 
     public Attribute getAttribute(String name) {
@@ -154,46 +158,7 @@ public final class Table {
                 string += "\t" + foreignKeys.get(j).toString() + "\n";
             }
         }
-
         return string + ");";
-
-    }
-
-    /**
-     * Generates instances exemples for each attribtute
-     *
-     * @throws ParseException
-     */
-    public void startToGenerateInstances() throws ParseException {
-        for (Attribute a : attributes) {
-            a.startToGenerateRootValues();
-        }
-        for (ForeignKey foreignKey : foreignKeys) {
-            List<Attribute> fkTuple = foreignKey.getFkTuple();
-            List<Attribute> pkTuple = foreignKey.getPkTuple();
-            for (int i = 0; i < pkTuple.size(); i++) {
-                fkTuple.get(i).setInstances(pkTuple.get(i).getInstances());
-            }
-        }
-    }
-
-    /**
-     * Shows instances exemples for each attribtute
-     */
-    public void show() {
-        int rowNumber = attributes.get(0).getInstances().size();
-        for (int j = 0; j < rowNumber - 1; j++) {
-            String insert = "INSERT INTO " + tableName + " VALUES (";
-            int i = 0;
-            Attribute a = null;
-            for (; i < attributes.size() - 1; i++) {
-                a = attributes.get(i);
-                insert += a.getInstances().get(j) + ", ";
-            }
-            a = attributes.get(i);
-            insert += a.getInstances().get(j) + ");";
-            System.out.println(insert);
-        }
 
     }
 

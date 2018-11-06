@@ -67,18 +67,6 @@ public final class SQLSchema {
         }
     }
 
-    public void generateInstances() throws ParseException {
-        for (Table table : tables) {
-            table.startToGenerateInstances();
-        }
-    }
-
-    public void show() throws ParseException {
-        for (Table table : tables) {
-            table.show();
-        }
-    }
-
     /**
      * search table instance by its name
      *

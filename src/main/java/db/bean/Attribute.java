@@ -5,6 +5,7 @@
  */
 package db.bean;
 
+import com.github.javafaker.Faker;
 import db.utils.DataFaker;
 import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
@@ -112,8 +113,10 @@ public class Attribute implements Comparable<Attribute> {
         return name + " " + dataType;
     }
 
-    public void startToGenerateRootValues() {
+    public void startToGenerateRootValues(int howMuch, int nullsRate) {
         if (this.isRoot) {
+            this.dataFaker.setHowMuch(howMuch);
+            this.dataFaker.setNullsRate(nullsRate);
             this.instances = dataFaker.values();
         }
     }
@@ -132,6 +135,10 @@ public class Attribute implements Comparable<Attribute> {
 
     public ArrayList<String> getInstances() {
         return this.instances;
+    }
+
+    public DataFaker getDataFaker() {
+        return dataFaker;
     }
 
     public void setInstances(ArrayList<String> instances) {

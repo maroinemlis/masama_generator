@@ -125,4 +125,12 @@ public abstract class DataFaker {
         return nullsRate;
     }
 
+    public void setHowMuch(int rows) {
+        this.howMuch = rows;
+    }
+
+    public void setNullsRate(int nullsRate) {
+        this.nullsRate = nullsRate;
+    }
+
 }

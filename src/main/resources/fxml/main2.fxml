@@ -27,7 +27,7 @@
             </HBox>
          </top>
          <left>
-            <VBox prefHeight="582.0" prefWidth="385.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="668.0" prefWidth="582.0" BorderPane.alignment="CENTER">
                <children>
                   <Accordion fx:id="left" />
                </children></VBox>

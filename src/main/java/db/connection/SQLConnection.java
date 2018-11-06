@@ -38,7 +38,7 @@ public final class SQLConnection {
 
     public SQLConnection(String fileUrl) throws Exception {
         this.url = "jdbc:sqlite:";
-        this.url = "";
+        this.user = "";
         this.password = "";
         connect();
         executeSQLFile(fileUrl);

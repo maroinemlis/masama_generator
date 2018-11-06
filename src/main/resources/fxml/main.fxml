@@ -23,7 +23,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="idMainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.main.MainController">
+<BorderPane fx:id="idMainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.main.MainController">
     <top>
         <Pane prefHeight="75.0" prefWidth="1304.0" BorderPane.alignment="CENTER">
             <children>
@@ -200,7 +200,7 @@
                                 </TabPane>
                                 <Pane prefHeight="33.0" prefWidth="963.0" style="-fx-background-color: #E0E0E0;">
                                     <children>
-                                        <Label layoutX="11.0" layoutY="10.0" text="[TableName.Culomnname]" />
+                                        <Label layoutX="11.0" layoutY="10.0" text="Configuration" />
                                     </children>
                                 </Pane>
                                 <Pane layoutY="32.0" prefHeight="33.0" prefWidth="963.0" style="-fx-background-color: #d0d0d0;">
@@ -231,7 +231,7 @@
             <content>
                 <TabPane prefHeight="633.0" prefWidth="336.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                        <Tab text="Tabels">
+                        <Tab text="Tables">
                             <content>
                                 <Pane fx:id="idPaneTables" prefHeight="600.0" prefWidth="243.0">
                                     <children>

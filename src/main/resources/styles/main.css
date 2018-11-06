@@ -15,3 +15,10 @@
 #tabPaneDeffirentData *.tab-header-background .split-pane{
     -fx-background-color: transparent;
 }
+
+.folder{
+    -fx-graphic: url('../images/folder2.png');
+}
+.json{
+    -fx-graphic: url('../images/json.png');
+}

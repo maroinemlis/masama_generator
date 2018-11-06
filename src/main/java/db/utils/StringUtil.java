@@ -5,7 +5,7 @@
  */
 package db.utils;
 
-import db.beans.Attribute;
+import db.bean.Attribute;
 import java.util.List;
 
 /**

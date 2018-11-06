@@ -1,4 +1,4 @@
-package db.beans;
+package db.bean;
 
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.sql.*;

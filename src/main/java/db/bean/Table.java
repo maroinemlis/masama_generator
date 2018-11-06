@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db.beans;
+package db.bean;
 
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.sql.ResultSet;

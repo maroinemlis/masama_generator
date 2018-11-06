@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import test_classes.TestClass_amirouche;
 
 /**
  *
@@ -22,7 +23,12 @@ public class LuncherApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage)  throws Exception{
+        //new TestClass_amirouche().main();        
+        startMainInterface(primaryStage);
+    }
+    
+    public void startMainInterface(Stage primaryStage)throws Exception{
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/main2.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add("styles/main.css");
@@ -31,6 +37,5 @@ public class LuncherApp extends Application {
         primaryStage.setMaximized(true);
         primaryStage.setTitle("MASAMA Generator v1");
         primaryStage.show();
-
     }
 }

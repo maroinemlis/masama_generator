@@ -87,7 +87,9 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql");
+            
+            cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql");
+            //cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql");
             schema = new SQLSchema();
         } catch (Exception ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);

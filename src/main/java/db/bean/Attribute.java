@@ -27,13 +27,12 @@ public class Attribute implements Comparable<Attribute> {
     private boolean isNull;
     private ArrayList<String> instances;
     private DataFaker dataFaker;
-    private boolean isNullable;
+    private String nullable;
 
     /**
      *
      * @param attributeName
      * @param dataType
-     * @param nullable
      */
     public Attribute(String attributeName, String dataType, String nullable) {
         this.name = attributeName;
@@ -42,7 +41,7 @@ public class Attribute implements Comparable<Attribute> {
         this.isPrimary = false;
         this.isRoot = true;
         this.isUnique = false;
-        this.isNullable = !nullable.equals("0");
+        this.nullable = nullable;
         instances = new ArrayList<>();
         switch (dataType) {
             case "TEXT":
@@ -150,13 +149,4 @@ public class Attribute implements Comparable<Attribute> {
             String generatorDataType, String specificType, int nullsRate) {
         this.dataFaker.setConfiguration(from, to, howMuch, generatorDataType, specificType, nullsRate);
     }
-
-    public boolean isUnique() {
-        return this.isUnique;
-    }
-
-    public boolean isNullable() {
-        return isNullable;
-    }
-
 }

@@ -44,8 +44,8 @@ public class MainController implements Initializable {
 
     public void createTablesView() {
         for (Table table : schema.getTables()) {
-            TitledPane titledPane = new TitledPane(table.getTableName(), table.createTableView());
-            left.getPanes().add(titledPane);
+            //TitledPane titledPane = new TitledPane(table.getTableName(), table.createTableView());
+            //left.getPanes().add(titledPane);
         }
     }
 
@@ -58,7 +58,7 @@ public class MainController implements Initializable {
         } catch (Exception ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        createTablesView();
+        /*createTablesView();
         left.expandedPaneProperty().addListener((ObservableValue<? extends TitledPane> ov, TitledPane old_val, TitledPane new_val) -> {
             if (new_val != null) {
                 Table tableByName = schema.getTableByName(new_val.getText());
@@ -66,7 +66,7 @@ public class MainController implements Initializable {
                 insertTab.getChildren().add(tableByName.createInsertsForTable());
                 tabName.setText(tableByName.getTableName());
             }
-        });
+        });*/
     }
 
     @FXML

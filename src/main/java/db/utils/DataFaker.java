@@ -28,7 +28,6 @@ public abstract class DataFaker {
     protected String generatorDataType;
     protected String specificType;
     protected int nullsRate;
-    private boolean nullable;
 
     public DataFaker() {
         this.faker = new Faker();
@@ -39,7 +38,6 @@ public abstract class DataFaker {
         this.generatorDataType = "System";
         this.specificType = "System";
         this.nullsRate = 10;
-        this.nullable = true;
     }
 
     public abstract String generateValue();
@@ -133,10 +131,6 @@ public abstract class DataFaker {
 
     public void setNullsRate(int nullsRate) {
         this.nullsRate = nullsRate;
-    }
-
-    public boolean isNullable() {
-        return this.nullable;
     }
 
 }

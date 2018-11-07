@@ -19,13 +19,13 @@ public class TestClass_amirouche {
     public void main() throws Exception {
         SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql");
         //cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql");
-        SQLSchema schema = new SQLSchema();
         
+        SQLSchema schema = new SQLSchema();                
+        //schema.startToGenerateInstances();
         for (Table table : schema.getTables()) {            
-            table.show();
+            //System.out.println(table.getTableName());            
+            
         }
-        
-        //schema.show();
         
         
     }

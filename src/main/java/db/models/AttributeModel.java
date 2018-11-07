@@ -9,6 +9,10 @@ import com.github.javafaker.Faker;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
+import db.utils.DataFaker;
+import db.utils.DateDataFaker;
+import db.utils.IntegerDataFaker;
+import db.utils.TextDataFaker;
 
 /**
  *
@@ -21,10 +25,6 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     public AttributeModel(Attribute attribute) {
         this.attribute = attribute;
 
-    }
-
-    public String getValue() {
-        return "test";
     }
 
     public String getName() {
@@ -45,24 +45,12 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         return null;
     }
 
-    public JFXCheckBox getIsUnique() {
-        if (attribute.isUnique()) {
-            JFXCheckBox JFXCheckBox = new JFXCheckBox();
-            JFXCheckBox.setDisable(true);
-            JFXCheckBox.setSelected(true);
-            return JFXCheckBox;
-        }
-        return null;
+    public String getGeneratorType() {
+        return attribute.getDataFaker().getGeneratorType();
     }
 
-    public JFXCheckBox getIsNullable() {
-        if (attribute.isNullable()) {
-            JFXCheckBox JFXCheckBox = new JFXCheckBox();
-            JFXCheckBox.setDisable(true);
-            JFXCheckBox.setSelected(true);
-            return JFXCheckBox;
-        }
-        return null;
+    public boolean isUnique() {
+        return attribute.getDataFaker().isUnique();
     }
 
     public String getFrom() {
@@ -81,7 +69,4 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         return attribute.getDataFaker().getSpecificType();
     }
 
-    public String getInstances() {
-        return attribute.getInstances().get(0);
-    }
 }

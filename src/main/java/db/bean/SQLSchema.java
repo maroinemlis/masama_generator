@@ -34,6 +34,9 @@ public final class SQLSchema {
     public SQLSchema() throws Exception {
         GenerateTables();
         fillForeignKeysForTables();
+        for (Table t : tables) {
+            t.startToGenerateInstances();
+        }
     }
 
     /**

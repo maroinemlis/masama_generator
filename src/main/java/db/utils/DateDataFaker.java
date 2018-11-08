@@ -5,6 +5,7 @@
  */
 package db.utils;
 
+import db.bean.Attribute;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,9 +18,9 @@ public class DateDataFaker extends DataFaker {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
 
-    public DateDataFaker() {
-        super();
-        this.from = "01-01-1995";
+    public DateDataFaker(Attribute att) {
+        super(att);
+        this.from = "01-01-2015";
         this.to = "01-01-2018";
     }
 
@@ -27,7 +28,6 @@ public class DateDataFaker extends DataFaker {
     public String generateValue() {
         Date date = null;
         try {
-
             date = faker.date().between(dateFormat.parse(from), dateFormat.parse(to));
         } catch (ParseException ex) {
             return null;

@@ -5,14 +5,9 @@ package db.models;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import com.github.javafaker.Faker;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
-import db.utils.DataFaker;
-import db.utils.DateDataFaker;
-import db.utils.IntegerDataFaker;
-import db.utils.TextDataFaker;
 
 /**
  *
@@ -21,6 +16,10 @@ import db.utils.TextDataFaker;
 public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     private Attribute attribute;
+
+    public Attribute getAttribute() {
+        return attribute;
+    }
 
     public AttributeModel(Attribute attribute) {
         this.attribute = attribute;
@@ -49,24 +48,35 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         return attribute.getDataFaker().getGeneratorType();
     }
 
-    public boolean isUnique() {
-        return attribute.getDataFaker().isUnique();
-    }
-
-    public String getFrom() {
-        return attribute.getDataFaker().getFrom();
-    }
-
-    public String getTo() {
-        return attribute.getDataFaker().getTo();
-    }
-
-    public String getGeneratorDataType() {
-        return attribute.getDataFaker().getGeneratorDataType();
-    }
-
     public String getSpecificType() {
         return attribute.getDataFaker().getSpecificType();
     }
 
+    public JFXCheckBox getIsUnique() {
+        if (attribute.isUnique()) {
+            JFXCheckBox JFXCheckBox = new JFXCheckBox();
+            JFXCheckBox.setDisable(true);
+            JFXCheckBox.setSelected(true);
+            return JFXCheckBox;
+        }
+        return null;
+    }
+
+    public JFXCheckBox getIsNullable() {
+        if (attribute.isNullable()) {
+            JFXCheckBox JFXCheckBox = new JFXCheckBox();
+            JFXCheckBox.setDisable(true);
+            JFXCheckBox.setSelected(true);
+            return JFXCheckBox;
+        }
+        return null;
+    }
+
+    public void setDataType(String type) {
+        this.attribute.setDataType(type);
+    }
+
+    public String toString() {
+        return this.attribute.toString();
+    }
 }

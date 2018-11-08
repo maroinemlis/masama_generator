@@ -5,24 +5,21 @@
  */
 package db.utils;
 
+import db.bean.Attribute;
+
 /**
  *
  * @author Maroine
  */
 public class IntegerDataFaker extends DataFaker {
 
-    private int from;
-    private int to;
-
-    public IntegerDataFaker() {
-        super();
-        this.from = Integer.parseInt(super.from);
-        this.to = Integer.parseInt(super.from);
+    public IntegerDataFaker(Attribute att) {
+        super(att);
     }
 
     @Override
     public String generateValue() {
-        return faker.random().nextInt(from, to) + "";
+        return between() + "";
     }
 
 }

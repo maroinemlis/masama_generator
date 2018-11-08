@@ -6,12 +6,12 @@
 package db.utils;
 
 import com.github.javafaker.Faker;
-import java.lang.reflect.Method;
+import db.bean.Attribute;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -19,49 +19,51 @@ import java.util.TreeSet;
  */
 public abstract class DataFaker {
 
-    protected String generatorType;
     protected Faker faker;
-    protected boolean unique;
     protected int howMuch;
+    protected int nullsRate;
     protected String from;
     protected String to;
-    protected String generatorDataType;
+    protected String generatorType;
     protected String specificType;
-    protected int nullsRate;
+    protected Attribute attribute;
+    private int nullsNumber;
 
-    public DataFaker() {
+    public DataFaker(Attribute att) {
+        this.attribute = att;
         this.faker = new Faker();
-        this.unique = false;
-        this.howMuch = 10;
         this.from = "3";
-        this.to = "10";
-        this.generatorDataType = "System";
+        this.to = "100";
+        this.generatorType = "System";
         this.specificType = "System";
-        this.nullsRate = 10;
+        this.nullsNumber = (nullsRate * howMuch / 100);
+    }
+
+    protected int between() {
+        return faker.random().nextInt(Integer.parseInt(from), Integer.parseInt(to));
     }
 
     public abstract String generateValue();
 
     private void generateNulls(Collection<String> values) {
-        int nulls = (nullsRate * howMuch / 100);
-        for (int i = 0; i < nulls; i++) {
+        for (int i = 0; i < nullsNumber; i++) {
             values.add("NULL");
         }
     }
 
-    private ArrayList<String> generateValues() {
-        ArrayList<String> values = new ArrayList<>();
+    private List<String> generateValues() {
+        List<String> values = new ArrayList<>();
         generateNulls(values);
-        for (int i = 0; i < howMuch - (nullsRate * howMuch / 100); i++) {
+        for (int i = 0; i < howMuch - nullsNumber; i++) {
             values.add(generateValue());
         }
         return values;
     }
 
-    private ArrayList<String> generateUniqueValues() {
+    private List<String> generateUniqueValues() {
         HashSet<String> values = new HashSet<>();
         generateNulls(values);
-        for (int i = 0; i < howMuch; i++) {
+        for (int i = 0; i < howMuch - nullsNumber; i++) {
             String value = null;
             do {
                 value = generateValue();
@@ -71,22 +73,20 @@ public abstract class DataFaker {
         return new ArrayList<>(values);
     }
 
-    public ArrayList<String> values() {
-        if (!unique) {
-            return generateValues();
-        } else {
+    public List<String> values() {
+        if (attribute.isUnique() || attribute.isPrimary()) {
             return generateUniqueValues();
+        } else {
+            return generateValues();
         }
     }
 
-    public void setConfiguration(String from, String to, int howMuch,
-            String generatorDataType, String specificType, int nullsRate) {
+    public void setConfiguration(String from, String to,
+            String generatorType, String specificType) {
         this.from = from;
         this.to = to;
-        this.howMuch = howMuch;
-        this.generatorDataType = generatorDataType;
+        this.generatorType = generatorType;
         this.specificType = specificType;
-        this.nullsRate = nullsRate;
     }
 
     public String getGeneratorType() {
@@ -95,10 +95,6 @@ public abstract class DataFaker {
 
     public Faker getFaker() {
         return faker;
-    }
-
-    public boolean isUnique() {
-        return unique;
     }
 
     public int getHowMuch() {
@@ -113,10 +109,6 @@ public abstract class DataFaker {
         return to;
     }
 
-    public String getGeneratorDataType() {
-        return generatorDataType;
-    }
-
     public String getSpecificType() {
         return specificType;
     }
@@ -125,8 +117,8 @@ public abstract class DataFaker {
         return nullsRate;
     }
 
-    public void setHowMuch(int rows) {
-        this.howMuch = rows;
+    public void setHowMuch(int howMuch) {
+        this.howMuch = howMuch;
     }
 
     public void setNullsRate(int nullsRate) {

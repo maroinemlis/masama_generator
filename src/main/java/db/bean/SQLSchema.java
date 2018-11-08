@@ -2,7 +2,6 @@ package db.bean;
 
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.sql.*;
-import java.text.ParseException;
 import java.util.*;
 
 public final class SQLSchema {
@@ -82,4 +81,9 @@ public final class SQLSchema {
         return null;
     }
 
+    public void startToGenerateInstances() {
+        for (Table t : tables) {
+            t.startToGenerateInstances();
+        }
+    }
 }

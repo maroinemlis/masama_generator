@@ -17,9 +17,9 @@ import static db.utils.StringUtil.tupelToString;
  */
 public class ForeignKey extends Constraint {
 
-    private List<Attribute> fkTuple = new ArrayList();
+    private List<Attribute> fkTuple = new ArrayList<>();
     private Table references;
-    private List<Attribute> pkTuple = new ArrayList();
+    private List<Attribute> pkTuple = new ArrayList<>();
     private int foreignKeyNumber;
 
     /**
@@ -35,13 +35,12 @@ public class ForeignKey extends Constraint {
     /**
      * Add primary key and foreign key part of the two tupels
      *
-     * @param pkPart
-     * @param fkPart
+     * @param fkTuplePart
+     * @param pkTuplePart
      */
-    public void addToTupels(Attribute fkPart, Attribute pkPart) {
-        fkTuple.add(fkPart);
-        pkTuple.add(pkPart);
-
+    public void addToTupels(Attribute fkTuplePart, Attribute pkTuplePart) {
+        this.fkTuple.add(fkTuplePart);
+        this.pkTuple.add(pkTuplePart);
     }
 
     public List<Attribute> getFkTuple() {
@@ -58,6 +57,10 @@ public class ForeignKey extends Constraint {
      */
     public int getForeignKeyNumber() {
         return this.foreignKeyNumber;
+    }
+
+    public Table getReferences() {
+        return references;
     }
 
     @Override

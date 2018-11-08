@@ -5,31 +5,27 @@
  */
 package db.utils;
 
+import db.bean.Attribute;
+
 /**
  *
  * @author Maroine
  */
 public class TextDataFaker extends DataFaker {
 
-    private int from;
-    private int to;
-
-    public TextDataFaker() {
-        super();
-        this.from = Integer.parseInt(super.from);
-        this.to = Integer.parseInt(super.from);
+    public TextDataFaker(Attribute att) {
+        super(att);
     }
 
     @Override
     public String generateValue() {
         String str = null;
-        int length = faker.random().nextInt(from, to);
-        if (generatorDataType.equals("System")) {
+        int length = between();
+        if (generatorType.equals("System")) {
             str = faker.regexify("[a-zA-Z]{" + length + "}");
-
         } else {
             try {
-                Object result = faker.getClass().getMethod(generatorDataType, null).invoke(faker);
+                Object result = faker.getClass().getMethod(generatorType, null).invoke(faker);
                 str = result.getClass().getMethod(specificType, null).invoke(result).toString();
             } catch (Exception ex) {
             }

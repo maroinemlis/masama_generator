@@ -5,12 +5,12 @@
  */
 package db.bean;
 
-import com.github.javafaker.Faker;
 import db.utils.DataFaker;
 import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.TextDataFaker;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A object represent a column of SQL table
@@ -19,42 +19,40 @@ import java.util.ArrayList;
  */
 public class Attribute implements Comparable<Attribute> {
 
+    private boolean isRoot;
     private String name;
     private String dataType;
     private boolean isPrimary;
-    private boolean isRoot;
     private boolean isUnique;
-    private boolean isNull;
-    private ArrayList<String> instances;
+    private boolean isNullable;
+    private List<String> instances;
     private DataFaker dataFaker;
-    private String nullable;
 
     /**
      *
      * @param attributeName
      * @param dataType
+     * @param nullable
      */
     public Attribute(String attributeName, String dataType, String nullable) {
         this.name = attributeName;
         this.dataType = dataType;
-        this.isNull = false;
         this.isPrimary = false;
         this.isRoot = true;
         this.isUnique = false;
-        this.nullable = nullable;
-        instances = new ArrayList<>();
+        this.isNullable = !nullable.equals("0");
         switch (dataType) {
             case "TEXT":
-                dataFaker = new TextDataFaker();
+                dataFaker = new TextDataFaker(this);
                 break;
             case "DATE":
-                dataFaker = new DateDataFaker();
+                dataFaker = new DateDataFaker(this);
                 break;
             case "INT":
             case "INTEGER":
             case "DOUBLE":
             case "FLOAT":
-                dataFaker = new IntegerDataFaker();
+                dataFaker = new IntegerDataFaker(this);
                 break;
         }
     }
@@ -108,17 +106,16 @@ public class Attribute implements Comparable<Attribute> {
         return this.name.hashCode();
     }
 
+    /*
     @Override
     public String toString() {
         return name + " " + dataType;
     }
-
+     */
     public void startToGenerateRootValues(int howMuch, int nullsRate) {
-        if (this.isRoot) {
-            this.dataFaker.setHowMuch(howMuch);
-            this.dataFaker.setNullsRate(nullsRate);
-            this.instances = dataFaker.values();
-        }
+        dataFaker.setHowMuch(howMuch);
+        dataFaker.setNullsRate(nullsRate);
+        this.instances = dataFaker.values();
     }
 
     public boolean isPrimary() {
@@ -133,7 +130,7 @@ public class Attribute implements Comparable<Attribute> {
         this.isRoot = bool;
     }
 
-    public ArrayList<String> getInstances() {
+    public List<String> getInstances() {
         return this.instances;
     }
 
@@ -141,12 +138,15 @@ public class Attribute implements Comparable<Attribute> {
         return dataFaker;
     }
 
-    public void setInstances(ArrayList<String> instances) {
+    public void setInstances(List<String> instances) {
         this.instances = instances;
     }
 
-    public void setConfiguration(String from, String to, int howMuch,
-            String generatorDataType, String specificType, int nullsRate) {
-        this.dataFaker.setConfiguration(from, to, howMuch, generatorDataType, specificType, nullsRate);
+    public boolean isNullable() {
+        return this.isNullable;
+    }
+
+    public boolean isUnique() {
+        return this.isUnique;
     }
 }

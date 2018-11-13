@@ -22,34 +22,12 @@ import java.sql.*;
  */
 public final class SQLConnection {
 
-    private String url;
-    private String user;
-    private String password;
+    private String url = "";
+    private String user = "";
+    private String password = "";
     private Connection connection;
     private static DatabaseMetaData bdMetaDate;
     private Statement stm;
-
-    private void connect() throws Exception {
-        Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection(url, user, password);
-        bdMetaDate = connection.getMetaData();
-        stm = connection.createStatement();
-    }
-
-    public SQLConnection(String fileUrl) throws Exception {
-        this.url = "jdbc:sqlite:";
-        this.user = "";
-        this.password = "";
-        connect();
-        executeSQLFile(fileUrl);
-    }
-
-    public SQLConnection(String url, String user, String password) throws Exception {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-        connect();
-    }
 
     private String readFile(String fileUrl, Charset encoding)
             throws IOException {
@@ -70,6 +48,60 @@ public final class SQLConnection {
      */
     public static DatabaseMetaData getDatabaseMetaData() {
         return bdMetaDate;
+    }
+//type de sgbd mysql oracle derby
+    //server
+    //binary
+    //.sql text
+
+    public void connect() throws Exception {
+        connection = DriverManager.getConnection(url, user, password);
+        bdMetaDate = connection.getMetaData();
+        stm = connection.createStatement();
+    }
+
+    public void setConnexionType(String sqlType) throws Exception {
+        switch (sqlType) {
+            case "sqlite":
+                Class.forName("org.sqlite.JDBC");
+                this.url = "jdbc:sqlite:" + url;
+                break;
+            case "postgresql":
+                Class.forName("org.postgresql.Driver");
+                this.url = "jdbc:postgresql:" + url;
+                break;
+            case "mysql":
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                this.url = "jdbc:mysql:" + url;
+                break;
+            case "sqlserver":
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                this.url = "jdbc:sqlserver:" + url;
+                break;
+            case "derby":
+                Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+                this.url = "jdbc:derby:" + url;
+                break;
+        }
+    }
+
+    public SQLConnection(String url, String user, String password, String sqlType) throws Exception {
+        setConnexionType(sqlType);
+        this.user = user;
+        this.password = password;
+        connect();
+    }
+
+    public SQLConnection(String fileUrl, String sqlType, boolean isBinaryFile) throws Exception {
+        if (isBinaryFile) {
+            this.url = "//" + fileUrl;
+        }
+        setConnexionType(sqlType);
+        connect();
+        if (!isBinaryFile) {
+            this.url = "//localhost";
+            executeSQLFile(fileUrl);
+        }
     }
 
 }

@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package views.main;
+package db.utils;
 
-import java.util.ArrayList;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
@@ -16,10 +17,18 @@ import java.util.TreeMap;
  */
 public class Types {
 
-    public static TreeMap<String, List<String>> TYPES_MAPPING = new TreeMap();
-    public static List<String> TYPES;
+    public TreeMap<String, List<String>> TYPES_MAPPING = new TreeMap();
+    private static Types types = null;
 
-    public Types() {
+    public static Types getInstances() {
+        if (types == null) {
+            types = new Types();
+        }
+        return types;
+    }
+
+    private Types() {
+        TYPES_MAPPING.put("system", Arrays.asList("system"));
         TYPES_MAPPING.put("address", Arrays.asList("buildingNumber", "city", "cityName",
                 "cityPrefix", "citySuffix", "country", "countryCode", "firstName", "lastName", "latitude",
                 "longitude", "secondaryAddress", "state", "stateAbbr", "streetAddress",

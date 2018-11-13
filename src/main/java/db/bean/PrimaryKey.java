@@ -6,7 +6,7 @@
 package db.bean;
 
 import db.utils.StringUtil;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class PrimaryKey extends Constraint {
 
-    private List<Attribute> tuple = new ArrayList();
+    private List<Attribute> tuple = new LinkedList();
 
     public List<Attribute> getTuple() {
         return tuple;

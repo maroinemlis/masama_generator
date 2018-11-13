@@ -5,13 +5,14 @@ package views.main;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import com.jfoenix.controls.JFXListView;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
 import db.models.AttributeModel;
 import java.io.File;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,8 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Accordion;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -38,35 +38,29 @@ public class MainController implements Initializable {
      */
     SQLConnection cnx;
     SQLSchema schema;
+    TableView currentTable;
+    List<TableView> tables;
     @FXML
-    private VBox insertTab;
+    private Label tableNameLabel;
     @FXML
-    private Accordion left;
+    private VBox insertsVBox;
     @FXML
-    private Tab tabName;
-    @FXML
-    private TextField howMuch;
-    @FXML
-    private TextField nullsRate;
-    @FXML
-    private TextField from;
-    @FXML
-    private TextField to;
-    private Table currentTable;
-    @FXML
-    private JFXListView<String> generatorTypeList;
-    @FXML
-    private JFXListView<String> specificTypeList;
-    @FXML
-    private TextField attributeField;
-    @FXML
-    private TextField tableField;
+    private Accordion tablesAccordion;
     private AttributeModel currentAttribute;
 
+    private TableView getTableByName(String name) {
+        for (TableView t : tables) {
+            if (t.get().getTableName().equals(name)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     public void createTablesView() {
-        for (Table table : schema.getTables()) {
-            TitledPane titledPane = new TitledPane(table.getTableName(), table.getTableView());
-            left.getPanes().add(titledPane);
+        for (TableView table : tables) {
+            TitledPane titledPane = new TitledPane(table.get().getTableName(), table.getTableView());
+            tablesAccordion.getPanes().add(titledPane);
         }
     }
 
@@ -75,46 +69,31 @@ public class MainController implements Initializable {
         try {
             //cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql");
             //cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql");
-            cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test2.sql");
+            cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test2.sql", "sqlite", false);
             schema = new SQLSchema();
+            tables = schema.getTablesAsTablesView();
         } catch (Exception ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.currentTable = schema.getTables().get(0);
+        this.currentTable = tables.get(0);
         createTablesView();
-        generatorTypeList.getItems().addAll(new Types().TYPES_MAPPING.keySet());
-        generatorTypeList.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
-            specificTypeList.getItems().clear();
-            specificTypeList.getItems().addAll(Types.TYPES_MAPPING.get(n));
-        });
-
-        left.expandedPaneProperty().addListener((ObservableValue<? extends TitledPane> ov, TitledPane old_val, TitledPane new_val) -> {
+        tablesAccordion.expandedPaneProperty().addListener((ObservableValue<? extends TitledPane> ov, TitledPane old_val, TitledPane new_val) -> {
             if (new_val != null) {
-                this.currentTable = schema.getTableByName(new_val.getText());
-                int _howMuch = Integer.parseInt(this.howMuch.getText());
-                int _nullsRate = Integer.parseInt(this.nullsRate.getText());
-                insertTab.getChildren().clear();
-                tabName.setText(currentTable.getTableName());
-                tableField.setText(currentTable.getTableName());
-                if (currentTable.getInsertsView() != null) {
-                    insertTab.getChildren().add(currentTable.getInsertsView());
-                }
+                this.currentTable = getTableByName(new_val.getText());
+                refrechInserts();
                 this.currentTable.getTableView().getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
                     this.currentAttribute = n.getValue();
-                    attributeField.setText(currentAttribute.getName());
                 });
-
             }
         });
     }
 
-    @FXML
     private void onOpenFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selectionner un script sql");
         File fileUrl = fileChooser.showOpenDialog(null);
         try {
-            cnx = new SQLConnection(fileUrl.getPath());
+            cnx = new SQLConnection(fileUrl.getPath(), "sqlite", false);
             schema = new SQLSchema();
         } catch (Exception ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
@@ -125,25 +104,17 @@ public class MainController implements Initializable {
     @FXML
     private void onGenerate(ActionEvent event) {
         schema.startToGenerateInstances();
+        refrechInserts();
+
     }
 
-    @FXML
-    private void onModifiyConfig(ActionEvent event) {
-        this.currentAttribute.getAttribute().getDataFaker().setConfiguration(
-                from.getText(),
-                to.getText(),
-                generatorTypeList.getSelectionModel().getSelectedItem(),
-                specificTypeList.getSelectionModel().getSelectedItem()
-        );
-        this.currentTable.getTableView().refresh();
-    }
-
-    @FXML
-    private void onModifiyConfigTable(ActionEvent event) {
-        for (Table t : schema.getTables()) {
-            t.setHowMuch(Integer.parseInt(howMuch.getText()));
-            t.setNullsRate(Integer.parseInt(nullsRate.getText()));
+    private void refrechInserts() {
+        insertsVBox.getChildren().clear();
+        if (currentTable.getTableInserts() != null) {
+            Label l = new Label("Table : " + currentTable.get().getTableName());
+            l.setStyle("-fx-font-size:15px");
+            insertsVBox.getChildren().addAll(l, currentTable.getTableInserts()
+            );
         }
-
     }
 }

@@ -3,10 +3,12 @@ package db.bean;
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import views.main.TableView;
 
 public final class SQLSchema {
 
-    private List<Table> tables = new ArrayList<>();
+    private List<Table> tables = new LinkedList<>();
     private String name;
 
     public List<Table> getTables() {
@@ -40,7 +42,7 @@ public final class SQLSchema {
      *
      * @throws SQLException
      */
-    private void GenerateTables() throws SQLException {
+    private void GenerateTables() throws Exception {
         ResultSet rs = getDatabaseMetaData().getTables(null, null, "%", null);
         while (rs.next()) {
             String tableName = rs.getString("TABLE_NAME");
@@ -60,7 +62,7 @@ public final class SQLSchema {
      *
      * @throws SQLException
      */
-    private void fillForeignKeysForTables() throws SQLException {
+    private void fillForeignKeysForTables() throws Exception {
         for (Table table : tables) {
             table.fillForeignKeys(this);
         }
@@ -85,5 +87,9 @@ public final class SQLSchema {
         for (Table t : tables) {
             t.startToGenerateInstances();
         }
+    }
+
+    public List<TableView> getTablesAsTablesView() {
+        return tables.stream().map(t -> new TableView(t)).collect(Collectors.toList());
     }
 }

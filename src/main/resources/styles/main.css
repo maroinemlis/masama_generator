@@ -1,33 +1,459 @@
+
 /*
-.split-pane:horizontal > .split-pane-divider {
-   -fx-background-color: transparent;
-}
-
-.split-pane:vertical > .split-pane-divider {
-   -fx-background-color: transparent;
-}
+    Created on : 11 Nov, 2017, 4:42:53 AM
+    Author     : afsal villan
 */
-.split-pane
-{
-    -fx-box-border: transparent;
+
+* {
+    -fx-primary : #2A2E37;
+    -fx-secondary : #b2b2b2;
+    -fx-third : gray;
+    -fx-primarytext : black;
+    -fx-secondarytext : white;
+    -fx-blue: #1976D2;
+    -fx-red: #FF0000;
+    -fx-color-1:#1976D2;
 }
 
-#tabPaneDeffirentData *.tab-header-background .split-pane{
+.root{
+    -fx-background-color: -fx-primary;
+}
+
+.glyph-icon
+{
+    -fx-fill: -fx-primarytext;
+}
+
+.split-pane:horizontal > .split-pane-divider {
     -fx-background-color: transparent;
 }
-
-.folder{
-    -fx-graphic: url('../images/folder2.png');
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: transparent;
 }
-.json{
-    -fx-graphic: url('../images/json.png');
-}
-
-.play{
-    -fx-graphic: url('../images/play.png');
-    -fx-background-size: 30px;
+AnchorPane,BorderPane,VBox{
+    -fx-background-color: -fx-primary;
 }
 
-.jfx-check-box{
-    -jfx-checked-color: gray;
+.button{
+    -fx-text-fill: -fx-secondarytext;
+    -fx-background-color: -fx-primary;
+    -fx-font-size: 10pt;
+    -fx-background-radius:0px;
+}
+.button:hover{
+    -jfx-button-type: RAISED;
+    -fx-background-color:derive(-fx-primary, 10%);
+
+}
+
+/* Styling the slider track */
+.jfx-slider > .track {
+    -fx-background-color: derive(-fx-primary, 20%);
+}
+
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+    -fx-background-color: -fx-secondarytext;
+}
+
+/* Styling the animated thumb */
+.jfx-slider > .animated-thumb {
+    -fx-background-color: derive(-fx-primary, 20%);
+}
+
+/* Styling the slider value text inside animated thumb */
+.jfx-slider .slider-value {
+    -fx-fill: white;
+    -fx-stroke: white;
+}
+.split-menu-button .arrow-button {
+    -fx-background-color: -fx-primary ;
+}
+
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: -fx-secondary;
+}
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: -fx-secondary;
+}
+.jfx-progress-bar > .track {
+    -fx-background-color: -fx-primary;
+}
+
+.jfx-progress-bar > .bar {
+    -fx-background-color: green;
+}
+
+.text-field
+{
+    -fx-text-fill: -fx-secondarytext;
+    -fx-background-color: transparent;
+    -fx-border-color: derive(-fx-primary, 30%);
+}
+.jfx-text-field
+{
+    -fx-border-color: transparent;
+    -jfx-focus-color: -fx-secondary;
+}
+
+
+/*Login Screen Specific*/
+
+
+.wrong-credentials
+{
+    -jfx-unfocus-color: -fx-red;
+    -jfx-focus-color: -fx-red;
+}
+
+/*Main Screen CSS Styling starts here*/
+
+/*TablPane styling*/
+.tab{
+    -fx-background-color: -fx-primary;
+}
+
+.tab-header-background{
+    -fx-background-color: -fx-primary;
+}
+
+.tab-label{
+    -fx-text-fill: -fx-secondary;
+    -fx-font-size: 10pt;
+}
+
+
+.tab-main{
+    -fx-pref-height : 60;
+    -fx-max-height : 60;
+}
+
+.settings-tab{
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-padding: 5px 20px 5px 20px;
+}
+
+.settings-tab:selected{
+    -fx-background-color: -fx-secondary;
+}
+
+.settings-tab:selected .tab-label{
+    -fx-text-fill: -fx-primary;
+}
+
+.settings-tab .tab-header-background{
+    -fx-background-color: derive(-fx-primary, -50%);
+}
+/*Menu bar Styling*/
+.menu-bar{
+    -fx-base : -fx-primary;
+    -fx-background-color: -fx-primary;
+}
+
+.context-menu {
+    -fx-background-color: derive(-fx-primary, 20%);
+    -fx-text-fill: -fx-secondary;
+}
+
+.menu-item .label {
+    -fx-text-fill: -fx-secondarytext;
+}
+
+/*Hamburger Styling*/
+.jfx-hamburger-icon{
+    -fx-spacing: 7;
+}
+
+.jfx-hamburger-icon StackPane
+{
+    -fx-background-color: -fx-secondary;
+    -fx-background-radius: 5px;
+}
+
+/*Toolbar buttons*/
+.toolbar-button
+{
+    -fx-border-color: transparent;
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-background-radius: 0px;
+    -fx-border-radius: 0px;
+}
+.toolbar-button:hover
+{
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-primary;
+}
+
+.toolbar-button:hover .glyph-icon, .toolbar-button:hover .glyph-icon
+{
+    -fx-fill: -fx-primary;
+}
+
+.my-button{
+    -fx-background-color: -fx-secondary;
+}
+.my-button:hover{
+    -fx-background-color: derive(-fx-secondary, 50%);
+}
+
+
+/*Text styling*/
+.main-text
+{
+    -fx-fill: -fx-secondary;
+    -fx-font-size: 14pt;
+    -fx-text-alignment: center;
+}
+
+.submission-container{
+    -fx-background-color: derive(-fx-primary, 10%);
+}
+
+/*Dialog styling*/
+.dialog-button{
+    -fx-border-color: -fx-color-1;
+    -fx-text-fill: -fx-secondarytext;
+    -fx-border-radius: 1px;
+    -fx-background-radius: 3px;
+}
+
+.dialog-button:hover{
+    -fx-background-color: -fx-color-1;
+    -fx-border-color: derive(-fx-color-1, -20%);
+    -fx-text-fill: -fx-secondarytext;
+}
+
+.jfx-layout-actions
+{
+    -fx-hgap:8;
+}
+
+/*Chart Styling*/
+.data0.chart-pie{
+    -fx-pie-color: -fx-secondary;
+    -fx-border-color: derive(-fx-secondary, -30%);
+}
+.data1.chart-pie{
+    -fx-pie-color: derive(-fx-primary, 30%);
+    -fx-border-color: derive(-fx-primary, 30%);
+}
+.chart-pie-label
+{
+    -fx-fill : derive(-fx-secondary, -5%);
+}
+
+/*About window*/
+.about-text{
+    -fx-fill: -fx-secondary;
+}
+
+.about-button{
+    -fx-border-color: transparent;
+}
+
+/*Custom window background*/
+.custom-pane{
+    -fx-background-color: derive(-fx-primary, 5%);
+}
+/*Custom window titled-pane*/
+.tab-pane .tab, .tab-pane .tab:selected, .tab-pane .tab:focus
+{
+    -fx-background-color: -fx-primary;
+    -fx-border-color: transparent;
+
+}
+
+
+.tab:selected .tab-label,.tab:hover .tab-label {
+    -fx-text-fill: -fx-secondarytext;
+}
+.titled-pane
+{
+    -fx-text-fill: -fx-secondary;
+}
+.titled-pane:focused, .titled-pane:hover
+{
+    -fx-text-fill: -fx-secondarytext;
+}
+.titled-pane > .title {
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-secondary;
+}
+.titled-pane > .title:hover{
+    -fx-background-color: derive(-fx-primary, 30%);
+
+}
+
+.combo-box .list-cell
+{
+    -fx-background-color: transparent;
+    -fx-text-fill:white;
+}
+
+.combo-box-popup .list-view .list-cell
+{
+    -fx-background-color: derive(-fx-primary,60%);
+}
+.jfx-combo-box {
+    -jfx-focus-color:-fx-secondary;
+}
+
+/*TableView Default*/
+.tree-table-view{
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-font-size: 12px;
+    -fx-border-color: derive(-fx-secondary, -60%);
+}
+.table-view:focused, .tree-table-view:focused{
+    -fx-background-color: derive(-fx-primary, 20%);
+}
+
+.tree-table-row-cell {
+    -fx-cell-size: 80px;
+}
+.tree-table-view .column-header-background{
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-border-color: derive(-fx-primary, 10%);
+}
+.tree-table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-secondarytext;
+}
+.tree-table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: derive(-fx-primary, 10%);
+
+}
+.tree-table-view .tree-table-cell{
+    -fx-text-fill: -fx-secondarytext;
+    -fx-alignment: CENTER;
+}
+.tree-table-row-cell:focused, .tree-table-cell:focused{
+    -fx-text-fill: -fx-primary;
+}
+.tree-table-row-cell:hover, .tree-table-cell:hover{
+    -fx-background-color: derive(-fx-primary, 20%);
+}
+.tree-table-row-cell{
+    -fx-background-color: -fx-primary;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+.tree-table-column{
+    -fx-alignment: CENTER;
+}
+.tree-table-row-cell:selected {
+    -fx-background-color:derive(-fx-primary, 20%);
+    -fx-text-fill: -fx-primary;
+}
+
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background,
+.table-view > .virtual-flow > .scroll-bar:horizontal,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
+}
+.table-view > .virtual-flow > .scroll-bar > .increment-button,
+.table-view > .virtual-flow > .scroll-bar > .decrement-button {
+    -fx-text-fill: -fx-secondarytext;
+}
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb{
+    -fx-background-color: derive(-fx-primary, 60%);
+    -fx-border-color: transparent;
+    -fx-background-radius: 5em;
+}
+.table-view .filler{
+    -fx-fill: -fx-primary;
+    -fx-background-color: -fx-primary;
+}
+.table-context
+{
+    -fx-base: -fx-primary;
+}
+
+
+/*JFXDialog styling*/
+.jfx-layout-heading
+{
+    -fx-background-color: -fx-color-1;
+}
+.jfx-layout-heading .label
+{
+    -fx-text-fill: -fx-secondarytext;
+    -fx-font-size: 12pt;
+}
+.jfx-layout-body, .jfx-layout-actions{
+    -fx-background-color: -fx-primary;
+}
+.jfx-layout-body .label
+{
+    -fx-text-fill: -fx-secondarytext;
+    -fx-padding: 20px 0 0 0;
+}
+
+
+/*Dashboard label*/
+.not-available
+{
+    -fx-background-radius: 5px;
+    -fx-fill: derive(blue, 80%);
+    -fx-cursor: hand;
+}
+
+/*Checkbox*/
+
+.checkbox-main{
+    -fx-text-fill: -fx-secondary;
+    -jfx-checked-color: -fx-primary;
+    -fx-font-size: 10pt;
+}
+
+.jfx-check-box {
+    -jfx-checked-color: transparent;
+}
+
+/* Styling checkmark */
+.jfx-check-box .mark{
+    -fx-border-color: white;
+}
+/*Progrss bar*/
+
+.progress-bar-main .track{
+    -fx-background-color: -fx-primary;
+}
+.progress-bar-main .bar{
+    -fx-background-color: -fx-secondary;
+    -fx-padding: 5px;
+}
+
+.common-label{
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-secondary;
+    -fx-font-size: 12pt;
+}
+
+.label{
+    -fx-text-fill: derive(-fx-primary,80%);
+}
+
+.label:hover{
+    -fx-text-fill: -fx-secondarytext;
+}
+
+.list-view{
+    -fx-background-color: derive(-fx-primary,20%);
+}
+
+
+.date-picker > .text-field ,.date-picker{
+    -fx-background-color:transparent;
 }

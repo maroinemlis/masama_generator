@@ -5,19 +5,27 @@
  */
 package db.bean;
 
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXTextField;
 import db.utils.DataFaker;
 import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.TextDataFaker;
-import java.util.ArrayList;
+import db.utils.Types;
+import java.io.Serializable;
 import java.util.List;
+import javafx.scene.control.Control;
+import javafx.scene.control.DatePicker;
 
 /**
  * A object represent a column of SQL table
  *
  * @author Maroine
  */
-public class Attribute implements Comparable<Attribute> {
+public class Attribute implements Comparable<Attribute>, Serializable {
 
     private boolean isRoot;
     private String name;
@@ -27,6 +35,10 @@ public class Attribute implements Comparable<Attribute> {
     private boolean isNullable;
     private List<String> instances;
     private DataFaker dataFaker;
+    private Control fromControl;
+    private Control toControl;
+    private JFXComboBox typesCombo;
+    private JFXComboBox typesCombo2;
 
     /**
      *
@@ -44,14 +56,20 @@ public class Attribute implements Comparable<Attribute> {
         switch (dataType) {
             case "TEXT":
                 dataFaker = new TextDataFaker(this);
+                fromControl = new JFXSlider();
+                toControl = new JFXSlider();
                 break;
             case "DATE":
                 dataFaker = new DateDataFaker(this);
+                fromControl = new DatePicker();
+                toControl = new DatePicker();
                 break;
             case "INT":
             case "INTEGER":
             case "DOUBLE":
             case "FLOAT":
+                fromControl = new JFXTextField();
+                toControl = new JFXTextField();
                 dataFaker = new IntegerDataFaker(this);
                 break;
         }
@@ -126,6 +144,10 @@ public class Attribute implements Comparable<Attribute> {
         isPrimary = bool;
     }
 
+    /**
+     *
+     * @param bool
+     */
     public void isRoot(boolean bool) {
         this.isRoot = bool;
     }
@@ -148,5 +170,13 @@ public class Attribute implements Comparable<Attribute> {
 
     public boolean isUnique() {
         return this.isUnique;
+    }
+
+    public Control getFromControl() {
+        return this.fromControl;
+    }
+
+    public Control getToControl() {
+        return this.toControl;
     }
 }

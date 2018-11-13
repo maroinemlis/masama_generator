@@ -7,11 +7,10 @@ package db.utils;
 
 import com.github.javafaker.Faker;
 import db.bean.Attribute;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 
 /**
  *
@@ -26,6 +25,7 @@ public abstract class DataFaker {
     protected String to;
     protected String generatorType;
     protected String specificType;
+    protected String regex;
     protected Attribute attribute;
     private int nullsNumber;
 
@@ -34,9 +34,10 @@ public abstract class DataFaker {
         this.faker = new Faker();
         this.from = "3";
         this.to = "100";
-        this.generatorType = "System";
-        this.specificType = "System";
+        this.generatorType = "system";
+        this.specificType = "system";
         this.nullsNumber = (nullsRate * howMuch / 100);
+        this.regex = "[a-zA-Z]";
     }
 
     protected int between() {
@@ -51,8 +52,8 @@ public abstract class DataFaker {
         }
     }
 
-    private List<String> generateValues() {
-        List<String> values = new ArrayList<>();
+    private LinkedList<String> generateValues() {
+        LinkedList<String> values = new LinkedList<>();
         generateNulls(values);
         for (int i = 0; i < howMuch - nullsNumber; i++) {
             values.add(generateValue());
@@ -60,7 +61,7 @@ public abstract class DataFaker {
         return values;
     }
 
-    private List<String> generateUniqueValues() {
+    private LinkedList<String> generateUniqueValues() {
         HashSet<String> values = new HashSet<>();
         generateNulls(values);
         for (int i = 0; i < howMuch - nullsNumber; i++) {
@@ -70,10 +71,10 @@ public abstract class DataFaker {
             } while (values.contains(value));
             values.add(value);
         }
-        return new ArrayList<>(values);
+        return new LinkedList<>(values);
     }
 
-    public List<String> values() {
+    public LinkedList<String> values() {
         if (attribute.isUnique() || attribute.isPrimary()) {
             return generateUniqueValues();
         } else {

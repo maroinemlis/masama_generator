@@ -7,9 +7,11 @@ package views.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import views.helper.Helper;
 
 /**
  *
@@ -33,13 +35,9 @@ public class LuncherApp extends Application {
     }
 
     public void startMainInterface(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/main2.fxml"));
-        //Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/dialogue/saveDialogue.fxml"));
+        Parent root = Helper.getNodeComponent(this, "fxml/main3.fxml", null);
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("styles/main.css");
         primaryStage.setScene(scene);
-        //primaryStage.setResizable(true);
-        //primaryStage.setMaximized(true);
         primaryStage.setTitle("MASAMA Generator v1");
         primaryStage.show();
 

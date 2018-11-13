@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+
+
+<fx:root fx:id="tableTreeView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../styles/main.css" type="JFXTreeTableView" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="views.table.TableController">
+    <columns>
+        <TreeTableColumn fx:id="name" prefWidth="75.0" text="Nom" />
+        <TreeTableColumn fx:id="type" prefWidth="75.0" text="Type" />
+        <TreeTableColumn fx:id="primaryKey" prefWidth="75.0" text="Clé primaire" />
+        <TreeTableColumn fx:id="unique" prefWidth="75.0" text="Unique" />
+        <TreeTableColumn fx:id="nullable" prefWidth="75.0" text="Nullable" />
+        <TreeTableColumn fx:id="generatorType" prefWidth="146.0" text="Type de génération" />
+        <TreeTableColumn fx:id="from" prefWidth="65.0" text="from" />
+        <TreeTableColumn fx:id="to" prefWidth="75.0" text="to" />
+    </columns>
+</fx:root>

@@ -6,8 +6,11 @@ package db.models;
  * and open the template in the editor.
  */
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
+import db.utils.Types;
+import javafx.scene.control.Control;
 
 /**
  *
@@ -16,6 +19,8 @@ import db.bean.Attribute;
 public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     private Attribute attribute;
+    private JFXComboBox generatorTypes = new JFXComboBox();
+    private JFXComboBox specificType = new JFXComboBox();
 
     public Attribute getAttribute() {
         return attribute;
@@ -23,7 +28,11 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     public AttributeModel(Attribute attribute) {
         this.attribute = attribute;
-
+        generatorTypes.getItems().addAll(Types.getInstances().TYPES_MAPPING.keySet());
+        generatorTypes.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
+            specificType.getItems().clear();
+            specificType.getItems().addAll(Types.getInstances().TYPES_MAPPING.get(n));
+        });
     }
 
     public String getName() {
@@ -32,6 +41,11 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     public String getDataType() {
         return attribute.getDataType();
+    }
+
+    public JFXCheckBox getIsSelected() {
+        JFXCheckBox JFXCheckBox = new JFXCheckBox();
+        return JFXCheckBox;
     }
 
     public JFXCheckBox getIsPrimaryKey() {
@@ -44,12 +58,14 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         return null;
     }
 
-    public String getGeneratorType() {
-        return attribute.getDataFaker().getGeneratorType();
+    public JFXComboBox getGeneratorType() {
+        return generatorTypes;
+        // return attribute.getDataFaker().getGeneratorType();
     }
 
-    public String getSpecificType() {
-        return attribute.getDataFaker().getSpecificType();
+    public JFXComboBox getSpecificType() {
+        return specificType;
+        //return attribute.getDataFaker().getSpecificType();
     }
 
     public JFXCheckBox getIsUnique() {
@@ -72,8 +88,12 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         return null;
     }
 
-    public void setDataType(String type) {
-        this.attribute.setDataType(type);
+    public Control getFrom() {
+        return attribute.getFromControl();
+    }
+
+    public Control getTo() {
+        return attribute.getToControl();
     }
 
     public String toString() {

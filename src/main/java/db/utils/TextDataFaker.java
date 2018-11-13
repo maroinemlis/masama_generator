@@ -21,8 +21,8 @@ public class TextDataFaker extends DataFaker {
     public String generateValue() {
         String str = null;
         int length = between();
-        if (generatorType.equals("System")) {
-            str = faker.regexify("[a-zA-Z]{" + length + "}");
+        if (generatorType.equals("system")) {
+            str = faker.regexify(regex + "{" + length + "}");
         } else {
             try {
                 Object result = faker.getClass().getMethod(generatorType, null).invoke(faker);

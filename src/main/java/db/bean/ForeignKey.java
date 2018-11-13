@@ -5,9 +5,10 @@
  */
 package db.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 import static db.utils.StringUtil.tupelToString;
+import java.io.Serializable;
+import java.util.LinkedList;
 
 /**
  * An object represente a foreign key constraint for a table. constraint foreign
@@ -15,11 +16,11 @@ import static db.utils.StringUtil.tupelToString;
  *
  * @author Maroine
  */
-public class ForeignKey extends Constraint {
+public class ForeignKey implements Serializable {
 
-    private List<Attribute> fkTuple = new ArrayList<>();
+    private List<Attribute> fkTuple = new LinkedList<>();
     private Table references;
-    private List<Attribute> pkTuple = new ArrayList<>();
+    private List<Attribute> pkTuple = new LinkedList<>();
     private int foreignKeyNumber;
 
     /**

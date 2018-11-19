@@ -5,20 +5,12 @@
  */
 package db.bean;
 
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXSlider;
-import com.jfoenix.controls.JFXTextField;
 import db.utils.DataFaker;
 import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.TextDataFaker;
-import db.utils.Types;
 import java.io.Serializable;
 import java.util.List;
-import javafx.scene.control.Control;
-import javafx.scene.control.DatePicker;
 
 /**
  * A object represent a column of SQL table
@@ -35,10 +27,6 @@ public class Attribute implements Comparable<Attribute>, Serializable {
     private boolean isNullable;
     private List<String> instances;
     private DataFaker dataFaker;
-    private Control fromControl;
-    private Control toControl;
-    private JFXComboBox typesCombo;
-    private JFXComboBox typesCombo2;
 
     /**
      *
@@ -53,26 +41,22 @@ public class Attribute implements Comparable<Attribute>, Serializable {
         this.isRoot = true;
         this.isUnique = false;
         this.isNullable = !nullable.equals("0");
+
         switch (dataType) {
             case "TEXT":
                 dataFaker = new TextDataFaker(this);
-                fromControl = new JFXSlider();
-                toControl = new JFXSlider();
                 break;
             case "DATE":
                 dataFaker = new DateDataFaker(this);
-                fromControl = new DatePicker();
-                toControl = new DatePicker();
                 break;
             case "INT":
             case "INTEGER":
             case "DOUBLE":
             case "FLOAT":
-                fromControl = new JFXTextField();
-                toControl = new JFXTextField();
                 dataFaker = new IntegerDataFaker(this);
                 break;
         }
+
     }
 
     /**
@@ -124,12 +108,11 @@ public class Attribute implements Comparable<Attribute>, Serializable {
         return this.name.hashCode();
     }
 
-    /*
     @Override
     public String toString() {
         return name + " " + dataType;
     }
-     */
+
     public void startToGenerateRootValues(int howMuch, int nullsRate) {
         dataFaker.setHowMuch(howMuch);
         dataFaker.setNullsRate(nullsRate);
@@ -172,11 +155,4 @@ public class Attribute implements Comparable<Attribute>, Serializable {
         return this.isUnique;
     }
 
-    public Control getFromControl() {
-        return this.fromControl;
-    }
-
-    public Control getToControl() {
-        return this.toControl;
-    }
 }

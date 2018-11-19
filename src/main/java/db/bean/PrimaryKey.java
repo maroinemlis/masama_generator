@@ -6,6 +6,7 @@
 package db.bean;
 
 import db.utils.StringUtil;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Maroine
  */
-public class PrimaryKey extends Constraint {
+public class PrimaryKey extends Constraint implements Serializable{
 
     private List<Attribute> tuple = new LinkedList();
 

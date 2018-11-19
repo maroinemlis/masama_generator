@@ -87,7 +87,7 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         }
         return null;
     }
-
+/*
     public Control getFrom() {
         return attribute.getFromControl();
     }
@@ -95,7 +95,7 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     public Control getTo() {
         return attribute.getToControl();
     }
-
+*/
     public String toString() {
         return this.attribute.toString();
     }

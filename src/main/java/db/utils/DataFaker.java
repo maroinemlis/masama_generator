@@ -7,18 +7,17 @@ package db.utils;
 
 import com.github.javafaker.Faker;
 import db.bean.Attribute;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  *
  * @author Maroine
  */
-public abstract class DataFaker {
+abstract class DataFaker implements Serializable {
 
-    protected Faker faker;
     protected int howMuch;
     protected int nullsRate;
     protected String from;
@@ -31,7 +30,6 @@ public abstract class DataFaker {
 
     public DataFaker(Attribute att) {
         this.attribute = att;
-        this.faker = new Faker();
         this.from = "3";
         this.to = "100";
         this.generatorType = "system";
@@ -40,11 +38,11 @@ public abstract class DataFaker {
         this.regex = "[a-zA-Z]";
     }
 
-    protected int between() {
+    protected int between(Faker faker) {
         return faker.random().nextInt(Integer.parseInt(from), Integer.parseInt(to));
     }
 
-    public abstract String generateValue();
+    public abstract String generateValue(Faker faker);
 
     private void generateNulls(Collection<String> values) {
         for (int i = 0; i < nullsNumber; i++) {
@@ -55,8 +53,9 @@ public abstract class DataFaker {
     private LinkedList<String> generateValues() {
         LinkedList<String> values = new LinkedList<>();
         generateNulls(values);
+        Faker faker = new Faker();
         for (int i = 0; i < howMuch - nullsNumber; i++) {
-            values.add(generateValue());
+            values.add(generateValue(faker));
         }
         return values;
     }
@@ -64,10 +63,11 @@ public abstract class DataFaker {
     private LinkedList<String> generateUniqueValues() {
         HashSet<String> values = new HashSet<>();
         generateNulls(values);
+        Faker faker = new Faker();
         for (int i = 0; i < howMuch - nullsNumber; i++) {
             String value = null;
             do {
-                value = generateValue();
+                value = generateValue(faker);
             } while (values.contains(value));
             values.add(value);
         }
@@ -92,10 +92,6 @@ public abstract class DataFaker {
 
     public String getGeneratorType() {
         return generatorType;
-    }
-
-    public Faker getFaker() {
-        return faker;
     }
 
     public int getHowMuch() {

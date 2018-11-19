@@ -5,7 +5,9 @@
  */
 package db.utils;
 
+import com.github.javafaker.Faker;
 import db.bean.Attribute;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +16,7 @@ import java.util.Date;
  *
  * @author Maroine
  */
-public class DateDataFaker extends DataFaker {
+public class DateDataFaker extends DataFaker implements Serializable {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
 
@@ -25,7 +27,7 @@ public class DateDataFaker extends DataFaker {
     }
 
     @Override
-    public String generateValue() {
+    public String generateValue(Faker faker) {
         Date date = null;
         try {
             date = faker.date().between(dateFormat.parse(from), dateFormat.parse(to));

@@ -5,6 +5,7 @@
  */
 package db.utils;
 
+import com.github.javafaker.Faker;
 import db.bean.Attribute;
 
 /**
@@ -18,9 +19,9 @@ public class TextDataFaker extends DataFaker {
     }
 
     @Override
-    public String generateValue() {
+    public String generateValue(Faker faker) {
         String str = null;
-        int length = between();
+        int length = between(faker);
         if (generatorType.equals("system")) {
             str = faker.regexify(regex + "{" + length + "}");
         } else {

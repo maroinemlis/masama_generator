@@ -13,6 +13,7 @@ import db.bean.Attribute;
 import db.bean.Table;
 import db.models.AttributeModel;
 import db.models.InstancesModel;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
  *
  * @author tamac
  */
-public class TableView {
+public class TableView implements Serializable{
 
     private Table table;
     private JFXTreeTableView<InstancesModel> insertsView = null;

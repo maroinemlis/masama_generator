@@ -8,6 +8,9 @@ package test_classes;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
+import db.save_and_load.projecte.SaveProject;
+import db.validation.PreCondetion;
+import static db.validation.PreCondetion.CHECKED_TRUE;
 import javafx.scene.control.TitledPane;
 
 /**
@@ -15,17 +18,57 @@ import javafx.scene.control.TitledPane;
  * @author amirouche
  */
 public class TestClass_amirouche {
-
+    SQLSchema sqlSchema ;
     public void main() throws Exception {
-//        SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", true);
-        //cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql");
-
-        SQLSchema schema = new SQLSchema();
-        //schema.startToGenerateInstances();
-        for (Table table : schema.getTables()) {
-            //System.out.println(table.getTableName());
-
+        
+        SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", "sqlite", false);
+        sqlSchema = new SQLSchema();
+        //testPrecondetion();
+        testSaveProject();   
+    }
+    
+    
+    private void testSaveProject() {
+        //j'ai decomenté la method toString de Attribure
+        /*
+         j'ai suprimmer de la class DataFaker
+        *   protected Faker faker;
+        *
+         j'ai suprimmer de la class Table
+        *   private JFXTreeTableView<AttributeModel> tableView;
+        *   private SwingNode insertsView = null;        
+        *
+         j'ai suprémir (commenté)quellque line dans dans MainController
+        * cherche sur delete amirouche
+        *
+        *
+        */
+        
+        
+        sqlSchema.startToGenerateInstances();
+        SaveProject saveProject=new SaveProject(sqlSchema);
+        String path="/home/amirouche/NetBeansProjects/masama_generator/SaveProject";
+        saveProject.saveSQLSchema(path);
+        
+    }
+    
+    private void testPrecondetion() throws Exception {
+                
+        //sqlSchema.getTable("Movie").setHowMuch(9);
+        //sqlSchema.getTable("Rating").setHowMuch(10);
+       
+        PreCondetion preCondetion=new PreCondetion(sqlSchema);                
+        String msgCheck= preCondetion.checkSqlScema();        
+        if (msgCheck.equals(CHECKED_TRUE)) {            
+            System.out.println("we can generate");
+            sqlSchema.startToGenerateInstances();
+            for (Table table : sqlSchema.getTables()) {                
+                table.show();
+            }
+            
+        }else{
+            System.out.println(msgCheck);
+            //showAlertDialogue whith mesage is mesageCheck
         }
-
     }
 }

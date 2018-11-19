@@ -6,12 +6,10 @@ package views.main;
  * and open the template in the editor.
  */
 import db.bean.SQLSchema;
-import db.bean.Table;
 import db.connection.SQLConnection;
 import db.models.AttributeModel;
 import java.io.File;
 import java.net.URL;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -70,6 +68,7 @@ public class MainController implements Initializable {
             //cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql");
             //cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql");
             cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test2.sql", "sqlite", false);
+            //cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", "sqlite", false);
             schema = new SQLSchema();
             tables = schema.getTablesAsTablesView();
         } catch (Exception ex) {
@@ -77,10 +76,10 @@ public class MainController implements Initializable {
         }
         this.currentTable = tables.get(0);
         createTablesView();
-        tablesAccordion.expandedPaneProperty().addListener((ObservableValue<? extends TitledPane> ov, TitledPane old_val, TitledPane new_val) -> {
+        tablesAccordion.expandedPaneProperty().addListener((ov, old_val, new_val) -> {
             if (new_val != null) {
                 this.currentTable = getTableByName(new_val.getText());
-                refrechInserts();
+                //refrechInserts();
                 this.currentTable.getTableView().getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
                     this.currentAttribute = n.getValue();
                 });

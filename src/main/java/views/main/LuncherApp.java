@@ -6,11 +6,10 @@
 package views.main;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import test_classes.TestClass_amirouche;
 import views.helper.Helper;
 
 /**
@@ -35,7 +34,7 @@ public class LuncherApp extends Application {
     }
 
     public void startMainInterface(Stage primaryStage) throws Exception {
-        Parent root = Helper.getNodeComponent(this, "fxml/main3.fxml", null);
+        Parent root = Helper.getNodeComponent(this, "fxml/main.fxml", null);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("MASAMA Generator v1");

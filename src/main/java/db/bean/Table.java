@@ -6,6 +6,7 @@
 package db.bean;
 
 import static db.connection.SQLConnection.getDatabaseMetaData;
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  *
  * @author Maroine
  */
-public final class Table {
+public final class Table implements Serializable{
 
     private String tableName;
     private List<Attribute> attributes = new LinkedList();

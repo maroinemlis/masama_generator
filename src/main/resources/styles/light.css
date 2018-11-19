@@ -1,0 +1,9 @@
+
+.jfx-check-box {
+    -jfx-checked-color: transparent;
+}
+
+/* Styling checkmark */
+.jfx-check-box .mark{
+    -fx-border-color: green;
+}

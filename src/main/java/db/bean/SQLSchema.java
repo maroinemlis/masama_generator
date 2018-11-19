@@ -1,12 +1,13 @@
 package db.bean;
 
 import static db.connection.SQLConnection.getDatabaseMetaData;
+import java.io.Serializable;
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import views.main.TableView;
 
-public final class SQLSchema {
+public final class SQLSchema implements Serializable{
 
     private List<Table> tables = new LinkedList<>();
     private String name;

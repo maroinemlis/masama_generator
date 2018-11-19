@@ -9,17 +9,18 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import db.bean.Attribute;
-import db.utils.DataFaker;
 import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.TextDataFaker;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
+import db.utils.
 
 /**
  *
  * @author tamac
  */
+
 public class AttributeView {
 
     Attribute attribute;

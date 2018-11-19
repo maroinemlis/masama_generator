@@ -26,4 +26,15 @@ public class StringUtil {
         }
         return string + list.get(i).getName() + ")";
     }
+    
+      public String getMsgErrorKeyReferences(){
+        return "Le nombre des colonnes de clé étrangère\n"
+             + "est superieur que les clés le table reference ";
+    }
+    
+    public String messageErrorFromTo(int nbrRowsToGenerate, String from, String to) {
+        return "Le nombre de colonne demander à \ngeneré("+nbrRowsToGenerate +") "
+                + "est inférieur au nombre de \n"
+                + "possibelité dans l'intervalle donnée: ["+from+" - "+to+"]"; 
+    }
 }

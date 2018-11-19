@@ -13,7 +13,7 @@ import java.util.List;
  * @author amirouche
  */
 public class ListUtils {
-      public List<String> generateInstenceForFogeignkey(List<String> instances,int howMuch) {
+      public List<String> generateInstanceForFogeignkey(List<String> instances,int howMuch) {
         ArrayList<String> list=new ArrayList<>();
          for (int i = 0; i < howMuch; i++) {
              list.add(instances.get(i));

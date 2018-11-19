@@ -5,7 +5,6 @@
  */
 package db.utils;
 
-import db.bean.Attribute;
 import db.save_and_load.projecte.SaveProject;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,23 +22,23 @@ import java.util.logging.Logger;
  * @author amirouche
  */
 public class FileUtil {
-    
+
     public static void writeFiles(String nameFile, String strToWrite) {
         FileWriter file;
         try {
             file = new FileWriter(new File(nameFile));
-            
+
             file.write(strToWrite);
-            file.close();            
+            file.close();
         } catch (IOException ex) {
-            
+
         }
     }
-    
-    public static void writeObjectInFiles(String mPathFile, Object object) {                    
-        try (FileOutputStream fileOutputStream=new FileOutputStream(mPathFile);
-            ObjectOutputStream objectOutputStream=new ObjectOutputStream(fileOutputStream);){                        
-            objectOutputStream.writeObject(object);            
+
+    public static void writeObjectInFiles(String mPathFile, Object object) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(mPathFile);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);) {
+            objectOutputStream.writeObject(object);
         } catch (FileNotFoundException ex) {
             System.err.println("db.utils.FileUtil.writeObjectInFiles() 1");
             Logger.getLogger(SaveProject.class.getName()).log(Level.SEVERE, null, ex);
@@ -48,12 +47,13 @@ public class FileUtil {
             Logger.getLogger(SaveProject.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public Object readFilesObjec(String mPathFile) {
-        Object result=null;
-        
-        try (FileInputStream fileInputStream =new FileInputStream(mPathFile);                                
-            ObjectInputStream objectInputStream=new ObjectInputStream(fileInputStream);){                        
-            result=objectInputStream.readObject();            
+        Object result = null;
+
+        try (FileInputStream fileInputStream = new FileInputStream(mPathFile);
+                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
+            result = objectInputStream.readObject();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(SaveProject.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

@@ -287,7 +287,6 @@ AnchorPane,BorderPane,VBox{
 }
 .titled-pane > .title:hover{
     -fx-background-color: derive(-fx-primary, 30%);
-
 }
 
 .combo-box .list-cell

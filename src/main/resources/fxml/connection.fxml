@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="439.0" prefWidth="521.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.ConnectionController">
+    <children>
+        <Label layoutX="36.0" layoutY="44.0" text="Type de connection">
+            <font>
+                <Font size="14.0" />
+            </font>
+            <padding>
+                <Insets bottom="20.0" />
+            </padding>
+        </Label>
+        <JFXRadioButton fx:id="r1" layoutX="36.0" layoutY="100.0" text="Serveur base de donnée">
+            <padding>
+                <Insets bottom="20.0" />
+            </padding>
+            <toggleGroup>
+                <ToggleGroup fx:id="cnxType" />
+            </toggleGroup>
+        </JFXRadioButton>
+        <JFXRadioButton fx:id="r2" layoutX="36.0" layoutY="160.0" text="Fichier base de donnée binaire" toggleGroup="$cnxType">
+            <padding>
+                <Insets bottom="20.0" />
+            </padding>
+        </JFXRadioButton>
+        <JFXRadioButton fx:id="r3" layoutX="37.0" layoutY="220.0" text="Script SQL" toggleGroup="$cnxType">
+            <padding>
+                <Insets bottom="20.0" />
+            </padding>
+        </JFXRadioButton>
+        <HBox fx:id="file" layoutX="37.0" layoutY="330.0">
+            <children>
+                <JFXTextField fx:id="path" disable="true" editable="false" prefHeight="25.0" prefWidth="369.0" text="C:/file.sql" />
+                <JFXButton onAction="#onChose" text=" ">
+                    <graphic>
+                        <FontAwesomeIconView fill="#6cacd7" glyphName="FILE" size="20" stroke="WHITE" strokeWidth="0.0" />
+                    </graphic>
+                </JFXButton>
+            </children>
+        </HBox>
+        <JFXButton layoutX="39.0" layoutY="388.0" onAction="#onConnect" text="Connecter" />
+        <AnchorPane fx:id="auth" layoutX="248.0" layoutY="44.0" prefHeight="269.0" prefWidth="224.0">
+            <children>
+                <Label layoutX="49.0" text="Authentification">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="20.0" />
+                    </padding>
+                </Label>
+                <JFXComboBox fx:id="driver" layoutX="79.0" layoutY="56.0" prefHeight="25.0" prefWidth="99.0" promptText="none" />
+                <JFXTextField fx:id="url" layoutX="79.0" layoutY="116.0" text="localhost:19528/test" />
+                <JFXTextField fx:id="user" layoutX="79.0" layoutY="176.0" text="user" />
+                <Label layoutY="73.0" text="SQL SGBD" />
+                <Label layoutX="2.0" layoutY="133.0" text="URL" />
+                <Label layoutX="3.0" layoutY="193.0" text="Utilisateur" />
+                <JFXTextField fx:id="password" layoutX="81.0" layoutY="238.0" text="password" />
+                <Label layoutX="3.0" layoutY="251.0" text="Mot de passe" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

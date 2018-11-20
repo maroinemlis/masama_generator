@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
@@ -19,29 +18,38 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="652.0" prefWidth="1280.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.main.MainController">
     <top>
-        <HBox prefHeight="0.0" prefWidth="1280.0" spacing="10.0" BorderPane.alignment="CENTER">
+        <HBox fx:id="drag" prefHeight="0.0" prefWidth="1280.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <JFXButton alignment="CENTER" contentDisplay="TOP" prefHeight="80.0" prefWidth="100.0" styleClass="db" text="Connexion">
+                <JFXButton alignment="CENTER" contentDisplay="TOP" onAction="#onConnection" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Connexion">
                     <graphic>
-                        <FontAwesomeIconView glyphName="DATABASE" size="30" stroke="WHITE" />
+                        <FontAwesomeIconView fill="#242763" glyphName="DATABASE" size="30" stroke="WHITE" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="CENTER" contentDisplay="TOP" onAction="#onGenerate" prefHeight="80.0" prefWidth="100.0" styleClass="play" text="Génerer">
+            <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#onOpen" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Ouvrire">
+               <graphic>
+                  <FontAwesomeIconView fill="#f2ec4f" glyphName="FOLDER" size="30" stroke="WHITE" strokeWidth="0.0" />
+               </graphic>
+            </JFXButton>
+            <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="230.0" layoutY="10.0" onAction="#onSave" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Enregistrer">
+               <graphic>
+                  <FontAwesomeIconView fill="#70c1ff" glyphName="SAVE" size="30" stroke="WHITE" strokeWidth="0.0" />
+               </graphic>
+            </JFXButton>
+                <JFXButton alignment="CENTER" contentDisplay="TOP" onAction="#onGenerate" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Génerer">
                     <graphic>
-                        <FontAwesomeIconView glyphName="PLAY" size="30" stroke="WHITE" />
+                        <FontAwesomeIconView fill="#499e65" glyphName="PLAY" size="30" stroke="WHITE" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="CENTER" contentDisplay="TOP" prefHeight="80.0" prefWidth="100.0" text="Exporter">
+                <JFXButton alignment="CENTER" contentDisplay="TOP" onAction="#onExport" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Exporter">
                     <graphic>
-                        <FontAwesomeIconView glyphName="UPLOAD" size="30" stroke="WHITE" />
+                        <FontAwesomeIconView fill="#919a56" glyphName="UPLOAD" size="30" stroke="WHITE" strokeWidth="0.0" text="" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="CENTER" contentDisplay="TOP" prefHeight="80.0" prefWidth="100.0" styleClass="option" text="Option">
+                <JFXButton alignment="CENTER" contentDisplay="TOP" onAction="#onOption" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Option">
                     <graphic>
-                        <FontAwesomeIconView glyphName="COG" size="30" stroke="WHITE" />
+                        <FontAwesomeIconView fill="#edb721" glyphName="COG" size="30" stroke="#edb721" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
-                <JFXProgressBar prefHeight="15.0" prefWidth="819.0" />
             </children>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="5.0" top="5.0" />

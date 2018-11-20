@@ -62,23 +62,27 @@ public final class SQLConnection {
 
     public void setConnexionType(String sqlType) throws Exception {
         switch (sqlType) {
-            case "sqlite":
+            case "SQLite":
                 Class.forName("org.sqlite.JDBC");
                 this.url = "jdbc:sqlite:" + url;
                 break;
-            case "postgresql":
+            case "Oracle":
+                Class.forName("org.sqlite.JDBC");
+                this.url = "jdbc:sqlite:" + url;
+                break;
+            case "Postgresql":
                 Class.forName("org.postgresql.Driver");
                 this.url = "jdbc:postgresql:" + url;
                 break;
-            case "mysql":
+            case "mySQL":
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 this.url = "jdbc:mysql:" + url;
                 break;
-            case "sqlserver":
+            case "SQLServer":
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 this.url = "jdbc:sqlserver:" + url;
                 break;
-            case "derby":
+            case "Derby":
                 Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
                 this.url = "jdbc:derby:" + url;
                 break;

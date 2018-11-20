@@ -5,23 +5,21 @@
  */
 package db.utils;
 
-import com.github.javafaker.Faker;
 import db.bean.Attribute;
-import java.io.Serializable;
 
 /**
  *
  * @author Maroine
  */
-public class IntegerDataFaker extends DataFaker implements Serializable {
+public class IntegerDataFaker extends DataFaker {
 
     public IntegerDataFaker(Attribute att) {
         super(att);
     }
 
     @Override
-    public String generateValue(Faker faker) {
-        return between(faker) + "";
+    public String generateValue() {
+        return between() + "";
     }
 
 }

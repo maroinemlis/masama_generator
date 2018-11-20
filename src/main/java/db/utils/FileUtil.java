@@ -5,7 +5,7 @@
  */
 package db.utils;
 
-import db.save_and_load.projecte.SaveProject;
+import db.save_and_load.SaveProject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,7 +35,7 @@ public class FileUtil {
         }
     }
 
-    public static void writeObjectInFiles(String mPathFile, Object object) {
+    public static void writeObjectInFile(String mPathFile, Object object) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(mPathFile);
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);) {
             objectOutputStream.writeObject(object);
@@ -48,7 +48,7 @@ public class FileUtil {
         }
     }
 
-    public Object readFilesObjec(String mPathFile) {
+    public static Object readFileObject(String mPathFile) {
         Object result = null;
 
         try (FileInputStream fileInputStream = new FileInputStream(mPathFile);

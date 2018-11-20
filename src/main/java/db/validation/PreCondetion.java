@@ -114,8 +114,8 @@ public class PreCondetion {
 
     private boolean checkDate(Attribute attrebute, int nbrRowsToGenerate) throws ParseException {
         boolean result;
-        // String from= attrebute.getDataFaker().getFrom();
-        //String to = attrebute.getDataFaker().getTo();
+        String from = attrebute.getDataFaker().getFrom();
+        String to = attrebute.getDataFaker().getTo();
         int numberOfDay = numberDayBetween(from, to);
 
         if (numberOfDay >= nbrRowsToGenerate) {

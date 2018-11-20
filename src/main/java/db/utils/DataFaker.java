@@ -7,16 +7,17 @@ package db.utils;
 
 import com.github.javafaker.Faker;
 import db.bean.Attribute;
+import static db.utils.Shared.faker;
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  *
- * @author Maroine
+ * @author tamac
  */
-abstract class DataFaker implements Serializable {
+public abstract class DataFaker implements Serializable {
 
     protected int howMuch;
     protected int nullsRate;
@@ -38,11 +39,11 @@ abstract class DataFaker implements Serializable {
         this.regex = "[a-zA-Z]";
     }
 
-    protected int between(Faker faker) {
+    protected int between() {
         return faker.random().nextInt(Integer.parseInt(from), Integer.parseInt(to));
     }
 
-    public abstract String generateValue(Faker faker);
+    public abstract String generateValue();
 
     private void generateNulls(Collection<String> values) {
         for (int i = 0; i < nullsNumber; i++) {
@@ -53,9 +54,8 @@ abstract class DataFaker implements Serializable {
     private LinkedList<String> generateValues() {
         LinkedList<String> values = new LinkedList<>();
         generateNulls(values);
-        Faker faker = new Faker();
         for (int i = 0; i < howMuch - nullsNumber; i++) {
-            values.add(generateValue(faker));
+            values.add(generateValue());
         }
         return values;
     }
@@ -63,11 +63,10 @@ abstract class DataFaker implements Serializable {
     private LinkedList<String> generateUniqueValues() {
         HashSet<String> values = new HashSet<>();
         generateNulls(values);
-        Faker faker = new Faker();
         for (int i = 0; i < howMuch - nullsNumber; i++) {
             String value = null;
             do {
-                value = generateValue(faker);
+                value = generateValue();
             } while (values.contains(value));
             values.add(value);
         }
@@ -121,5 +120,4 @@ abstract class DataFaker implements Serializable {
     public void setNullsRate(int nullsRate) {
         this.nullsRate = nullsRate;
     }
-
 }

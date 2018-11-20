@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Maroine
  */
-public final class Table implements Serializable{
+public final class Table implements Serializable {
 
     private String tableName;
     private List<Attribute> attributes = new LinkedList();

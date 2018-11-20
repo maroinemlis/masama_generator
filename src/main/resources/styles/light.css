@@ -1,9 +1,73 @@
-
+*{
+    -fx-primary:rgb(244,244,244);
+    -fx-secondary:green;
+}
 .jfx-check-box {
     -jfx-checked-color: transparent;
 }
 
 /* Styling checkmark */
-.jfx-check-box .mark{
+.jfx-check-box {
     -fx-border-color: green;
+}
+
+.button{
+    -fx-background-color: -fx-primary;
+    -fx-font-size: 10pt;
+    -fx-background-radius:0px;
+}
+.button:hover{
+    -jfx-button-type: RAISED;
+}
+.normal-button{
+    -fx-background-color: -fx-secondary;
+    -fx-font-size: 10pt;
+    -fx-background-radius:0px;
+}
+.normal-button:hover{
+}
+.tree-table-view{
+    -fx-font-size: 12px;
+}
+
+.tree-table-row-cell {
+    -fx-cell-size: 80px;
+}
+.tree-table-view .column-header-background{
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-border-color: derive(-fx-primary, 10%);
+}
+.tree-table-view .column-header-background .label{
+    -fx-background-color: transparent;
+}
+.tree-table-view .column-header {
+    -fx-background-color: transparent;
+}
+.tree-table-view .tree-table-cell{
+    -fx-alignment: CENTER;
+}
+.tree-table-row-cell:focused, .tree-table-cell:focused{
+    -fx-text-fill: -fx-primary;
+}
+.tree-table-row-cell:hover, .tree-table-cell:hover{
+    -fx-background-color: derive(gray, 80%);
+}
+.tree-table-row-cell{
+    -fx-background-color: -fx-primary;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+.tree-table-column{
+    -fx-alignment: CENTER;
+}
+.tree-table-row-cell:selected {
+    -fx-text-fill: -fx-primary;
+}
+.jfx-combo-box {
+    -jfx-focus-color:-fx-secondary;
+}
+.jfx-text-field
+{
+    -fx-border-color: transparent;
+    -jfx-focus-color: -fx-secondary;
 }

@@ -7,6 +7,9 @@ package db.models;
  */
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
 import db.utils.Types;
@@ -19,8 +22,13 @@ import javafx.scene.control.Control;
 public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     private Attribute attribute;
-    private JFXComboBox generatorTypes = new JFXComboBox();
-    private JFXComboBox specificType = new JFXComboBox();
+    private JFXCheckBox isPrimaryKey = null;
+    private JFXCheckBox isUnique = null;
+    private JFXCheckBox isNullable = null;
+    private JFXComboBox generatorTypes = null;
+    private JFXComboBox specificType = null;
+    private Control from;
+    private Control to;
 
     public Attribute getAttribute() {
         return attribute;
@@ -28,11 +36,47 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     public AttributeModel(Attribute attribute) {
         this.attribute = attribute;
-        generatorTypes.getItems().addAll(Types.getInstances().TYPES_MAPPING.keySet());
-        generatorTypes.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
-            specificType.getItems().clear();
-            specificType.getItems().addAll(Types.getInstances().TYPES_MAPPING.get(n));
-        });
+        if (attribute.isUnique()) {
+            isUnique = new JFXCheckBox();
+            isUnique.setDisable(true);
+            isUnique.setSelected(true);
+        }
+        if (attribute.isPrimary()) {
+            isPrimaryKey = new JFXCheckBox();
+            isPrimaryKey.setDisable(true);
+            isPrimaryKey.setSelected(true);
+        }
+        if (attribute.isNullable()) {
+            isNullable = new JFXCheckBox();
+            isNullable.setDisable(true);
+            isNullable.setSelected(true);
+        }
+        switch (attribute.getDataType()) {
+            case "TEXT":
+                this.from = new JFXSlider(1, 255, 20);
+                this.to = new JFXSlider(1, 255, 20);
+                generatorTypes = new JFXComboBox();
+                specificType = new JFXComboBox();
+                generatorTypes.getItems().addAll(Types.getInstances().TYPES_MAPPING.keySet());
+                generatorTypes.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
+                    specificType.getItems().clear();
+                    specificType.getItems().addAll(Types.getInstances().TYPES_MAPPING.get(n));
+                });
+                break;
+            case "DATE":
+                this.from = new JFXDatePicker();
+                this.to = new JFXDatePicker();
+
+                break;
+            case "INT":
+            case "INTEGER":
+            case "DOUBLE":
+            case "FLOAT":
+
+                this.from = new JFXTextField();
+                this.to = new JFXTextField();
+                break;
+        }
     }
 
     public String getName() {
@@ -43,59 +87,36 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         return attribute.getDataType();
     }
 
-    public JFXCheckBox getIsSelected() {
-        JFXCheckBox JFXCheckBox = new JFXCheckBox();
-        return JFXCheckBox;
-    }
-
     public JFXCheckBox getIsPrimaryKey() {
-        if (attribute.isPrimary()) {
-            JFXCheckBox JFXCheckBox = new JFXCheckBox();
-            JFXCheckBox.setDisable(true);
-            JFXCheckBox.setSelected(true);
-            return JFXCheckBox;
-        }
-        return null;
+        return isPrimaryKey;
     }
 
     public JFXComboBox getGeneratorType() {
         return generatorTypes;
-        // return attribute.getDataFaker().getGeneratorType();
     }
 
     public JFXComboBox getSpecificType() {
         return specificType;
-        //return attribute.getDataFaker().getSpecificType();
     }
 
     public JFXCheckBox getIsUnique() {
-        if (attribute.isUnique()) {
-            JFXCheckBox JFXCheckBox = new JFXCheckBox();
-            JFXCheckBox.setDisable(true);
-            JFXCheckBox.setSelected(true);
-            return JFXCheckBox;
-        }
-        return null;
+        return isUnique;
     }
 
     public JFXCheckBox getIsNullable() {
-        if (attribute.isNullable()) {
-            JFXCheckBox JFXCheckBox = new JFXCheckBox();
-            JFXCheckBox.setDisable(true);
-            JFXCheckBox.setSelected(true);
-            return JFXCheckBox;
-        }
-        return null;
+        return isNullable;
+
     }
-/*
+
     public Control getFrom() {
-        return attribute.getFromControl();
+        return from;
     }
 
     public Control getTo() {
-        return attribute.getToControl();
+
+        return to;
     }
-*/
+
     public String toString() {
         return this.attribute.toString();
     }

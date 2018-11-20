@@ -25,7 +25,7 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
  *
  * @author tamac
  */
-public class TableView implements Serializable{
+public class TableView implements Serializable {
 
     private Table table;
     private JFXTreeTableView<InstancesModel> insertsView = null;
@@ -60,6 +60,8 @@ public class TableView implements Serializable{
         }
         ObservableList<InstancesModel> observables = FXCollections.observableArrayList(collect);
         treeTableView.setRoot(new RecursiveTreeItem<>(observables, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
+        treeTableView.setMaxWidth(Double.MAX_VALUE);
+        treeTableView.setMaxHeight(Double.MAX_VALUE);
         return treeTableView;
     }
 
@@ -92,6 +94,8 @@ public class TableView implements Serializable{
         ObservableList<AttributeModel> observables = FXCollections.observableArrayList(collect);
         treeTableView.getColumns().addAll(name, type, pk, unique, nullable, generatorType, specificType, from, to);
         treeTableView.setRoot(new RecursiveTreeItem<>(observables, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
+        treeTableView.setMaxWidth(Double.MAX_VALUE);
+        treeTableView.setMaxHeight(Double.MAX_VALUE);
         return treeTableView;
     }
 }

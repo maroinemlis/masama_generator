@@ -8,7 +8,7 @@ package test_classes;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
-import db.save_and_load.projecte.SaveProject;
+import db.save_and_load.SaveProject;
 import db.validation.PreCondetion;
 import static db.validation.PreCondetion.CHECKED_TRUE;
 import javafx.scene.control.TitledPane;

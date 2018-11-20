@@ -12,7 +12,8 @@ import db.bean.Attribute;
 import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.TextDataFaker;
-import db.utils.;
+import db.utils.DataFaker;
+
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 

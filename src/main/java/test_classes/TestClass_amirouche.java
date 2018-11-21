@@ -24,6 +24,7 @@ public class TestClass_amirouche {
     SQLSchema sqlSchema;
 
     public void main() throws Exception {
+        //amirouche branche
         //le clé prémair sont il possible de generé pour les chane
         SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", "SQLite", false);
         sqlSchema = new SQLSchema();

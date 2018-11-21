@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
 import db.bean.Table;
 import db.models.AttributeModel;
@@ -19,7 +20,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import static views.main.MainController.schema;
 
 /**
  *
@@ -28,7 +31,7 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 public class TableView implements Serializable {
 
     private Table table;
-    private JFXTreeTableView<InstancesModel> insertsView = null;
+    private JFXTreeTableView<Data> insertsView = null;
     private JFXTreeTableView<AttributeModel> tableView = null;
 
     public TableView(Table table) {
@@ -42,6 +45,31 @@ public class TableView implements Serializable {
 
     public JFXTreeTableView<AttributeModel> getTableView() {
         return tableView;
+    }
+    
+    public void insertInstancesInTable( ArrayList<Data> tables_data, String tableName, JFXTreeTableView<Data> instancesView){
+        instancesView.setVisible(true);
+        ObservableList<Data> data = FXCollections.observableArrayList();
+        List<Attribute> listAttribute = schema.getTableByName(tableName).getAttributes();                   
+        instancesView.getColumns().clear();
+        for(int i=0; i<listAttribute.size();i++){
+            final int finalIdx = i;
+            String nameOfColomn = listAttribute.get(i).getName();
+            JFXTreeTableColumn<Data, String> column = new JFXTreeTableColumn<>(nameOfColomn);
+            column.setPrefWidth(instancesView.getWidth()/listAttribute.size());
+            column.setCellValueFactory((param) -> {
+                return param.getValue().getValue().lines.get(finalIdx);
+            });
+            instancesView.getColumns().add(column);
+        }
+        for(Data table : tables_data){
+            if(table.table_name.equals(tableName))
+            data.add(table);
+        }
+
+        final TreeItem<Data> root = new RecursiveTreeItem<Data>(data, RecursiveTreeObject::getChildren);
+        instancesView.setRoot(root);
+        instancesView.setShowRoot(false);
     }
 
     public JFXTreeTableView<InstancesModel> getTableInserts() {

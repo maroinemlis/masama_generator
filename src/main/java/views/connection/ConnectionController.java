@@ -3,19 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fxml;
+package views.connection;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import db.bean.SQLSchema;
-import db.connection.SQLConnection;
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,10 +19,8 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import static views.main.LuncherApp.primaryStage;
-import views.main.MainController;
 
 /**
  * FXML Controller class
@@ -59,6 +53,7 @@ public class ConnectionController implements Initializable {
     private JFXTextField url;
     private SingleSelectionModel<String> driverString;
     private String fileString;
+    private static Path filePath;
 
     /**
      * Initializes the controller class.
@@ -92,16 +87,22 @@ public class ConnectionController implements Initializable {
         }
         File fileUrl = fileChooser.showOpenDialog(primaryStage);
         this.fileString = fileUrl.getAbsolutePath();
+        filePath = fileUrl.toPath();
     }
 
     @FXML
     private void onConnect(ActionEvent event) {
         this.driverString = driver.selectionModelProperty().getValue();
+        
 
     }
 
     public String getFileString() {
         return fileString;
+    }
+    
+    public Path getFilePath() {
+        return filePath;
     }
 
     public String getCnxType() {

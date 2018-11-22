@@ -10,11 +10,10 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
+import db.bean.Table;
 import db.utils.Types;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.scene.control.Control;
@@ -35,12 +34,11 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     private Control from;
     private Control to;
     private JFXCheckBox checked;
-
+    private Table table;
     String fromString = "";
     String toString = "";
-    String generatorTypeString = "";
-    String specificTypeString = "";
-    private TreeTableView<AttributeModel> view;
+    String generatorTypeString = "'system";
+    String specificTypeString = "'system";
 
     public void setDisable(boolean selected) {
         if (generatorTypes != null) {
@@ -53,15 +51,23 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         to.setDisable(selected);
     }
 
-    public AttributeModel(Attribute attribute) {
+    public AttributeModel(Attribute attribute, Table table) {
+        this.table = table;
         this.attribute = attribute;
         checked = new JFXCheckBox();
-        checked.selectedProperty().addListener((observable) -> {
-            boolean notChecked = !checked.isSelected();
-            setDisable(notChecked);
-            update();
-            attribute.getDataFaker().setConfiguration(fromString, toString, generatorTypeString, specificTypeString);
-        });
+        fromString = attribute.getDataFaker().getFrom();
+        toString = attribute.getDataFaker().getTo();
+        if (this.attribute.getRef() == null) {
+            checked.selectedProperty().addListener((observable) -> {
+                boolean notChecked = !checked.isSelected();
+                setDisable(notChecked);
+                if (notChecked) {
+                    System.out.println("now we update");
+                    update();
+                    attribute.getDataFaker().setConfiguration(fromString, toString, generatorTypeString, specificTypeString);
+                }
+            });
+        }
         if (attribute.isUnique()) {
             isUnique = new JFXCheckBox();
             isUnique.setDisable(true);
@@ -77,8 +83,7 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             isNullable.setDisable(true);
             isNullable.setSelected(true);
         }
-        fromString = attribute.getDataFaker().getFrom();
-        toString = attribute.getDataFaker().getTo();
+
         switch (attribute.getDataType()) {
             case "TEXT":
                 from = new JFXSlider(1, 255, Integer.parseInt(fromString));
@@ -116,6 +121,10 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         setDisable(true);
     }
 
+    public String getReference() {
+        return table.getTableName() + "(" + attribute.getRef().getName() + ")";
+    }
+
     public JFXCheckBox getChecked() {
         return checked;
     }
@@ -146,7 +155,6 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     public JFXCheckBox getIsNullable() {
         return isNullable;
-
     }
 
     public Control getFrom() {
@@ -154,12 +162,7 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     }
 
     public Control getTo() {
-
         return to;
-    }
-
-    public String toString() {
-        return this.attribute.toString();
     }
 
     public void update() {
@@ -177,9 +180,13 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             case "DOUBLE":
             case "FLOAT":
                 fromString = ((JFXTextField) from).getText();
-                toString = ((JFXTextField) from).getText();
+                toString = ((JFXTextField) to).getText();
                 break;
         }
+
     }
 
+    public Table getTable() {
+        return table;
+    }
 }

@@ -82,7 +82,7 @@ public class TableView implements Serializable {
             col.setCellValueFactory((param) -> {
                 return param.getValue().getValue().getInstances().get(currentI);
             });
-            col.setPrefWidth(treeTableView.getWidth() / table.getAttributes().size());
+            col.setPrefWidth(LuncherApp.primaryStage.getWidth() / table.getAttributes().size());
             treeTableView.getColumns().add(col);
             i++;
         }
@@ -101,10 +101,11 @@ public class TableView implements Serializable {
         JFXTreeTableColumn<AttributeModel, JFXCheckBox> pk = new JFXTreeTableColumn<>("Clé primaire");
         JFXTreeTableColumn<AttributeModel, JFXCheckBox> unique = new JFXTreeTableColumn<>("Unique");
         JFXTreeTableColumn<AttributeModel, JFXCheckBox> nullable = new JFXTreeTableColumn<>("Nullable");
-        JFXTreeTableColumn<AttributeModel, ?> generatorType = new JFXTreeTableColumn<>("generatorType");
-        JFXTreeTableColumn<AttributeModel, ?> specificType = new JFXTreeTableColumn<>("specificType");
-        JFXTreeTableColumn<AttributeModel, ?> from = new JFXTreeTableColumn<>("from");
-        JFXTreeTableColumn<AttributeModel, ?> to = new JFXTreeTableColumn<>("to");
+        JFXTreeTableColumn<AttributeModel, ?> generatorType = new JFXTreeTableColumn<>("Type de génération");
+        JFXTreeTableColumn<AttributeModel, ?> specificType = new JFXTreeTableColumn<>("Spécificité");
+        JFXTreeTableColumn<AttributeModel, ?> from = new JFXTreeTableColumn<>("Valeur min");
+        JFXTreeTableColumn<AttributeModel, ?> to = new JFXTreeTableColumn<>("Valeur max");
+        //JFXTreeTableColumn<AttributeModel, ?> references = new JFXTreeTableColumn<>("Référence");
         checked.setCellValueFactory(new TreeItemPropertyValueFactory("checked"));
         name.setCellValueFactory(new TreeItemPropertyValueFactory("name"));
         type.setCellValueFactory(new TreeItemPropertyValueFactory("dataType"));
@@ -115,9 +116,11 @@ public class TableView implements Serializable {
         specificType.setCellValueFactory(new TreeItemPropertyValueFactory("specificType"));
         from.setCellValueFactory(new TreeItemPropertyValueFactory("from"));
         to.setCellValueFactory(new TreeItemPropertyValueFactory("to"));
-        treeTableView.getColumns().addAll(checked, name, type, pk, unique, nullable, generatorType, specificType, from, to);
+        //references.setCellValueFactory(new TreeItemPropertyValueFactory("reference"));
+
+        treeTableView.getColumns().addAll(checked, name, type, pk, unique, nullable, generatorType, specificType, from, to/*, references*/);
         List<AttributeModel> collect = table.getAttributes().stream().
-                map(att -> new AttributeModel(att)).
+                map(att -> new AttributeModel(att, table)).
                 collect(Collectors.toList());
         observablesAttributes.addAll(collect);
         treeTableView.setRoot(new RecursiveTreeItem<>(observablesAttributes, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));

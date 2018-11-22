@@ -16,9 +16,9 @@ public class Alerts {
 
     public static void error() {
         Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Error Dialog");
-        alert.setHeaderText("Look, an Error Dialog");
-        alert.setContentText("Ooops, there was an error!");
+        alert.setTitle("Erreur d'une action");
+        alert.setHeaderText("...");
+        alert.setContentText("Erreur d'une action...");
         alert.showAndWait();
     }
 }

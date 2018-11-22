@@ -28,6 +28,11 @@ public class TestClass_amirouche {
         //todo :: le clé prémair sont il possible de generé pour les chane
         SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", "SQLite", false);
         sqlSchema = new SQLSchema();
+        sqlSchema.getTables().get(0).setHowMuch(10);
+        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("5");
+        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("4");
+        sqlSchema.getTables().get(1).setHowMuch(3);
+        sqlSchema.getTables().get(2).setHowMuch(5);
         sqlSchema.getTables().get(0).setHowMuch(0);
         sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("2");
         sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("4");

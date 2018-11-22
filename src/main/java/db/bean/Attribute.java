@@ -114,6 +114,7 @@ public class Attribute implements Comparable<Attribute>, Serializable {
     }
 
     public void startToGenerateRootValues(int howMuch, int nullsRate) {
+
         dataFaker.setHowMuch(howMuch);
         dataFaker.setNullsRate(nullsRate);
         this.instances = dataFaker.values();

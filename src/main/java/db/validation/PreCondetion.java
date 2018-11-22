@@ -107,9 +107,11 @@ public class PreCondetion {
     private boolean isReferenceToPK(ForeignKey foreignKey) {
         boolean result = false;
         for (Attribute attribute : foreignKey.getPkTuple()) {
-            result = attribute.isPrimary() || attribute.isUnique();
+            if (attribute.isPrimary() || attribute.isUnique()) {
+                return true;
+            }
+
         }
-        //System.out.println("isReferenceTo " + result);
         return result;
         //todo in the case thier are multi pk and fk
     }

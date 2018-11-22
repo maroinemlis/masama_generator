@@ -52,6 +52,7 @@ public abstract class DataFaker implements Serializable {
 
     private LinkedList<String> generateValues() {
         LinkedList<String> values = new LinkedList<>();
+
         generateNulls(values);
         for (int i = 0; i < howMuch - nullsNumber; i++) {
             values.add(generateValue());
@@ -126,6 +127,9 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void setNullsRate(int nullsRate) {
-        this.nullsRate = nullsRate;
+        this.nullsNumber = ((nullsRate * howMuch) / 100);
+
+        System.out.println(nullsNumber);
+
     }
 }

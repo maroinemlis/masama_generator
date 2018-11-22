@@ -11,6 +11,8 @@ import db.connection.SQLConnection;
 import db.save_and_load.SaveProject;
 import db.validation.PreCondetion;
 import static db.validation.PreCondetion.CHECKED_TRUE;
+import java.util.Arrays;
+import java.util.List;
 import javafx.scene.control.TitledPane;
 
 /**
@@ -22,8 +24,8 @@ public class TestClass_amirouche {
     SQLSchema sqlSchema;
 
     public void main() throws Exception {
-
         //branche amirouche
+
         //todo :: le clé prémair sont il possible de generé pour les chane
         /*todo :: une bug : on ne peut pas generé pleusieurs tuple pas plus de 95
             sqlSchema.getTables().get(0).setHowMuch(100);
@@ -39,7 +41,14 @@ public class TestClass_amirouche {
         sqlSchema.getTables().get(2).setHowMuch(3);
 
         testPrecondetion();
+        /*
 
+
+        for (Table table : sqlSchema.getTables()) {
+            table.show();
+        }
+         */
+        //testSaveProject();
     }
 
     private void testSaveProject() {
@@ -65,37 +74,17 @@ public class TestClass_amirouche {
     }
 
     private void testPrecondetion() throws Exception {
-         << << << < HEAD
-
-        //sqlSchema.getTable("Movie").setHowMuch(9);
-        //sqlSchema.getTable("Rating").setHowMuch(10);
-
-
 
         PreCondetion preCondetion = new PreCondetion(sqlSchema);
         String msgCheck = preCondetion.checkSqlScema();
         if (msgCheck.equals(CHECKED_TRUE)) {
-             == == ==
-                    = PreCondetion preCondetion = new PreCondetion(sqlSchema);
-            String msgCheck = preCondetion.checkSqlScema();
-            if (msgCheck.equals(CHECKED_TRUE)) {
-                 >>> >>> > amirouche - branch
-                System.out.println("we can generate");
-                sqlSchema.startToGenerateInstances();
-                for (Table table : sqlSchema.getTables()) {
-                    table.show();
-                }
-                 << << << < HEAD
-
-
-
-            } else {
-                System.out.println(msgCheck);
-                //showAlertDialogue whith mesage is mesageCheck
-                 == == == =
-            }else {
-                        System.out.println(msgCheck);
-                         >>> >>> > amirouche - branch
-                    }
+            System.out.println("we can generate");
+            sqlSchema.startToGenerateInstances();
+            for (Table table : sqlSchema.getTables()) {
+                table.show();
+            }
+        } else {
+            System.out.println(msgCheck);
         }
     }
+}

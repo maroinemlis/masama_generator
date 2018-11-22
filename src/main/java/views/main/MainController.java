@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import db.bean.Attribute;
 import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.controls.JFXToggleButton;
 import db.bean.SQLSchema;
 import db.connection.SQLConnection;
 import db.models.AttributeModel;
@@ -81,7 +82,7 @@ public class MainController implements Initializable {
     @FXML
     private JFXProgressBar progress_Bar;
     @FXML
-    private JFXCheckBox activateUpdate;
+    private JFXToggleButton activateUpdate;
 
     private TableView getTableByName(String name) {
         for (TableView t : tables) {

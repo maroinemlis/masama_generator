@@ -6,6 +6,7 @@ package views.main;
  * and open the template in the editor.
  */
 import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXProgressBar;
 import db.bean.SQLSchema;
 import db.connection.SQLConnection;
 import db.models.AttributeModel;
@@ -32,12 +33,14 @@ import java.io.FileOutputStream;
 import views.connection.ConnectionController;
 import java.io.IOException;
 import java.io.OutputStream;
+import static java.lang.Thread.sleep;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import views.export.ExportController;
 
@@ -63,6 +66,11 @@ public class MainController implements Initializable {
     private AttributeModel currentAttribute;
     @FXML
     private HBox drag;
+    @FXML
+    private Text chargement_en_cours;
+
+    @FXML
+    private JFXProgressBar progress_Bar;
 
     private TableView getTableByName(String name) {
         for (TableView t : tables) {
@@ -119,14 +127,13 @@ public class MainController implements Initializable {
 
     @FXML
     private void onGenerate(ActionEvent event) {
-        try {
+        progress(() -> {
             schema.startToGenerateInstances();
             for (TableView t : tables) {
                 t.updateTableViewInserts();
             }
-        } catch (Exception e) {
+        });
 
-        }
     }
 
     private void refrechInserts() {
@@ -221,5 +228,33 @@ public class MainController implements Initializable {
         for (TableView t : tables) {
             t.updateAttributes();
         }
+    }
+
+    private void progress(Runnable s) {
+        new Thread() {
+            int x = 0;
+
+            public void run() {
+                while (x < 1) {
+                    try {
+                        progress_Bar.setVisible(true);
+
+                        chargement_en_cours.setVisible(true);
+                        s.run();
+
+                        sleep(10);
+
+                    } catch (Exception e) {
+
+                    }
+                    x += 1;
+
+                }
+                progress_Bar.setVisible(false);
+                chargement_en_cours.setVisible(false);
+            }
+
+        }.start();
+
     }
 }

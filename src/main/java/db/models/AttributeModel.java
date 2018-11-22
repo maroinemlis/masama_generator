@@ -57,17 +57,15 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         checked = new JFXCheckBox();
         fromString = attribute.getDataFaker().getFrom();
         toString = attribute.getDataFaker().getTo();
-        if (this.attribute.getRef() == null) {
-            checked.selectedProperty().addListener((observable) -> {
-                boolean notChecked = !checked.isSelected();
-                setDisable(notChecked);
-                if (notChecked) {
-                    System.out.println("now we update");
-                    update();
-                    attribute.getDataFaker().setConfiguration(fromString, toString, generatorTypeString, specificTypeString);
-                }
-            });
-        }
+        checked.selectedProperty().addListener((observable) -> {
+            boolean notChecked = !checked.isSelected();
+            setDisable(notChecked);
+            if (notChecked) {
+                System.out.println("now we update");
+                update();
+                attribute.getDataFaker().setConfiguration(fromString, toString, generatorTypeString, specificTypeString);
+            }
+        });
         if (attribute.isUnique()) {
             isUnique = new JFXCheckBox();
             isUnique.setDisable(true);
@@ -119,10 +117,6 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
                 break;
         }
         setDisable(true);
-    }
-
-    public String getReference() {
-        return table.getTableName() + "(" + attribute.getRef().getName() + ")";
     }
 
     public JFXCheckBox getChecked() {

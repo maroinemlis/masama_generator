@@ -8,6 +8,7 @@ package db.bean;
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -190,22 +191,48 @@ public final class Table implements Serializable {
         }
 
         for (ForeignKey fk : foreignKeys) {
+
             List<Attribute> fkTuple = fk.getFkTuple();
             List<Attribute> pkTuple = fk.getPkTuple();
+
             for (int i = 0; i < pkTuple.size(); i++) {
                 if (pkTuple.get(i).getInstances() != null) {
-                    fkTuple.get(i).setInstances(pkTuple.get(i).getInstances());
+                    fkTuple.get(i).setInstances(getListForeigKey(fkTuple, pkTuple, i));
+                    //amirouche branch
                 }
+
             }
         }
+
+    }
+
+    private List<String> getListForeigKey(List<Attribute> fkTuple, List<Attribute> pkTuple, int i) {
+        int fkHowMuch = fkTuple.get(i).getDataFaker().getHowMuch();
+        int pkHowMuch = pkTuple.get(i).getDataFaker().getHowMuch();
+        int mDiv = fkHowMuch / pkHowMuch;
+        int mMod = fkHowMuch % pkHowMuch;
+
+        int size = pkTuple.get(i).getInstances().size();
+
+        //System.err.println(pkTuple.get(i).getInstances());
+        List<String> list = new ArrayList<>();
+        for (int j = 0; j < mDiv; j++) {
+            List<String> a = pkTuple.get(i).getInstances().subList(0, size);
+            list.addAll(a);
+        }
+        List<String> a = pkTuple.get(i).getInstances().subList(0, mMod);
+        list.addAll(a);
+
+        return list;
     }
 
     /**
      * Shows instances exemples for each attribtute
      */
     public void show() {
+        System.out.println("-------------------------");
         int rowNumber = attributes.get(0).getInstances().size();
-        for (int j = 0; j < rowNumber - 1; j++) {
+        for (int j = 0; j < rowNumber; j++) {
             String insert = "INSERT INTO " + this.getTableName() + " VALUES (";
             int i = 0;
             Attribute a = null;
@@ -214,6 +241,7 @@ public final class Table implements Serializable {
                 insert += a.getInstances().get(j) + ", ";
             }
             a = attributes.get(i);
+
             insert += a.getInstances().get(j) + ");";
             System.out.println(insert);
         }

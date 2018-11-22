@@ -39,6 +39,7 @@ public class PreCondetion {
      * @return
      */
     public String checkSqlScema() throws ParseException {
+        //check from and to ::from<to
 
         //check ForingAndKPrimery
         String result = checkForingAndKPrimery();
@@ -51,6 +52,9 @@ public class PreCondetion {
         for (Table table : sqlSchema.getTables()) {
             int nbrRowsToGenerate = table.getHowMuch();
             for (Attribute attrebute : table.getAttributes()) {
+                if (checkFromTo(attrebute)) {
+                    return msgError;
+                }
                 String type = attrebute.getDataType();
                 switch (type) {
                     case "INT":
@@ -105,7 +109,7 @@ public class PreCondetion {
         for (Attribute attribute : foreignKey.getPkTuple()) {
             result = attribute.isPrimary() || attribute.isUnique();
         }
-        System.out.println("isReferenceTo " + result);
+        //System.out.println("isReferenceTo " + result);
         return result;
         //todo in the case thier are multi pk and fk
     }
@@ -152,12 +156,39 @@ public class PreCondetion {
     }
 
     private boolean checkString(Attribute attrebute, int nbrRowsToGenerate) {
+        //4 caractères
+        //A à Z = 26 Lettres
+        //donc 26*26*26*26
         boolean result;
         int from = Integer.valueOf(attrebute.getDataFaker().getFrom());
         int to = Integer.valueOf(attrebute.getDataFaker().getTo());
+        double nbrCombinision = 0;
+        for (int i = from; i <= to; i++) {
+            nbrCombinision += Math.pow(26, i);
+        }
+        if (nbrCombinision >= nbrRowsToGenerate) {
+            result = true;
+        } else {
+            msgError = new StringUtil().messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
+            result = false;
+        }
+        return result;
+    }
 
-        msgError = new StringUtil().messageErrorFromTo(nbrRowsToGenerate, String.valueOf(from), String.valueOf(to));
-        return true;
+    /**
+     * the method check if the attrebute.getDataFaker().getTO() is superior then
+     * attrebute.getDataFaker().getFrom() || example : 4 caractères || A à Z =
+     * 26 Lettres donc 26*26*26*26
+     *
+     * @param attrebute
+     * @return boolean
+     */
+    private boolean checkFromTo(Attribute attrebute) {
+        int from = Integer.valueOf(attrebute.getDataFaker().getFrom());
+        int to = Integer.valueOf(attrebute.getDataFaker().getTo());
+        boolean result = from > to;
+        msgError = ((result) ? new StringUtil().messageErrorFromTo(attrebute) : "");
+        return result;
     }
 
 }

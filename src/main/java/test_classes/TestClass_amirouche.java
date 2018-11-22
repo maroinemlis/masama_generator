@@ -34,16 +34,15 @@ public class TestClass_amirouche {
          */
         SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", "SQLite", false);
         sqlSchema = new SQLSchema();
-
-        sqlSchema.getTables().get(0).setHowMuch(100);
-        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("1");
-        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("10");
+        sqlSchema.getTables().get(0).setHowMuch(10);
+        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("2");
+        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("4");
         sqlSchema.getTables().get(1).setHowMuch(3);
         sqlSchema.getTables().get(2).setHowMuch(3);
 
         testPrecondetion();
         /*
-        sqlSchema.startToGenerateInstances();
+
 
         for (Table table : sqlSchema.getTables()) {
             table.show();
@@ -75,8 +74,6 @@ public class TestClass_amirouche {
     }
 
     private void testPrecondetion() throws Exception {
-
-        sqlSchema.startToGenerateInstances();
 
         PreCondetion preCondetion = new PreCondetion(sqlSchema);
         String msgCheck = preCondetion.checkSqlScema();

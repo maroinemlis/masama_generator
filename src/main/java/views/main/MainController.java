@@ -6,6 +6,9 @@ package views.main;
  * and open the template in the editor.
  */
 import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXTextField;
+import db.bean.Attribute;
 import db.bean.SQLSchema;
 import db.connection.SQLConnection;
 import db.models.AttributeModel;
@@ -37,6 +40,7 @@ import java.nio.file.Path;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import views.export.ExportController;
@@ -63,6 +67,10 @@ public class MainController implements Initializable {
     private AttributeModel currentAttribute;
     @FXML
     private HBox drag;
+    @FXML
+    private JFXTextField howMuch;
+    @FXML
+    private JFXSlider nullsRate;
 
     private TableView getTableByName(String name) {
         for (TableView t : tables) {
@@ -98,34 +106,27 @@ public class MainController implements Initializable {
                     });
                 }
             });
-
-        } catch (Exception ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void onOpenFile(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Selectionner un script sql");
-        File fileUrl = fileChooser.showOpenDialog(null);
-        try {
-            cnx = new SQLConnection(fileUrl.getPath(), "sqlite", false);
+            new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test2.sql", "SQLite", false);
             schema = new SQLSchema();
+            tables = schema.getTablesAsTablesView();
+            this.currentTable = tables.get(0);
+            createTablesView();
+            System.out.println(currentTable.getLines());
         } catch (Exception ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        createTablesView();
     }
 
     @FXML
     private void onGenerate(ActionEvent event) {
         try {
+            updateTableConf();
             schema.startToGenerateInstances();
             for (TableView t : tables) {
                 t.updateTableViewInserts();
             }
         } catch (Exception e) {
-
+            Alerts.error();
         }
     }
 
@@ -163,21 +164,20 @@ public class MainController implements Initializable {
         alert.setContent(root);
         alert.show();
         alert.setOnCloseRequest((e) -> {
-            ConnectionController controller = fxmlLoader.<ConnectionController>getController();
             try {
+                ConnectionController controller = fxmlLoader.<ConnectionController>getController();
                 if (!controller.isServer()) {
                     new SQLConnection(controller.getFileString(), "SQLite", controller.isBinary());
                 }
                 schema = new SQLSchema();
-
-            } catch (Exception ex) {
-                Logger.getLogger(MainController.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                tables = schema.getTablesAsTablesView();
+                this.currentTable = tables.get(0);
+                howMuch.setText(currentTable.get().getHowMuch() + "");
+                createTablesView();
+                path = controller.getFilePath();
+            } catch (Throwable ex) {
+                Alerts.error();
             }
-            tables = schema.getTablesAsTablesView();
-            this.currentTable = tables.get(0);
-            createTablesView();
-            path = controller.getFilePath();
         });
     }
 
@@ -216,10 +216,14 @@ public class MainController implements Initializable {
     }
 
     @FXML
-
     private void onUpdateAttribute(ActionEvent event) {
         for (TableView t : tables) {
             t.updateAttributes();
         }
+    }
+
+    private void updateTableConf() {
+        this.currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
+
     }
 }

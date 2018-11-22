@@ -81,12 +81,13 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void setConfiguration(String from, String to, String generatorType, String specificType) {
+        System.out.println(this.from + " " + this.to);
+
         this.from = from;
         this.to = to;
-        if (!generatorType.equals("")) {
-            this.generatorType = generatorType;
-            this.specificType = specificType;
-        }
+        System.out.println(this.from + " " + this.to);
+        this.generatorType = generatorType;
+        this.specificType = specificType;
     }
 
     public String getGeneratorType() {

@@ -24,28 +24,18 @@ public final class Table implements Serializable {
     private PrimaryKey primaryKey = new PrimaryKey();
     private List<ForeignKey> foreignKeys = new LinkedList<>();
     private int howMuch;
-    private int nullsRate;
 
     public int getHowMuch() {
         return howMuch;
-    }
-
-    public int getNullsRate() {
-        return nullsRate;
     }
 
     public void setHowMuch(int howMuch) {
         this.howMuch = howMuch;
     }
 
-    public void setNullsRate(int nullsRate) {
-        this.nullsRate = nullsRate;
-    }
-
     public Table(String tableName) throws Exception {
         this.tableName = tableName;
         this.howMuch = 10;
-        this.nullsRate = 5;
         fillAttributes();
         fillPrimaryKey();
     }
@@ -130,7 +120,6 @@ public final class Table implements Serializable {
 
             Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
             Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
-            //System.out.println(fkTuplePart.getName() + " " + this.getTableName() + " -> " + pkTuplePart.getName() + " " + pkTable.getTableName() + " 3");
             String seq = rs.getString("KEY_SEQ");
             ForeignKey foreignKey = null;
             if (seq.equals("1")) {
@@ -140,6 +129,7 @@ public final class Table implements Serializable {
             } else {
                 foreignKey = getForeignKeyByNumber(foreignKeyNumber);
             }
+            fkTuplePart.setRef(pkTuplePart);
             foreignKey.addToTupels(fkTuplePart, pkTuplePart);
 
         }
@@ -154,42 +144,17 @@ public final class Table implements Serializable {
         return null;
     }
 
-    @Override
-    public String toString() {
-        String string = "CREATE TABLE " + tableName + " (\n";
-        int i = 0;
-        for (; i < attributes.size() - 1; i++) {
-            string += "\t" + attributes.get(i).toString() + ",\n";
-        }
-        if (primaryKey.getTuple().isEmpty() && foreignKeys.isEmpty()) {
-            string += "\t" + attributes.get(i).toString() + "\n";
-        } else {
-            string += "\t" + attributes.get(i).toString() + ",\n";
-            if (foreignKeys.isEmpty()) {
-                string += "\t" + primaryKey.toString() + "\n";
-            } else {
-                int j = 0;
-                for (; j < foreignKeys.size() - 1; j++) {
-                    string += "\t" + foreignKeys.get(j).toString() + ",\n";
-                }
-                string += "\t" + foreignKeys.get(j).toString() + "\n";
-            }
-        }
-        return string + ");";
-
-    }
-
     /**
      * Generates instances exemples for each attribtute
      *
      */
     public void startToGenerateInstances() {
         for (Attribute a : attributes) {
-            a.startToGenerateRootValues(this.howMuch, this.nullsRate);
+            if (a.getRef() == null) {
+                a.startToGenerateRootValues(this.howMuch);
+            }
         }
-
         for (ForeignKey fk : foreignKeys) {
-
             List<Attribute> fkTuple = fk.getFkTuple();
             List<Attribute> pkTuple = fk.getPkTuple();
 
@@ -220,7 +185,6 @@ public final class Table implements Serializable {
         }
         List<String> a = pkTuple.get(i).getInstances().subList(0, mMod);
         list.addAll(a);
-
         return list;
     }
 

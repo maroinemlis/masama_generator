@@ -230,7 +230,6 @@ public class MainController implements Initializable {
                 while (x < 1) {
                     try {
                         progress_Bar.setVisible(true);
-
                         chargement_en_cours.setVisible(true);
                         s.run();
 

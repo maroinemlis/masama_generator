@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Maroine
  */
-public class PrimaryKey extends Constraint implements Serializable{
+public class PrimaryKey extends Constraint implements Serializable {
 
     private List<Attribute> tuple = new LinkedList();
 

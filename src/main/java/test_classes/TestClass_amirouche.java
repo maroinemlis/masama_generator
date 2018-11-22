@@ -24,21 +24,31 @@ public class TestClass_amirouche {
     SQLSchema sqlSchema;
 
     public void main() throws Exception {
-        //amirouche branche
-        //le clé prémair sont il possible de generé pour les chane
+        //branche amirouche
+
+        //todo :: le clé prémair sont il possible de generé pour les chane
+        /*todo :: une bug : on ne peut pas generé pleusieurs tuple pas plus de 95
+            sqlSchema.getTables().get(0).setHowMuch(100);
+            sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("1");
+            sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("1");
+         */
         SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", "SQLite", false);
         sqlSchema = new SQLSchema();
 
-        sqlSchema.getTable("InfoA").setHowMuch(3);
-        sqlSchema.getTable("InfoB").setHowMuch(2);
-        sqlSchema.getTable("InfoC").setHowMuch(7);
+        sqlSchema.getTables().get(0).setHowMuch(100);
+        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("1");
+        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("10");
+        sqlSchema.getTables().get(1).setHowMuch(3);
+        sqlSchema.getTables().get(2).setHowMuch(3);
 
+        testPrecondetion();
+        /*
         sqlSchema.startToGenerateInstances();
 
         for (Table table : sqlSchema.getTables()) {
             table.show();
         }
-        //testPrecondetion();
+         */
         //testSaveProject();
     }
 
@@ -62,30 +72,22 @@ public class TestClass_amirouche {
         SaveProject saveProject = new SaveProject(sqlSchema);
         String path = "/home/amirouche/NetBeansProjects/masama_generator/SaveProject";
         saveProject.saveSQLSchema(path);
-
     }
 
     private void testPrecondetion() throws Exception {
 
-        sqlSchema.getTable("InfoA").setHowMuch(1);
-        sqlSchema.getTable("InfoB").setHowMuch(5);
-        sqlSchema.getTable("InfoC").setHowMuch(4);
-
         sqlSchema.startToGenerateInstances();
 
-        /*
-        PreCondetion preCondetion=new PreCondetion(sqlSchema);
-        String msgCheck= preCondetion.checkSqlScema();
+        PreCondetion preCondetion = new PreCondetion(sqlSchema);
+        String msgCheck = preCondetion.checkSqlScema();
         if (msgCheck.equals(CHECKED_TRUE)) {
             System.out.println("we can generate");
             sqlSchema.startToGenerateInstances();
             for (Table table : sqlSchema.getTables()) {
                 table.show();
             }
-
-        }else{
+        } else {
             System.out.println(msgCheck);
-            //showAlertDialogue whith mesage is mesageCheck
-        }*/
+        }
     }
 }

@@ -40,7 +40,7 @@ public class PreCondetion {
      */
     public String checkSqlScema() throws ParseException {
 
-        //check
+        //check ForingAndKPrimery
         String result = checkForingAndKPrimery();
         if (!result.equals(CHECKED_TRUE)) {
             return result;
@@ -68,6 +68,10 @@ public class PreCondetion {
                             return msgError;
                         }
                     case "TEXT":
+                        check = checkString(attrebute, nbrRowsToGenerate);
+                        if (!check) {
+                            return msgError;
+                        }
                     default:
                         break;
                 }
@@ -78,25 +82,32 @@ public class PreCondetion {
 
     private String checkForingAndKPrimery() {
 
-        String result = "No Foging key ";
+        String result = CHECKED_TRUE;
+
         for (Table table : sqlSchema.getTables()) {
-            List<ForeignKey> foreignKeys = table.getForeignKeys();
-            int nbrRowsThisTable = table.getHowMuch();
             for (ForeignKey foreignKey : table.getForeignKeys()) {
-                int nbrRowsTableReference = foreignKey.getReferences().getHowMuch();
 
-                boolean b = foreignKey.getReferences().getAttribute("mID").isPrimary()
-                        || foreignKey.getReferences().getAttribute("mID").isUnique();
-
-                if (b && (nbrRowsTableReference >= nbrRowsThisTable)) {
-                    result = CHECKED_TRUE;
-                } else {
+                boolean isReferenceToPK = isReferenceToPK(foreignKey);
+                if (isReferenceToPK
+                        && (foreignKey.getReferences().getHowMuch() < table.getHowMuch())) {
                     result = new StringUtil().getMsgErrorKeyReferences();
+                } else {
+                    result = CHECKED_TRUE;
                 }
             }
         }
 
         return result;
+    }
+
+    private boolean isReferenceToPK(ForeignKey foreignKey) {
+        boolean result = false;
+        for (Attribute attribute : foreignKey.getPkTuple()) {
+            result = attribute.isPrimary() || attribute.isUnique();
+        }
+        System.out.println("isReferenceTo " + result);
+        return result;
+        //todo in the case thier are multi pk and fk
     }
 
     private boolean checkInt(Attribute attrebute, int nbrRowsToGenerate) {
@@ -116,7 +127,7 @@ public class PreCondetion {
         boolean result;
         String from = attrebute.getDataFaker().getFrom();
         String to = attrebute.getDataFaker().getTo();
-        int numberOfDay = numberDayBetween(from, to);
+        int numberOfDay = numberDaysBetween(from, to);
 
         if (numberOfDay >= nbrRowsToGenerate) {
             result = true;
@@ -127,7 +138,7 @@ public class PreCondetion {
         return result;
     }
 
-    private int numberDayBetween(String from, String to) throws ParseException {
+    private int numberDaysBetween(String from, String to) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
 
         Date toDate = dateFormat.parse(to);
@@ -138,6 +149,15 @@ public class PreCondetion {
         //System.out.println("------>"+ result);
         return result;
 
+    }
+
+    private boolean checkString(Attribute attrebute, int nbrRowsToGenerate) {
+        boolean result;
+        int from = Integer.valueOf(attrebute.getDataFaker().getFrom());
+        int to = Integer.valueOf(attrebute.getDataFaker().getTo());
+
+        msgError = new StringUtil().messageErrorFromTo(nbrRowsToGenerate, String.valueOf(from), String.valueOf(to));
+        return true;
     }
 
 }

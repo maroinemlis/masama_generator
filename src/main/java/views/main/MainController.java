@@ -74,6 +74,7 @@ public class MainController implements Initializable {
     private JFXTextField howMuch;
     @FXML
     private JFXSlider nullsRate;
+    @FXML
     private Text chargement_en_cours;
 
     @FXML
@@ -116,14 +117,11 @@ public class MainController implements Initializable {
 
     @FXML
     private void onGenerate(ActionEvent event) {
-        progress(() -> {
-            updateTableConf();
-            schema.startToGenerateInstances();
-            for (TableView t : tables) {
-                t.updateTableViewInserts();
-            }
-        });
-        Alerts.error();
+        updateTableConf();
+        schema.startToGenerateInstances();
+        for (TableView t : tables) {
+            t.updateTableViewInserts();
+        }
     }
 
     private void refrechInserts() {
@@ -211,7 +209,6 @@ public class MainController implements Initializable {
         }
     }
 
-    @FXML
     private void onUpdateAttribute(ActionEvent event) {
         for (TableView t : tables) {
             t.updateAttributes();
@@ -232,14 +229,10 @@ public class MainController implements Initializable {
                         progress_Bar.setVisible(true);
                         chargement_en_cours.setVisible(true);
                         s.run();
-
                         sleep(10);
-
                     } catch (Exception e) {
-
                     }
                     x += 1;
-
                 }
                 progress_Bar.setVisible(false);
                 chargement_en_cours.setVisible(false);

@@ -74,7 +74,6 @@
                     <items>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                             <children>
-                        <JFXButton onAction="#onUpdateAttribute" text="Met à jour" />
                                 <Accordion fx:id="tablesAccordion" />
                             </children>
                         </VBox>

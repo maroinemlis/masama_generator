@@ -6,6 +6,7 @@ package views.main;
  * and open the template in the editor.
  */
 import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import db.bean.Attribute;
@@ -79,6 +80,8 @@ public class MainController implements Initializable {
 
     @FXML
     private JFXProgressBar progress_Bar;
+    @FXML
+    private JFXCheckBox activateUpdate;
 
     private TableView getTableByName(String name) {
         for (TableView t : tables) {
@@ -103,9 +106,19 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        activateUpdate.selectedProperty().addListener((observable) -> {
+            boolean notChecked = !activateUpdate.isSelected();
+            if (activateUpdate.isSelected()) {
+                howMuch.setDisable(false);
+            } else {
+                howMuch.setDisable(true);
+                updateTableConf();
+            }
+        });
         tablesAccordion.expandedPaneProperty().addListener((ov, old_val, new_val) -> {
             if (new_val != null) {
                 this.currentTable = getTableByName(new_val.getText());
+                howMuch.setText(currentTable.get().getHowMuch() + "");
                 refrechInserts();
                 this.currentTable.getTableView().getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
                     this.currentAttribute = n.getValue();
@@ -117,7 +130,6 @@ public class MainController implements Initializable {
 
     @FXML
     private void onGenerate(ActionEvent event) {
-        updateTableConf();
         schema.startToGenerateInstances();
         for (TableView t : tables) {
             t.updateTableViewInserts();

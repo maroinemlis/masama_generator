@@ -150,9 +150,7 @@ public final class Table implements Serializable {
      */
     public void startToGenerateInstances() {
         for (Attribute a : attributes) {
-            if (a.getRef() == null) {
-                a.startToGenerateRootValues(this.howMuch);
-            }
+            a.startToGenerateRootValues(this.howMuch);
         }
         for (ForeignKey fk : foreignKeys) {
             List<Attribute> fkTuple = fk.getFkTuple();

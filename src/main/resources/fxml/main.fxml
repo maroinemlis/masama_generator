@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXTextField?>
@@ -88,7 +89,8 @@
                                                         <Label layoutX="14.0" layoutY="43.0" text="Nombre de ligne" />
                                                         <Label layoutX="14.0" layoutY="121.0" text="Pourcentage des valeurs nulls" />
                                                         <JFXSlider fx:id="nullsRate" layoutX="200.0" layoutY="122.0" prefHeight="14.0" prefWidth="233.0" value="10.0" />
-                                          <JFXTextField fx:id="howMuch" layoutX="200.0" layoutY="24.0" prefHeight="27.0" prefWidth="235.0" />
+                                          <JFXTextField fx:id="howMuch" disable="true" layoutX="200.0" layoutY="24.0" prefHeight="27.0" prefWidth="235.0" />
+                                          <JFXCheckBox fx:id="activateUpdate" layoutX="435.0" layoutY="42.0" text=" " />
                                                     </children>
                                                 </AnchorPane>
                                             </content>

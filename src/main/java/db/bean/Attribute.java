@@ -109,7 +109,17 @@ public class Attribute implements Comparable<Attribute>, Serializable {
         return this.name.hashCode();
     }
 
+<<<<<<< HEAD
     public void startToGenerateRootValues(int howMuch) {
+=======
+    @Override
+    public String toString() {
+        return name + " " + dataType;
+    }
+
+    public void startToGenerateRootValues(int howMuch, int nullsRate) {
+
+>>>>>>> d80bbb19f093d86244872549be149483653513c2
         dataFaker.setHowMuch(howMuch);
         this.instances = dataFaker.values();
     }

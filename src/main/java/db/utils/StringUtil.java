@@ -45,8 +45,8 @@ public class StringUtil {
     }
 
     public String messageErrorFromTo(Attribute attrebute) {
-        return "vous avez formez le min =" + attrebute.getDataFaker().getFrom() + " et max =" + attrebute.getDataFaker().getTo() + ""
-                + "dans la colonne : " + attrebute.getName() + " " + attrebute.getDataType();
+        return "vous avez formez le min = " + attrebute.getDataFaker().getFrom() + " et max = " + attrebute.getDataFaker().getTo() + ""
+                + " dans la colonne : " + attrebute.getName() + " " + attrebute.getDataType();
     }
 
 }

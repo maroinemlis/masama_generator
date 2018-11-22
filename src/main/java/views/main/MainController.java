@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import db.bean.Attribute;
+import com.jfoenix.controls.JFXProgressBar;
 import db.bean.SQLSchema;
 import db.connection.SQLConnection;
 import db.models.AttributeModel;
@@ -35,6 +36,7 @@ import java.io.FileOutputStream;
 import views.connection.ConnectionController;
 import java.io.IOException;
 import java.io.OutputStream;
+import static java.lang.Thread.sleep;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +44,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import views.export.ExportController;
 
@@ -71,6 +74,10 @@ public class MainController implements Initializable {
     private JFXTextField howMuch;
     @FXML
     private JFXSlider nullsRate;
+    private Text chargement_en_cours;
+
+    @FXML
+    private JFXProgressBar progress_Bar;
 
     private TableView getTableByName(String name) {
         for (TableView t : tables) {
@@ -95,39 +102,28 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
+        tablesAccordion.expandedPaneProperty().addListener((ov, old_val, new_val) -> {
+            if (new_val != null) {
+                this.currentTable = getTableByName(new_val.getText());
+                refrechInserts();
+                this.currentTable.getTableView().getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
+                    this.currentAttribute = n.getValue();
+                });
+            }
+        });
 
-            tablesAccordion.expandedPaneProperty().addListener((ov, old_val, new_val) -> {
-                if (new_val != null) {
-                    this.currentTable = getTableByName(new_val.getText());
-                    refrechInserts();
-                    this.currentTable.getTableView().getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
-                        this.currentAttribute = n.getValue();
-                    });
-                }
-            });
-            new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test2.sql", "SQLite", false);
-            schema = new SQLSchema();
-            tables = schema.getTablesAsTablesView();
-            this.currentTable = tables.get(0);
-            createTablesView();
-            System.out.println(currentTable.getLines());
-        } catch (Exception ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @FXML
     private void onGenerate(ActionEvent event) {
-        try {
+        progress(() -> {
             updateTableConf();
             schema.startToGenerateInstances();
             for (TableView t : tables) {
                 t.updateTableViewInserts();
             }
-        } catch (Exception e) {
-            Alerts.error();
-        }
+        });
+        Alerts.error();
     }
 
     private void refrechInserts() {
@@ -224,6 +220,33 @@ public class MainController implements Initializable {
 
     private void updateTableConf() {
         this.currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
+    }
+
+    private void progress(Runnable s) {
+        new Thread() {
+            int x = 0;
+
+            public void run() {
+                while (x < 1) {
+                    try {
+                        progress_Bar.setVisible(true);
+
+                        chargement_en_cours.setVisible(true);
+                        s.run();
+
+                        sleep(10);
+
+                    } catch (Exception e) {
+
+                    }
+                    x += 1;
+
+                }
+                progress_Bar.setVisible(false);
+                chargement_en_cours.setVisible(false);
+            }
+
+        }.start();
 
     }
 }

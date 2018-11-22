@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
@@ -14,6 +15,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="652.0" prefWidth="1280.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.main.MainController">
     <top>
@@ -49,6 +52,12 @@
                         <FontAwesomeIconView fill="#edb721" glyphName="COG" size="30" stroke="#edb721" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
+            <Text fx:id="chargement_en_cours" strokeType="OUTSIDE" strokeWidth="0.0" text="Chargement en cours ..." visible="false" wrappingWidth="187.0048828125">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <JFXProgressBar fx:id="progress_Bar" prefHeight="29.0" prefWidth="403.0" visible="false" />
             </children>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="5.0" top="5.0" />

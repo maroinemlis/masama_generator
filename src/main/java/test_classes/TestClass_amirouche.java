@@ -25,13 +25,7 @@ public class TestClass_amirouche {
 
     public void main() throws Exception {
         //branche amirouche
-
         //todo :: le clé prémair sont il possible de generé pour les chane
-        /*todo :: une bug : on ne peut pas generé pleusieurs tuple pas plus de 95
-            sqlSchema.getTables().get(0).setHowMuch(100);
-            sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("1");
-            sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("1");
-         */
         SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", "SQLite", false);
         sqlSchema = new SQLSchema();
         sqlSchema.getTables().get(0).setHowMuch(10);
@@ -39,16 +33,31 @@ public class TestClass_amirouche {
         sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("4");
         sqlSchema.getTables().get(1).setHowMuch(3);
         sqlSchema.getTables().get(2).setHowMuch(5);
+        sqlSchema.getTables().get(0).setHowMuch(0);
+        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("2");
+        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("4");
+        sqlSchema.getTables().get(1).setHowMuch(10);
 
+        /*sqlSchema.getTables().get(1).getAttributes().get(1).getDataFaker().setNullsRate(50);
+        sqlSchema.getTables().get(1).setNullsRate(50);
+        sqlSchema.getTables().get(2).setHowMuch(4);*/
         testPrecondetion();
-        /*
-
-
-        for (Table table : sqlSchema.getTables()) {
-            table.show();
-        }
-         */
         //testSaveProject();
+    }
+
+    private void testPrecondetion() throws Exception {
+
+        PreCondetion preCondetion = new PreCondetion(sqlSchema);
+        String msgCheck = preCondetion.checkSqlScema();
+        if (msgCheck.equals(CHECKED_TRUE)) {
+            System.out.println("we can generate");
+            sqlSchema.startToGenerateInstances();
+            for (Table table : sqlSchema.getTables()) {
+                table.show();
+            }
+        } else {
+            System.out.println(msgCheck);
+        }
     }
 
     private void testSaveProject() {
@@ -73,18 +82,4 @@ public class TestClass_amirouche {
         saveProject.saveSQLSchema(path);
     }
 
-    private void testPrecondetion() throws Exception {
-
-        PreCondetion preCondetion = new PreCondetion(sqlSchema);
-        String msgCheck = preCondetion.checkSqlScema();
-        if (msgCheck.equals(CHECKED_TRUE)) {
-            System.out.println("we can generate");
-            sqlSchema.startToGenerateInstances();
-            for (Table table : sqlSchema.getTables()) {
-                table.show();
-            }
-        } else {
-            System.out.println(msgCheck);
-        }
-    }
 }

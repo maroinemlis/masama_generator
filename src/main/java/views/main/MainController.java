@@ -75,11 +75,12 @@ public class MainController implements Initializable {
     private JFXTextField howMuch;
     @FXML
     private JFXSlider nullsRate;
-    @FXML
-    private Text chargement_en_cours;
+
+    public Text chargement_en_cours;
 
     @FXML
-    private JFXProgressBar progress_Bar;
+    public JFXProgressBar progress_Bar;
+
     @FXML
     private JFXToggleButton activateUpdate;
 
@@ -118,10 +119,39 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void onGenerate(ActionEvent event) {
-        schema.startToGenerateInstances();
-        tables.forEach(t -> t.updateTableViewInserts());
+    private void onGenerate(ActionEvent event) throws Exception {
+        new Thread() {
+            int x = 0;
 
+            public void run() {
+                while (x < 1) {
+                    try {
+                        progress_Bar.setVisible(true);
+                        chargement_en_cours.setVisible(true);
+
+                        currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
+                        sleep(200);
+                        schema.startToGenerateInstances();
+                        for (TableView t : tables) {
+                            t.updateTableViewInserts();
+                        }
+                        x += 1;
+                        progress_Bar.setVisible(false);
+                        chargement_en_cours.setVisible(false);
+
+                        sleep(10);
+                        break;
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+
+        }.start();
+        // progress(() -> {
+
+        // });
     }
 
     private void refrechInserts() {
@@ -157,7 +187,9 @@ public class MainController implements Initializable {
         alert.setTitle("Connection");
         alert.setContent(root);
         alert.show();
+
         alert.setOnCloseRequest((e) -> {
+
             try {
                 ConnectionController controller = fxmlLoader.<ConnectionController>getController();
                 if (!controller.isServer()) {
@@ -220,26 +252,4 @@ public class MainController implements Initializable {
         this.currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
     }
 
-    private void progress(Runnable s) {
-        new Thread() {
-            int x = 0;
-
-            public void run() {
-                while (x < 1) {
-                    try {
-                        progress_Bar.setVisible(true);
-                        chargement_en_cours.setVisible(true);
-                        s.run();
-                        sleep(10);
-                    } catch (Exception e) {
-                    }
-                    x += 1;
-                }
-                progress_Bar.setVisible(false);
-                chargement_en_cours.setVisible(false);
-            }
-
-        }.start();
-
-    }
 }

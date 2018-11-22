@@ -129,7 +129,7 @@ public final class Table implements Serializable {
             } else {
                 foreignKey = getForeignKeyByNumber(foreignKeyNumber);
             }
-            fkTuplePart.setRef(pkTuplePart);
+            //fkTuplePart.setRef(pkTuplePart);
             foreignKey.addToTupels(fkTuplePart, pkTuplePart);
 
         }

@@ -22,8 +22,6 @@ public final class Table implements Serializable {
     private List<Attribute> attributes = new LinkedList();
     private PrimaryKey primaryKey = new PrimaryKey();
     private List<ForeignKey> foreignKeys = new LinkedList<>();
-    private boolean rootTable = true;
-    private boolean generated = false;
     private int howMuch;
     private int nullsRate;
 

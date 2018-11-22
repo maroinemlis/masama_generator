@@ -14,6 +14,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
 import db.bean.Table;
 import db.utils.Types;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.scene.control.Control;
@@ -61,7 +62,6 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             boolean notChecked = !checked.isSelected();
             setDisable(notChecked);
             if (notChecked) {
-                System.out.println("now we update");
                 update();
                 attribute.getDataFaker().setConfiguration(fromString, toString, generatorTypeString, specificTypeString);
             }
@@ -105,8 +105,8 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
                 });
                 break;
             case "DATE":
-                this.from = new JFXDatePicker(LocalDate.parse(fromString, DateTimeFormatter.ISO_DATE));
-                this.to = new JFXDatePicker(LocalDate.parse(toString, DateTimeFormatter.ISO_DATE));
+                this.from = new JFXDatePicker(LocalDate.parse(fromString));
+                this.to = new JFXDatePicker(LocalDate.parse(toString));
                 break;
             case "INT":
             case "INTEGER":
@@ -167,7 +167,7 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
                 break;
             case "DATE":
                 fromString = ((JFXDatePicker) from).getValue().toString();
-                toString = ((JFXDatePicker) from).getValue().toString();
+                toString = ((JFXDatePicker) to).getValue().toString();
                 break;
             case "INT":
             case "INTEGER":

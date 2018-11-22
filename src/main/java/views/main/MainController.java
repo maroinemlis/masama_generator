@@ -69,7 +69,6 @@ public class MainController implements Initializable {
     private VBox insertsVBox;
     @FXML
     private Accordion tablesAccordion;
-    private AttributeModel currentAttribute;
     @FXML
     private HBox drag;
     @FXML
@@ -95,14 +94,7 @@ public class MainController implements Initializable {
 
     public void createTablesView() {
         tablesAccordion.getPanes().clear();
-        for (TableView table : tables) {
-            TitledPane titledPane = new TitledPane(table.get().getTableName(), table.getTableView());
-            tablesAccordion.getPanes().add(titledPane);
-        }
-    }
-
-    public void init() {
-
+        tables.forEach(t -> tablesAccordion.getPanes().add(new TitledPane(t.get().getTableName(), t.getTableView())));
     }
 
     @Override
@@ -121,20 +113,15 @@ public class MainController implements Initializable {
                 this.currentTable = getTableByName(new_val.getText());
                 howMuch.setText(currentTable.get().getHowMuch() + "");
                 refrechInserts();
-                this.currentTable.getTableView().getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
-                    this.currentAttribute = n.getValue();
-                });
             }
         });
-
     }
 
     @FXML
     private void onGenerate(ActionEvent event) {
         schema.startToGenerateInstances();
-        for (TableView t : tables) {
-            t.updateTableViewInserts();
-        }
+        tables.forEach(t -> t.updateTableViewInserts());
+
     }
 
     private void refrechInserts() {
@@ -213,19 +200,20 @@ public class MainController implements Initializable {
             fileChooser.setTitle("Choisir le répertoire d'enregistrement");
             fileChooser.setInitialDirectory(new File("."));
             File showOpenDialog = fileChooser.showOpenDialog(primaryStage);
-            this.schema = (SQLSchema) readFileObject(showOpenDialog.getAbsolutePath());
-            this.tables = schema.getTablesAsTablesView();
-            this.currentTable = tables.get(0);
-            refrechInserts();
+
+            schema = (SQLSchema) readFileObject(showOpenDialog.getAbsolutePath());
+            tables = schema.getTablesAsTablesView();
+            tables.forEach(t -> t.updateTableViewInserts());
+            currentTable = tables.get(0);
+            howMuch.setText(currentTable.get().getHowMuch() + "");
+            createTablesView();
         } catch (Exception e) {
             Alerts.error();
         }
     }
 
     private void onUpdateAttribute(ActionEvent event) {
-        for (TableView t : tables) {
-            t.updateAttributes();
-        }
+        tables.forEach(t -> t.updateAttributes());
     }
 
     private void updateTableConf() {

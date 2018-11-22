@@ -90,7 +90,7 @@
                                                         <Label layoutX="14.0" layoutY="177.0" text="Pourcentage des valeurs nulls" />
                                                         <JFXSlider fx:id="nullsRate" layoutX="200.0" layoutY="178.0" prefHeight="14.0" prefWidth="233.0" value="10.0" />
                                           <JFXTextField fx:id="howMuch" disable="true" layoutX="200.0" layoutY="80.0" prefHeight="27.0" prefWidth="235.0" />
-                                          <JFXToggleButton fx:id="activateUpdate" layoutX="10.0" layoutY="-5.0" text="Activer la modification" />
+                                          <JFXToggleButton fx:id="activateUpdate" layoutX="10.0" layoutY="-5.0" text="Activer la modification" toggleColor="#499e65" toggleLineColor="#499e65" />
                                                     </children>
                                                 </AnchorPane>
                                             </content>

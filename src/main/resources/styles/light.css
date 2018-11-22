@@ -1,11 +1,14 @@
 *{
     -fx-primary:rgb(244,244,244);
-    -fx-secondary:green;
+    -fx-secondary:#499e65;
 }
 .jfx-check-box {
     -jfx-checked-color: -fx-secondary;
 }
 
+.jfx-toggle-button{
+    -jfx-checked-color: -fx-secondary;
+}
 
 .button{
     -fx-background-color: -fx-primary;

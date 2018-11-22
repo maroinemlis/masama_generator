@@ -5,7 +5,6 @@
  */
 package db.utils;
 
-import com.github.javafaker.Faker;
 import db.bean.Attribute;
 import static db.utils.Shared.faker;
 import java.io.Serializable;
@@ -33,8 +32,8 @@ public abstract class DataFaker implements Serializable {
         this.attribute = att;
         this.from = "3";
         this.to = "100";
-        this.generatorType = "system";
-        this.specificType = "system";
+        this.generatorType = "'system";
+        this.specificType = "'system";
         this.nullsNumber = (nullsRate * howMuch / 100);
         this.regex = "[a-zA-Z]";
     }
@@ -81,12 +80,13 @@ public abstract class DataFaker implements Serializable {
         }
     }
 
-    public void setConfiguration(String from, String to,
-            String generatorType, String specificType) {
+    public void setConfiguration(String from, String to, String generatorType, String specificType) {
         this.from = from;
         this.to = to;
-        this.generatorType = generatorType;
-        this.specificType = specificType;
+        if (!generatorType.equals("")) {
+            this.generatorType = generatorType;
+            this.specificType = specificType;
+        }
     }
 
     public String getGeneratorType() {

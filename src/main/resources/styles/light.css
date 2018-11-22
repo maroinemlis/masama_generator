@@ -3,13 +3,9 @@
     -fx-secondary:green;
 }
 .jfx-check-box {
-    -jfx-checked-color: transparent;
+    -jfx-checked-color: -fx-secondary;
 }
 
-/* Styling checkmark */
-.jfx-check-box {
-    -fx-border-color: green;
-}
 
 .button{
     -fx-background-color: -fx-primary;
@@ -31,7 +27,7 @@
 }
 
 .tree-table-row-cell {
-    -fx-cell-size: 80px;
+    -fx-cell-size: 30px;
 }
 .tree-table-view .column-header-background{
     -fx-background-color: derive(-fx-primary, 10%);

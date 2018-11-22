@@ -5,15 +5,8 @@ package views.main;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import com.google.common.collect.Tables;
 import com.jfoenix.controls.JFXAlert;
-import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import db.bean.Attribute;
 import db.bean.SQLSchema;
-import db.bean.Table;
 import db.connection.SQLConnection;
 import db.models.AttributeModel;
 import static db.utils.FileUtil.readFileObject;
@@ -41,20 +34,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import views.export.ExportController;
 
 /**
@@ -79,9 +63,6 @@ public class MainController implements Initializable {
     private AttributeModel currentAttribute;
     @FXML
     private HBox drag;
-    @FXML
-    private JFXTreeTableView<Data> table;
-    ArrayList<Data> tables_data = new ArrayList<>();
 
     private TableView getTableByName(String name) {
         for (TableView t : tables) {
@@ -111,11 +92,10 @@ public class MainController implements Initializable {
             tablesAccordion.expandedPaneProperty().addListener((ov, old_val, new_val) -> {
                 if (new_val != null) {
                     this.currentTable = getTableByName(new_val.getText());
-                    currentTable.insertInstancesInTable(tables_data, new_val.getText(), table);
-                    /*refrechInserts();
+                    refrechInserts();
                     this.currentTable.getTableView().getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
                         this.currentAttribute = n.getValue();
-                    });*/   
+                    });
                 }
             });
 
@@ -141,79 +121,36 @@ public class MainController implements Initializable {
     private void onGenerate(ActionEvent event) {
         try {
             schema.startToGenerateInstances();
-            refrechInserts();
+            for (TableView t : tables) {
+                t.updateTableViewInserts();
+            }
         } catch (Exception e) {
 
         }
-
     }
 
     private void refrechInserts() {
-        //insertsVBox.getChildren().clear();
+        insertsVBox.getChildren().clear();
         if (currentTable.getTableInserts() != null) {
             Label l = new Label("Table : " + currentTable.get().getTableName());
             l.setStyle("-fx-font-size:15px");
-            //insertsVBox.getChildren().addAll(l, currentTable.getTableInserts());
-            for (Table table : schema.getTables()) {
-                int rowNumber = table.getAttributes().get(0).getInstances().size();
-                for (int j = 0; j < rowNumber - 1; j++) {
-                    ArrayList listDonnees = new ArrayList();
-                    int i = 0; 
-                    Attribute a = null;
-                    for (; i < table.getAttributes().size() - 1; i++) {
-                        a = table.getAttributes().get(i);
-                        listDonnees.add(a.getInstances().get(j));
-                    }
-                    a = table.getAttributes().get(i);
-                    listDonnees.add(a.getInstances().get(j));
-                    Data tableau = new Data(table.getTableName(), listDonnees);
-                    tables_data.add(tableau);
-                }
-            }
+            insertsVBox.getChildren().addAll(l, currentTable.getTableInserts());
         }
+
     }
 
     @FXML
     private void onExport(ActionEvent event) throws IOException {
-        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/export.fxml"));
         Parent root1 = (Parent) loader.load();
         ExportController controller = loader.<ExportController>getController();
-        System.out.println(path);
-        controller.initData(path,tables_data);
-        Stage primaryStage=new Stage();
+        controller.initData(tables);
+        Stage primaryStage = new Stage();
         Scene scene = new Scene(root1);
         scene.getStylesheets().add("styles/main.css");
-        primaryStage.setScene(scene);        
-        primaryStage.setTitle("Save");
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Exporter");
         primaryStage.show();
-        
-    }
-    
-    private void exportOnSql() throws FileNotFoundException, IOException{
-        
-        String destination = "monNouveauFichier.sql";
-        OutputStream output = new FileOutputStream(destination);
-        Files.copy(path, output);
-        for (Data t : tables_data) {
-            String insert = "INSERT INTO " + t.table_name + " VALUES (";
-            int i=0 ;
-            String Type = "";
-            for (; i<t.lines.size() - 1; i++) {
-                Type = schema.getTableByName(t.table_name).getAttributes().get(i).getDataType();
-                if(Type.equals("TEXT")) insert += "'";
-                insert += t.lines.get(i).get();
-                if(Type.equals("TEXT")) insert += "'";
-                insert +=", ";
-            }
-            Type = schema.getTableByName(t.table_name).getAttributes().get(i).getDataType();
-            if(Type.equals("TEXT")) insert += "'";
-            insert += t.lines.get(i).get();
-            if(Type.equals("TEXT")) insert += "'";
-            insert +=");";
-            Files.write(Paths.get(destination), (insert + System.lineSeparator()).getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
-        }
-        
     }
 
     @FXML
@@ -234,12 +171,13 @@ public class MainController implements Initializable {
                 schema = new SQLSchema();
 
             } catch (Exception ex) {
-                Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MainController.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
             tables = schema.getTablesAsTablesView();
             this.currentTable = tables.get(0);
             createTablesView();
-           path = controller.getFilePath();
+            path = controller.getFilePath();
         });
     }
 
@@ -271,9 +209,17 @@ public class MainController implements Initializable {
             this.schema = (SQLSchema) readFileObject(showOpenDialog.getAbsolutePath());
             this.tables = schema.getTablesAsTablesView();
             this.currentTable = tables.get(0);
-            createTablesView();
+            refrechInserts();
         } catch (Exception e) {
             Alerts.error();
+        }
+    }
+
+    @FXML
+
+    private void onUpdateAttribute(ActionEvent event) {
+        for (TableView t : tables) {
+            t.updateAttributes();
         }
     }
 }

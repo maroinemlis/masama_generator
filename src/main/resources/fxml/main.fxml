@@ -14,7 +14,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -68,6 +67,7 @@
                     <items>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                             <children>
+                        <JFXButton onAction="#onUpdateAttribute" text="Met à jour" />
                                 <Accordion fx:id="tablesAccordion" />
                             </children>
                         </VBox>
@@ -139,13 +139,9 @@
                         </VBox>
                     </items>
                 </SplitPane>
-                <VBox fx:id="insertsVBox" alignment="TOP_CENTER" prefHeight="332.0" prefWidth="1283.0">
+                <VBox fx:id="insertsVBox" alignment="TOP_CENTER">
                <children>
-                  <FlowPane prefHeight="310.0" prefWidth="1283.0">
-                     <children>
-                        <JFXTreeTableView fx:id="table" focusTraversable="false" prefHeight="272.0" prefWidth="1283.0" visible="false" />
-                     </children>
-                  </FlowPane>
+                  <JFXTreeTableView fx:id="table" focusTraversable="false" visible="false" />
                </children></VBox>
             </items>
         </SplitPane>

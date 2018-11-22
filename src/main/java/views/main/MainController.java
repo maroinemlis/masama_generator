@@ -76,20 +76,14 @@ public class MainController implements Initializable {
     private JFXTextField howMuch;
     @FXML
     private JFXSlider nullsRate;
-<<<<<<< HEAD
+
     public Text chargement_en_cours;
 
     @FXML
     public JFXProgressBar progress_Bar;
-=======
-    @FXML
-    private Text chargement_en_cours;
 
     @FXML
-    private JFXProgressBar progress_Bar;
-    @FXML
     private JFXToggleButton activateUpdate;
->>>>>>> c60bc805ee121ce6e1eb7fc77efc8686a664ed5e
 
     private TableView getTableByName(String name) {
         for (TableView t : tables) {
@@ -137,7 +131,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-<<<<<<< HEAD
+
     private void onGenerate(ActionEvent event) throws Exception {
         new Thread() {
             int x = 0;
@@ -171,13 +165,6 @@ public class MainController implements Initializable {
         // progress(() -> {
 
         // });
-=======
-    private void onGenerate(ActionEvent event) {
-        schema.startToGenerateInstances();
-        for (TableView t : tables) {
-            t.updateTableViewInserts();
-        }
->>>>>>> c60bc805ee121ce6e1eb7fc77efc8686a664ed5e
     }
 
     private void refrechInserts() {
@@ -277,29 +264,4 @@ public class MainController implements Initializable {
         this.currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
     }
 
-<<<<<<< HEAD
-=======
-    private void progress(Runnable s) {
-        new Thread() {
-            int x = 0;
-
-            public void run() {
-                while (x < 1) {
-                    try {
-                        progress_Bar.setVisible(true);
-                        chargement_en_cours.setVisible(true);
-                        s.run();
-                        sleep(10);
-                    } catch (Exception e) {
-                    }
-                    x += 1;
-                }
-                progress_Bar.setVisible(false);
-                chargement_en_cours.setVisible(false);
-            }
-
-        }.start();
-
-    }
->>>>>>> c60bc805ee121ce6e1eb7fc77efc8686a664ed5e
 }

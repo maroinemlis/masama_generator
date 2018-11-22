@@ -194,7 +194,9 @@ public final class Table implements Serializable {
             List<Attribute> pkTuple = fk.getPkTuple();
             for (int i = 0; i < pkTuple.size(); i++) {
                 if (pkTuple.get(i).getInstances() != null) {
-                    fkTuple.get(i).setInstances(pkTuple.get(i).getInstances());
+
+                    fkTuple.get(i).setInstances(getListForeigKey(fkTuple, pkTuple, i));
+                    //amirouche branch
                 }
             }
         }

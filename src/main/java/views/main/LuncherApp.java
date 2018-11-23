@@ -26,7 +26,7 @@ public class LuncherApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //new TestClass_amirouche().main();
+        new TestClass_amirouche().main();
         //new TestClass_saad().main();
         //new TestClass_maroine().main();
         //new TestClass_maryem().main();

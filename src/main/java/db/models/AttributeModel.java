@@ -14,6 +14,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
 import db.bean.Table;
 import db.utils.Types;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.scene.control.Control;
@@ -57,17 +58,14 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
         checked = new JFXCheckBox();
         fromString = attribute.getDataFaker().getFrom();
         toString = attribute.getDataFaker().getTo();
-        if (this.attribute.getRef() == null) {
-            checked.selectedProperty().addListener((observable) -> {
-                boolean notChecked = !checked.isSelected();
-                setDisable(notChecked);
-                if (notChecked) {
-                    System.out.println("now we update");
-                    update();
-                    attribute.getDataFaker().setConfiguration(fromString, toString, generatorTypeString, specificTypeString);
-                }
-            });
-        }
+        checked.selectedProperty().addListener((observable) -> {
+            boolean notChecked = !checked.isSelected();
+            setDisable(notChecked);
+            if (notChecked) {
+                update();
+                attribute.getDataFaker().setConfiguration(fromString, toString, generatorTypeString, specificTypeString);
+            }
+        });
         if (attribute.isUnique()) {
             isUnique = new JFXCheckBox();
             isUnique.setDisable(true);
@@ -107,8 +105,8 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
                 });
                 break;
             case "DATE":
-                this.from = new JFXDatePicker(LocalDate.parse(fromString, DateTimeFormatter.ISO_DATE));
-                this.to = new JFXDatePicker(LocalDate.parse(toString, DateTimeFormatter.ISO_DATE));
+                this.from = new JFXDatePicker(LocalDate.parse(fromString));
+                this.to = new JFXDatePicker(LocalDate.parse(toString));
                 break;
             case "INT":
             case "INTEGER":
@@ -119,10 +117,6 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
                 break;
         }
         setDisable(true);
-    }
-
-    public String getReference() {
-        return table.getTableName() + "(" + attribute.getRef().getName() + ")";
     }
 
     public JFXCheckBox getChecked() {
@@ -173,7 +167,7 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
                 break;
             case "DATE":
                 fromString = ((JFXDatePicker) from).getValue().toString();
-                toString = ((JFXDatePicker) from).getValue().toString();
+                toString = ((JFXDatePicker) to).getValue().toString();
                 break;
             case "INT":
             case "INTEGER":

@@ -27,7 +27,6 @@ public class Attribute implements Comparable<Attribute>, Serializable {
     private boolean isNullable;
     private List<String> instances;
     private DataFaker dataFaker;
-    private Attribute ref = null;
 
     /**
      *
@@ -112,14 +111,6 @@ public class Attribute implements Comparable<Attribute>, Serializable {
     public void startToGenerateRootValues(int howMuch) {
         dataFaker.setHowMuch(howMuch);
         this.instances = dataFaker.values();
-    }
-
-    public Attribute getRef() {
-        return ref;
-    }
-
-    public void setRef(Attribute ref) {
-        this.ref = ref;
     }
 
     public boolean isPrimary() {

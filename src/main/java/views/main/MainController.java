@@ -6,10 +6,12 @@ package views.main;
  * and open the template in the editor.
  */
 import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import db.bean.Attribute;
 import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.controls.JFXToggleButton;
 import db.bean.SQLSchema;
 import db.connection.SQLConnection;
 import db.models.AttributeModel;
@@ -67,18 +69,20 @@ public class MainController implements Initializable {
     private VBox insertsVBox;
     @FXML
     private Accordion tablesAccordion;
-    private AttributeModel currentAttribute;
     @FXML
     private HBox drag;
     @FXML
     private JFXTextField howMuch;
     @FXML
     private JFXSlider nullsRate;
-    @FXML
-    private Text chargement_en_cours;
+
+    public Text chargement_en_cours;
 
     @FXML
-    private JFXProgressBar progress_Bar;
+    public JFXProgressBar progress_Bar;
+
+    @FXML
+    private JFXToggleButton activateUpdate;
 
     private TableView getTableByName(String name) {
         for (TableView t : tables) {
@@ -91,37 +95,63 @@ public class MainController implements Initializable {
 
     public void createTablesView() {
         tablesAccordion.getPanes().clear();
-        for (TableView table : tables) {
-            TitledPane titledPane = new TitledPane(table.get().getTableName(), table.getTableView());
-            tablesAccordion.getPanes().add(titledPane);
-        }
-    }
-
-    public void init() {
-
+        tables.forEach(t -> tablesAccordion.getPanes().add(new TitledPane(t.get().getTableName(), t.getTableView())));
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        activateUpdate.selectedProperty().addListener((observable) -> {
+            boolean notChecked = !activateUpdate.isSelected();
+            if (activateUpdate.isSelected()) {
+                howMuch.setDisable(false);
+            } else {
+                howMuch.setDisable(true);
+                updateTableConf();
+            }
+        });
         tablesAccordion.expandedPaneProperty().addListener((ov, old_val, new_val) -> {
             if (new_val != null) {
                 this.currentTable = getTableByName(new_val.getText());
+                howMuch.setText(currentTable.get().getHowMuch() + "");
                 refrechInserts();
-                this.currentTable.getTableView().getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
-                    this.currentAttribute = n.getValue();
-                });
             }
         });
-
     }
 
     @FXML
-    private void onGenerate(ActionEvent event) {
-        updateTableConf();
-        schema.startToGenerateInstances();
-        for (TableView t : tables) {
-            t.updateTableViewInserts();
-        }
+    private void onGenerate(ActionEvent event) throws Exception {
+        new Thread() {
+            int x = 0;
+
+            public void run() {
+                while (x < 1) {
+                    try {
+                        progress_Bar.setVisible(true);
+                        chargement_en_cours.setVisible(true);
+
+                        currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
+                        sleep(200);
+                        schema.startToGenerateInstances();
+                        for (TableView t : tables) {
+                            t.updateTableViewInserts();
+                        }
+                        x += 1;
+                        progress_Bar.setVisible(false);
+                        chargement_en_cours.setVisible(false);
+
+                        sleep(10);
+                        break;
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+
+        }.start();
+        // progress(() -> {
+
+        // });
     }
 
     private void refrechInserts() {
@@ -157,7 +187,9 @@ public class MainController implements Initializable {
         alert.setTitle("Connection");
         alert.setContent(root);
         alert.show();
+
         alert.setOnCloseRequest((e) -> {
+
             try {
                 ConnectionController controller = fxmlLoader.<ConnectionController>getController();
                 if (!controller.isServer()) {
@@ -200,45 +232,24 @@ public class MainController implements Initializable {
             fileChooser.setTitle("Choisir le répertoire d'enregistrement");
             fileChooser.setInitialDirectory(new File("."));
             File showOpenDialog = fileChooser.showOpenDialog(primaryStage);
-            this.schema = (SQLSchema) readFileObject(showOpenDialog.getAbsolutePath());
-            this.tables = schema.getTablesAsTablesView();
-            this.currentTable = tables.get(0);
-            refrechInserts();
+
+            schema = (SQLSchema) readFileObject(showOpenDialog.getAbsolutePath());
+            tables = schema.getTablesAsTablesView();
+            tables.forEach(t -> t.updateTableViewInserts());
+            currentTable = tables.get(0);
+            howMuch.setText(currentTable.get().getHowMuch() + "");
+            createTablesView();
         } catch (Exception e) {
             Alerts.error();
         }
     }
 
     private void onUpdateAttribute(ActionEvent event) {
-        for (TableView t : tables) {
-            t.updateAttributes();
-        }
+        tables.forEach(t -> t.updateAttributes());
     }
 
     private void updateTableConf() {
         this.currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
     }
 
-    private void progress(Runnable s) {
-        new Thread() {
-            int x = 0;
-
-            public void run() {
-                while (x < 1) {
-                    try {
-                        progress_Bar.setVisible(true);
-                        chargement_en_cours.setVisible(true);
-                        s.run();
-                        sleep(10);
-                    } catch (Exception e) {
-                    }
-                    x += 1;
-                }
-                progress_Bar.setVisible(false);
-                chargement_en_cours.setVisible(false);
-            }
-
-        }.start();
-
-    }
 }

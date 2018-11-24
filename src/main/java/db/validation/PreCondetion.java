@@ -120,6 +120,7 @@ public class PreCondetion {
         boolean result;
         double from = Integer.valueOf(attrebute.getDataFaker().getFrom());
         double to = Integer.valueOf(attrebute.getDataFaker().getTo());
+        System.out.println("nbrRowsToGenerate : " + nbrRowsToGenerate);
         if (nbrRowsToGenerate <= (to - from)) {
             result = true;
         } else {
@@ -161,6 +162,8 @@ public class PreCondetion {
         //4 caractères
         //A à Z = 26 Lettres
         //donc 26*26*26*26
+
+        //todo :if only unique
         boolean result;
         int from = Integer.valueOf(attrebute.getDataFaker().getFrom());
         int to = Integer.valueOf(attrebute.getDataFaker().getTo());

@@ -11,9 +11,9 @@ import db.connection.SQLConnection;
 import db.save_and_load.SaveProject;
 import db.validation.PreCondetion;
 import static db.validation.PreCondetion.CHECKED_TRUE;
-import java.util.Arrays;
-import java.util.List;
-import javafx.scene.control.TitledPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.sqlite.SQLiteException;
 
 /**
  *
@@ -26,21 +26,38 @@ public class TestClass_amirouche {
     public void main() throws Exception {
         //amirouche I am in branch mastre
         //todo :: le clé prémair sont il possible de generé pour les chane
-        SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/MASAMA/mySQL/test.sql", "SQLite", false);
-        sqlSchema = new SQLSchema();
-        sqlSchema.getTables().get(0).setHowMuch(10);
-        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("5");
-        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("4");
-        sqlSchema.getTables().get(1).setHowMuch(3);
-        sqlSchema.getTables().get(2).setHowMuch(5);
-        sqlSchema.getTables().get(0).setHowMuch(0);
-        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setFrom("2");
-        sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setTo("4");
-        sqlSchema.getTables().get(1).setHowMuch(10);
+        //todo :: test the code withe the complicate schema SQLITE
+        //todo :: if the float or double we don't to make intervale
+        //todo :: add exeption if the sql file is error (show msg with error sql)
+        //todo :: add exeption(message) when we reference table not exist
+        //  (beceaus sqlite don't check this)
+        //  try with file
+        //todo :: add exeption(message) when we drop table not exist
+        //todo :: check the spealing of message text in String Util.java
 
-        /*sqlSchema.getTables().get(1).getAttributes().get(1).getDataFaker().setNullsRate(50);
-        sqlSchema.getTables().get(1).setNullsRate(50);
-        sqlSchema.getTables().get(2).setHowMuch(4);*/
+        //todo :: the tables is generated in alphabitique order
+        SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/masama_generator/SQL/5_tables.sql", "SQLite", false);
+        sqlSchema = new SQLSchema();
+
+        sqlSchema.getTables().get(0).setHowMuch(3);
+        sqlSchema.getTables().get(1).setHowMuch(3);
+        sqlSchema.getTables().get(2).setHowMuch(3);
+        sqlSchema.getTables().get(3).setHowMuch(3);
+
+        //sqlSchema.getTables().get(3).setHowMuch(3);
+        //sqlSchema.getTables().get(4).setHowMuch(3);
+        //sqlSchema.getTables().get(0).getAttributes().get(2).getDataFaker().setFrom("3");
+        //sqlSchema.getTables().get(0).getAttributes().get(2).getDataFaker().setTo("4");
+        //sqlSchema.getTables().get(1).setHowMuch(3);
+        /*sqlSchema.getTables().get(2).setHowMuch(5);
+        sqlSchema.getTables().get(0).setHowMuch(0);
+
+        sqlSchema.getTables().get(1).setHowMuch(10);*/
+
+ /*  sqlSchema.getTables().get(1).getAttributes().get(1).getDataFaker().setNullsRate(50);
+            sqlSchema.getTables().get(1).setNullsRate(50);
+            sqlSchema.getTables().get(2).setHowMuch(4);
+         */
         testPrecondetion();
         //testSaveProject();
     }
@@ -48,7 +65,7 @@ public class TestClass_amirouche {
     private void testPrecondetion() throws Exception {
 
         PreCondetion preCondetion = new PreCondetion(sqlSchema);
-        String msgCheck = preCondetion.checkSqlScema();
+        String msgCheck = preCondetion.checkSqlSchema();
         if (msgCheck.equals(CHECKED_TRUE)) {
             System.out.println("we can generate");
             sqlSchema.startToGenerateInstances();

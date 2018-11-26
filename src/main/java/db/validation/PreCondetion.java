@@ -9,12 +9,16 @@ import db.bean.Attribute;
 import db.bean.ForeignKey;
 import db.bean.SQLSchema;
 import db.bean.Table;
+import db.utils.DateUtil;
 import db.utils.StringUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * this class is for to check if it is possible to generate data or not
@@ -32,13 +36,13 @@ public class PreCondetion {
     }
 
     /**
-     * the checkSqlScema check if we can generate or not data return final value
-     * CHECKED_TRUE if it is possible to generate else return message describe
-     * the reason way it is not possible to generate data
+     * the checkSqlSchema check if we can generate or not data return final
+     * value CHECKED_TRUE if it is possible to generate else return message
+     * describe the reason way it is not possible to generate data
      *
      * @return
      */
-    public String checkSqlScema() throws ParseException {
+    public String checkSqlSchema() throws ParseException {
         //check from and to ::from<to
 
         //check ForingAndKPrimery
@@ -52,7 +56,7 @@ public class PreCondetion {
         for (Table table : sqlSchema.getTables()) {
             int nbrRowsToGenerate = table.getHowMuch();
             for (Attribute attrebute : table.getAttributes()) {
-                if (checkFromTo(attrebute)) {
+                if (!checkFromTo(attrebute)) {
                     return msgError;
                 }
                 String type = attrebute.getDataType();
@@ -116,6 +120,11 @@ public class PreCondetion {
         //todo in the case thier are multi pk and fk
     }
 
+    /**
+     * TODO ): Bug : check this only if the son is unique or primary key
+     *
+     * @return boolean
+     */
     private boolean checkInt(Attribute attrebute, int nbrRowsToGenerate) {
         boolean result;
         double from = Integer.valueOf(attrebute.getDataFaker().getFrom());
@@ -129,12 +138,18 @@ public class PreCondetion {
         return result;
     }
 
+    /**
+     * TODO ): Bug : it does not take into account the number of months
+     *
+     * @param attrebute
+     * @return boolean
+     */
     private boolean checkDate(Attribute attrebute, int nbrRowsToGenerate) throws ParseException {
         boolean result;
         String from = attrebute.getDataFaker().getFrom();
         String to = attrebute.getDataFaker().getTo();
         int numberOfDay = numberDaysBetween(from, to);
-
+        System.out.println(numberOfDay);
         if (numberOfDay >= nbrRowsToGenerate) {
             result = true;
         } else {
@@ -144,53 +159,87 @@ public class PreCondetion {
         return result;
     }
 
+    /**
+     * TODO ): Bug : it does not take into account the number of months todo ):
+     * BUG: it shold work oly with unique
+     *
+     * @param attrebute
+     * @return boolean
+     */
     private int numberDaysBetween(String from, String to) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         Date toDate = dateFormat.parse(to);
         Date fromDate = dateFormat.parse(from);
-
+        /*
+        int diffInDays = (int) ((toDate.getTime() - fromDate.getTime())
+                / (1000 * 60 * 60 * 24)) + 1;
+        System.err.println("D " + diffInDays);*/
         long diffInMillies = Math.abs(toDate.getTime() - fromDate.getTime());
         int result = (int) TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) + 1;
-        //System.out.println("------>"+ result);
         return result;
 
     }
 
+    /**
+     * todo :( BUG: it shold work oly with unique return True if it is possible
+     * to generate the method check if the attrebute.getDataFaker().getTO() is
+     * superior then attrebute.getDataFaker().getFrom() || example : 4
+     * caractères || A à Z = 26 Lettres donc 26*26*26*26
+     *
+     * @param attrebute
+     * @return boolean
+     */
     private boolean checkString(Attribute attrebute, int nbrRowsToGenerate) {
-        //4 caractères
-        //A à Z = 26 Lettres
-        //donc 26*26*26*26
-        boolean result;
-        int from = Integer.valueOf(attrebute.getDataFaker().getFrom());
-        int to = Integer.valueOf(attrebute.getDataFaker().getTo());
-        double nbrCombinision = 0;
-        for (int i = from; i <= to; i++) {
-            nbrCombinision += Math.pow(26, i);
-        }
-        if (nbrCombinision >= nbrRowsToGenerate) {
+        boolean result = true;
+        if (attrebute.getDataType().equals("INT")
+                || attrebute.getDataType().equals("TEXT")) {
+
+            int from = Integer.valueOf(attrebute.getDataFaker().getFrom());
+            int to = Integer.valueOf(attrebute.getDataFaker().getTo());
+            double nbrCombinision = 0;
+            for (int i = from; i <= to; i++) {
+                nbrCombinision += Math.pow(26, i);
+            }
+            if (nbrCombinision >= nbrRowsToGenerate) {
+                result = true;
+            } else {
+                msgError = new StringUtil().messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
+                result = false;
+            }
+        } else if (attrebute.getDataType().equals("DATE")) {
+
             result = true;
-        } else {
-            msgError = new StringUtil().messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
-            result = false;
         }
         return result;
     }
 
     /**
-     * the method check if the attrebute.getDataFaker().getTO() is superior then
-     * attrebute.getDataFaker().getFrom() || example : 4 caractères || A à Z =
-     * 26 Lettres donc 26*26*26*26
+     * return True if the MIN > MAX else false
      *
      * @param attrebute
      * @return boolean
      */
     private boolean checkFromTo(Attribute attrebute) {
-        int from = Integer.valueOf(attrebute.getDataFaker().getFrom());
-        int to = Integer.valueOf(attrebute.getDataFaker().getTo());
-        boolean result = from > to;
-        msgError = ((result) ? new StringUtil().messageErrorFromTo(attrebute) : "");
+        boolean result = true;
+        String from = attrebute.getDataFaker().getFrom();
+        String to = attrebute.getDataFaker().getTo();
+        if (attrebute.getDataType().equals("INT")
+                || attrebute.getDataType().equals("TEXT")) {
+            int fromInt = Integer.valueOf(from);
+            int toInt = Integer.valueOf(to);
+            result = fromInt <= toInt;
+            msgError = ((result) ? "" : new StringUtil().messageErrorFromTo(attrebute));
+        } else if (attrebute.getDataType().equals("DATE")) {
+            try {
+                result = new DateUtil().CompareDate(from, to);
+                msgError = ((result) ? "" : new StringUtil().messageErrorFromTo(attrebute));
+            } catch (ParseException ex) {
+                System.out.println("db.validation.PreCondetion.checkFromTo()");
+                Logger.getLogger(PreCondetion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return result;
+
     }
 
 }

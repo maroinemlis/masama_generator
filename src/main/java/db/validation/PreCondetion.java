@@ -85,8 +85,8 @@ public class PreCondetion {
     }
 
     private String checkForingAndKPrimery() {
-
         String result = CHECKED_TRUE;
+        /*
 
         for (Table table : sqlSchema.getTables()) {
             for (ForeignKey foreignKey : table.getForeignKeys()) {
@@ -100,7 +100,7 @@ public class PreCondetion {
                 }
             }
         }
-
+         */
         return result;
     }
 

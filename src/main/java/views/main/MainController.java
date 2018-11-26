@@ -119,39 +119,10 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void onGenerate(ActionEvent event) throws Exception {
-        new Thread() {
-            int x = 0;
+    private void onGenerate(ActionEvent event) {
+        schema.startToGenerateInstances();
+        tables.forEach(t -> t.updateTableViewInserts());
 
-            public void run() {
-                while (x < 1) {
-                    try {
-                        progress_Bar.setVisible(true);
-                        chargement_en_cours.setVisible(true);
-
-                        currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
-                        sleep(200);
-                        schema.startToGenerateInstances();
-                        for (TableView t : tables) {
-                            t.updateTableViewInserts();
-                        }
-                        x += 1;
-                        progress_Bar.setVisible(false);
-                        chargement_en_cours.setVisible(false);
-
-                        sleep(10);
-                        break;
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-            }
-
-        }.start();
-        // progress(() -> {
-
-        // });
     }
 
     private void refrechInserts() {

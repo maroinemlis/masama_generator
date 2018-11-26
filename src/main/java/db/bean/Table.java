@@ -22,7 +22,6 @@ public final class Table implements Serializable {
     private String tableName;
     private List<Attribute> attributes = new LinkedList();
     private PrimaryKey primaryKey = new PrimaryKey();
-    private List<ForeignKey> foreignKeys = new LinkedList<>();
     private int howMuch;
 
     public int getHowMuch() {
@@ -59,10 +58,6 @@ public final class Table implements Serializable {
 
     public List<Attribute> getAttributes() {
         return attributes;
-    }
-
-    public List<ForeignKey> getForeignKeys() {
-        return foreignKeys;
     }
 
     public Attribute getAttribute(String name) {
@@ -113,35 +108,14 @@ public final class Table implements Serializable {
      */
     public void fillForeignKeys(SQLSchema schema) throws Exception {
         ResultSet rs = getDatabaseMetaData().getImportedKeys(null, null, tableName);
-        int foreignKeyNumber = 0;
         while (rs.next()) {
 
             Attribute fkTuplePart = getAttribute(rs.getString("FKCOLUMN_NAME"));
-
             Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
             Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
-            String seq = rs.getString("KEY_SEQ");
-            ForeignKey foreignKey = null;
-            if (seq.equals("1")) {
-                foreignKeyNumber++;
-                foreignKey = new ForeignKey(pkTable, foreignKeyNumber);
-                foreignKeys.add(foreignKey);
-            } else {
-                foreignKey = getForeignKeyByNumber(foreignKeyNumber);
-            }
-            //fkTuplePart.setRef(pkTuplePart);
-            foreignKey.addToTupels(fkTuplePart, pkTuplePart);
-
+            fkTuplePart.setReferences(pkTuplePart);
+            System.out.println(fkTuplePart.getName() + " " + pkTuplePart.getName());
         }
-    }
-
-    private ForeignKey getForeignKeyByNumber(int foreignKeyNumber) {
-        for (ForeignKey foreignKey : foreignKeys) {
-            if (foreignKey.getForeignKeyNumber() == foreignKeyNumber) {
-                return foreignKey;
-            }
-        }
-        return null;
     }
 
     /**
@@ -150,36 +124,35 @@ public final class Table implements Serializable {
      */
     public void startToGenerateInstances() {
         for (Attribute a : attributes) {
-            a.startToGenerateRootValues(this.howMuch);
+            if (a.getReference() == null) {
+                a.startToGenerateRootValues(this.howMuch);
+                System.out.println(a.getInstances());
+            }
         }
-        for (ForeignKey fk : foreignKeys) {
-            List<Attribute> fkTuple = fk.getFkTuple();
-            List<Attribute> pkTuple = fk.getPkTuple();
-
-            for (int i = 0; i < pkTuple.size(); i++) {
-                if (pkTuple.get(i).getInstances() != null) {
-                    fkTuple.get(i).setInstances(getListForeigKey(fkTuple, pkTuple, i));
-                }
+        for (Attribute a : attributes) {
+            if (a.getReference() != null) {
+                a.setInstances(a.getReference().getInstances());
             }
         }
 
+        for (Attribute a : attributes) {
+            System.out.println(a.getInstances());
+        }
     }
 
-    private List<String> getListForeigKey(List<Attribute> fkTuple, List<Attribute> pkTuple, int i) {
-        int fkHowMuch = fkTuple.get(i).getDataFaker().getHowMuch();
-        int pkHowMuch = pkTuple.get(i).getDataFaker().getHowMuch();
+    private List<String> getListForeigKey(Attribute fkPart, Attribute pkPart) {
+        int fkHowMuch = fkPart.getDataFaker().getHowMuch();
+        int pkHowMuch = pkPart.getDataFaker().getHowMuch();
         int mDiv = fkHowMuch / pkHowMuch;
         int mMod = fkHowMuch % pkHowMuch;
 
-        int size = pkTuple.get(i).getInstances().size();
-
-        //System.err.println(pkTuple.get(i).getInstances());
+        int size = pkPart.getInstances().size();
         List<String> list = new ArrayList<>();
         for (int j = 0; j < mDiv; j++) {
-            List<String> a = pkTuple.get(i).getInstances().subList(0, size);
+            List<String> a = pkPart.getInstances().subList(0, size);
             list.addAll(a);
         }
-        List<String> a = pkTuple.get(i).getInstances().subList(0, mMod);
+        List<String> a = fkPart.getInstances().subList(0, mMod);
         list.addAll(a);
         return list;
     }

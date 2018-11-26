@@ -188,7 +188,7 @@ public final class Table implements Serializable {
      * Shows instances exemples for each attribtute
      */
     public void show() {
-        System.out.println("-------------------------");
+        System.out.println("-------------------------" + this.getTableName());
         int rowNumber = attributes.get(0).getInstances().size();
         for (int j = 0; j < rowNumber; j++) {
             String insert = "INSERT INTO " + this.getTableName() + " VALUES (";

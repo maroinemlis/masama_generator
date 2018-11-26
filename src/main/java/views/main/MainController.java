@@ -129,7 +129,7 @@ public class MainController implements Initializable {
 
         currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
         PreCondetion preCondetion = new PreCondetion(schema);
-        String msgCheck = preCondetion.checkSqlScema();
+        String msgCheck = preCondetion.checkSqlSchema();
 
         if (msgCheck.equals(CHECKED_TRUE)) {
             System.out.println("we can generate");
@@ -140,15 +140,12 @@ public class MainController implements Initializable {
             /*
             new Thread() {
                 int x = 0;
-
                 public void run() {
                     while (x < 1) {
                         try {
                             progress_Bar.setVisible(true);
                             chargement_en_cours.setVisible(true);
-
                             sleep(200);
-
                             schema.startToGenerateInstances();
                             for (TableView t : tables) {
                                 t.updateTableViewInserts();
@@ -156,18 +153,14 @@ public class MainController implements Initializable {
                             x += 1;
                             progress_Bar.setVisible(false);
                             chargement_en_cours.setVisible(false);
-
                             sleep(10);
                             break;
                         } catch (InterruptedException ex) {
                             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-
                 }
-
             }.start();
-
              */
 
         } else {

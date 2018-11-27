@@ -88,6 +88,9 @@ public final class SQLSchema implements Serializable {
         for (Table t : tables) {
             t.startToGenerateInstances();
         }
+        for (Table t : tables) {
+            t.startToGenerateInstancesForForeignKey();
+        }
     }
 
     public List<TableView> getTablesAsTablesView() {

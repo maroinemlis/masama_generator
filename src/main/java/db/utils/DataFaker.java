@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -50,17 +51,15 @@ public abstract class DataFaker implements Serializable {
         }
     }
 
-    private LinkedList<String> generateValues() {
-        LinkedList<String> values = new LinkedList<>();
-
+    private void generateValues() {
+        List<String> values = attribute.getInstances();
         generateNulls(values);
         for (int i = 0; i < howMuch - nullsNumber; i++) {
             values.add(generateValue());
         }
-        return values;
     }
 
-    private LinkedList<String> generateUniqueValues() {
+    private void generateUniqueValues() {
         HashSet<String> values = new HashSet<>();
         generateNulls(values);
         for (int i = 0; i < howMuch - nullsNumber; i++) {
@@ -70,14 +69,14 @@ public abstract class DataFaker implements Serializable {
             } while (values.contains(value));
             values.add(value);
         }
-        return new LinkedList<>(values);
+        attribute.getInstances().addAll(values);
     }
 
-    public LinkedList<String> values() {
+    public void values() {
         if (attribute.isUnique() || attribute.isPrimary()) {
-            return generateUniqueValues();
+            generateUniqueValues();
         } else {
-            return generateValues();
+            generateValues();
         }
     }
 

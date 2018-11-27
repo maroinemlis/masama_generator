@@ -10,6 +10,7 @@ import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.TextDataFaker;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class Attribute implements Serializable {
     private boolean isPrimary;
     private boolean isUnique;
     private boolean isNullable;
-    private List<String> instances;
+    private List<String> instances = new ArrayList<>();
     private DataFaker dataFaker;
     private Attribute reference;
 
@@ -102,9 +103,9 @@ public class Attribute implements Serializable {
         return this.name.hashCode();
     }
 
-    public void startToGenerateRootValues(int howMuch) {
-        dataFaker.setHowMuch(howMuch);
-        this.instances = dataFaker.values();
+    public void startToGenerateRootValues() {
+        instances.clear();
+        dataFaker.values();
 
     }
 

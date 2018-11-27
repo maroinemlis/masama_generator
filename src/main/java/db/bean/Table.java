@@ -9,6 +9,7 @@ import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,6 +83,7 @@ public final class Table implements Serializable {
             String nullable = rs.getString("NULLABLE");
             Attribute attribute = new Attribute(name, dataType, nullable);
             attributes.add(attribute);
+            attribute.getDataFaker().setHowMuch(howMuch);
         }
     }
 
@@ -109,12 +111,11 @@ public final class Table implements Serializable {
     public void fillForeignKeys(SQLSchema schema) throws Exception {
         ResultSet rs = getDatabaseMetaData().getImportedKeys(null, null, tableName);
         while (rs.next()) {
-
             Attribute fkTuplePart = getAttribute(rs.getString("FKCOLUMN_NAME"));
             Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
             Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
             fkTuplePart.setReferences(pkTuplePart);
-            System.out.println(fkTuplePart.getName() + " " + pkTuplePart.getName());
+
         }
     }
 
@@ -123,20 +124,19 @@ public final class Table implements Serializable {
      *
      */
     public void startToGenerateInstances() {
+        System.out.println(tableName);
         for (Attribute a : attributes) {
             if (a.getReference() == null) {
-                a.startToGenerateRootValues(this.howMuch);
-                System.out.println(a.getInstances());
+                a.startToGenerateRootValues();
             }
         }
-        for (Attribute a : attributes) {
-            if (a.getReference() != null) {
-                a.setInstances(a.getReference().getInstances());
-            }
-        }
+    }
 
+    public void startToGenerateInstancesForForeignKey() {
         for (Attribute a : attributes) {
-            System.out.println(a.getInstances());
+            if (a.getInstances().isEmpty() && a.getReference() != null) {
+                a.getInstances().addAll(getListForeigKey(a, a.getReference()));
+            }
         }
     }
 
@@ -144,16 +144,13 @@ public final class Table implements Serializable {
         int fkHowMuch = fkPart.getDataFaker().getHowMuch();
         int pkHowMuch = pkPart.getDataFaker().getHowMuch();
         int mDiv = fkHowMuch / pkHowMuch;
-        int mMod = fkHowMuch % pkHowMuch;
-
         int size = pkPart.getInstances().size();
         List<String> list = new ArrayList<>();
         for (int j = 0; j < mDiv; j++) {
-            List<String> a = pkPart.getInstances().subList(0, size);
-            list.addAll(a);
+            list.addAll(pkPart.getInstances());
+            fkHowMuch = fkHowMuch - size;
         }
-        List<String> a = fkPart.getInstances().subList(0, mMod);
-        list.addAll(a);
+        System.out.println(fkHowMuch);
         return list;
     }
 

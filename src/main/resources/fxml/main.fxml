@@ -27,7 +27,7 @@
                         <FontAwesomeIconView fill="#242763" glyphName="DATABASE" size="30" stroke="WHITE" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
-            <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#onOpen" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Ouvrire">
+            <JFXButton alignment="CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#onOpen" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Ouvrir">
                <graphic>
                   <FontAwesomeIconView fill="#f2ec4f" glyphName="FOLDER" size="30" stroke="WHITE" strokeWidth="0.0" />
                </graphic>

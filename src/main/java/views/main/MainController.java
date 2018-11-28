@@ -218,7 +218,8 @@ public class MainController implements Initializable {
 
     @FXML
     private void onConnection(ActionEvent event) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("fxml/connection.fxml"));
+       // FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("fxml/connection.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("fxml/sidebar.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         JFXAlert alert = new JFXAlert();
         alert.initModality(Modality.APPLICATION_MODAL);

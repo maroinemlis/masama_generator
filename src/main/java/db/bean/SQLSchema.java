@@ -7,9 +7,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import views.main.TableView;
 
-public final class SQLSchema implements Serializable{
+public final class SQLSchema implements Serializable {
 
-    private List<Table> tables = new LinkedList<>();
+    private List<Table> tables = new ArrayList<>();
     private String name;
 
     public List<Table> getTables() {
@@ -87,6 +87,9 @@ public final class SQLSchema implements Serializable{
     public void startToGenerateInstances() {
         for (Table t : tables) {
             t.startToGenerateInstances();
+        }
+        for (Table t : tables) {
+            t.startToGenerateInstancesForForeignKey();
         }
     }
 

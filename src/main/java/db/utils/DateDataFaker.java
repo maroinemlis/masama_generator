@@ -22,7 +22,7 @@ public class DateDataFaker extends DataFaker {
     public DateDataFaker(Attribute att) {
         super(att);
         this.from = "2015-01-01";
-        this.to = "2018-01-01";
+        this.to = "2018-05-01";
     }
 
     @Override

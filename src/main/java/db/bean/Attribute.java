@@ -10,6 +10,7 @@ import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.TextDataFaker;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,16 +18,16 @@ import java.util.List;
  *
  * @author Maroine
  */
-public class Attribute implements Comparable<Attribute>, Serializable {
+public class Attribute implements Serializable {
 
-    private boolean isRoot;
     private String name;
     private String dataType;
     private boolean isPrimary;
     private boolean isUnique;
     private boolean isNullable;
-    private List<String> instances;
+    private List<String> instances = new ArrayList<>();
     private DataFaker dataFaker;
+    private Attribute reference;
 
     /**
      *
@@ -38,10 +39,9 @@ public class Attribute implements Comparable<Attribute>, Serializable {
         this.name = attributeName;
         this.dataType = dataType;
         this.isPrimary = false;
-        this.isRoot = true;
         this.isUnique = false;
         this.isNullable = !nullable.equals("0");
-
+        this.reference = null;
         switch (dataType) {
             case "TEXT":
                 dataFaker = new TextDataFaker(this);
@@ -94,11 +94,6 @@ public class Attribute implements Comparable<Attribute>, Serializable {
     }
 
     @Override
-    public int compareTo(Attribute o) {
-        return name.compareTo(o.name);
-    }
-
-    @Override
     public boolean equals(Object o) {
         return name.equals(((Attribute) o).name);
     }
@@ -108,15 +103,10 @@ public class Attribute implements Comparable<Attribute>, Serializable {
         return this.name.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return name + " " + dataType;
-    }
+    public void startToGenerateRootValues() {
+        instances.clear();
+        dataFaker.values();
 
-    public void startToGenerateRootValues(int howMuch, int nullsRate) {
-        dataFaker.setHowMuch(howMuch);
-        dataFaker.setNullsRate(nullsRate);
-        this.instances = dataFaker.values();
     }
 
     public boolean isPrimary() {
@@ -125,14 +115,6 @@ public class Attribute implements Comparable<Attribute>, Serializable {
 
     public void isPrimary(boolean bool) {
         isPrimary = bool;
-    }
-
-    /**
-     *
-     * @param bool
-     */
-    public void isRoot(boolean bool) {
-        this.isRoot = bool;
     }
 
     public List<String> getInstances() {
@@ -153,6 +135,14 @@ public class Attribute implements Comparable<Attribute>, Serializable {
 
     public boolean isUnique() {
         return this.isUnique;
+    }
+
+    public Attribute getReference() {
+        return reference;
+    }
+
+    public void setReferences(Attribute a) {
+        this.reference = a;
     }
 
 }

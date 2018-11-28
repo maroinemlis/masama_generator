@@ -22,7 +22,7 @@ public class TextDataFaker extends DataFaker {
     public String generateValue() {
         String str = null;
         int length = between();
-        if (generatorType.equals("system")) {
+        if (generatorType.equals("'system")) {
             str = faker.regexify(regex + "{" + length + "}");
         } else {
             try {
@@ -31,6 +31,6 @@ public class TextDataFaker extends DataFaker {
             } catch (Exception ex) {
             }
         }
-        return str;
+        return "'" + str + "'";
     }
 }

@@ -54,10 +54,9 @@ public class AttributeView {
         }
     }
 
-    public void startToGenerateRootValues(int howMuch, int nullsRate) {
+    public void startToGenerateRootValues(int howMuch) {
         dataFaker.setHowMuch(howMuch);
-        dataFaker.setNullsRate(nullsRate);
-        this.attribute.setInstances(dataFaker.values());
+        attribute.startToGenerateRootValues();
     }
 
     public DataFaker getDataFaker() {

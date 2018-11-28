@@ -28,7 +28,7 @@ public class Types {
     }
 
     private Types() {
-        TYPES_MAPPING.put("system", Arrays.asList("system"));
+        TYPES_MAPPING.put("'system", Arrays.asList("'system"));
         TYPES_MAPPING.put("address", Arrays.asList("buildingNumber", "city", "cityName",
                 "cityPrefix", "citySuffix", "country", "countryCode", "firstName", "lastName", "latitude",
                 "longitude", "secondaryAddress", "state", "stateAbbr", "streetAddress",

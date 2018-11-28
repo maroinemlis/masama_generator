@@ -5,13 +5,13 @@
  */
 package db.utils;
 
-import com.github.javafaker.Faker;
 import db.bean.Attribute;
 import static db.utils.Shared.faker;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -33,8 +33,8 @@ public abstract class DataFaker implements Serializable {
         this.attribute = att;
         this.from = "3";
         this.to = "100";
-        this.generatorType = "system";
-        this.specificType = "system";
+        this.generatorType = "'system";
+        this.specificType = "'system";
         this.nullsNumber = (nullsRate * howMuch / 100);
         this.regex = "[a-zA-Z]";
     }
@@ -51,16 +51,15 @@ public abstract class DataFaker implements Serializable {
         }
     }
 
-    private LinkedList<String> generateValues() {
-        LinkedList<String> values = new LinkedList<>();
+    private void generateValues() {
+        List<String> values = attribute.getInstances();
         generateNulls(values);
         for (int i = 0; i < howMuch - nullsNumber; i++) {
             values.add(generateValue());
         }
-        return values;
     }
 
-    private LinkedList<String> generateUniqueValues() {
+    private void generateUniqueValues() {
         HashSet<String> values = new HashSet<>();
         generateNulls(values);
         for (int i = 0; i < howMuch - nullsNumber; i++) {
@@ -70,21 +69,23 @@ public abstract class DataFaker implements Serializable {
             } while (values.contains(value));
             values.add(value);
         }
-        return new LinkedList<>(values);
+        attribute.getInstances().addAll(values);
     }
 
-    public LinkedList<String> values() {
+    public void values() {
         if (attribute.isUnique() || attribute.isPrimary()) {
-            return generateUniqueValues();
+            generateUniqueValues();
         } else {
-            return generateValues();
+            generateValues();
         }
     }
 
-    public void setConfiguration(String from, String to,
-            String generatorType, String specificType) {
+    public void setConfiguration(String from, String to, String generatorType, String specificType) {
+        System.out.println(this.from + " " + this.to);
+
         this.from = from;
         this.to = to;
+        System.out.println(this.from + " " + this.to);
         this.generatorType = generatorType;
         this.specificType = specificType;
     }
@@ -105,6 +106,14 @@ public abstract class DataFaker implements Serializable {
         return to;
     }
 
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
     public String getSpecificType() {
         return specificType;
     }
@@ -118,6 +127,6 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void setNullsRate(int nullsRate) {
-        this.nullsRate = nullsRate;
+        this.nullsNumber = ((nullsRate * howMuch) / 100);
     }
 }

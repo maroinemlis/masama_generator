@@ -26,15 +26,27 @@ public class StringUtil {
         }
         return string + list.get(i).getName() + ")";
     }
-    
-      public String getMsgErrorKeyReferences(){
+
+    public String getMsgErrorKeyReferences() {
         return "Le nombre des colonnes de clé étrangère\n"
-             + "est superieur que les clés le table reference ";
+                + "est superieur que les clés le table reference ";
     }
-    
+
     public String messageErrorFromTo(int nbrRowsToGenerate, String from, String to) {
-        return "Le nombre de colonne demander à \ngeneré("+nbrRowsToGenerate +") "
+        return "Le nombre de colonne demander à \ngeneré(" + nbrRowsToGenerate + ") "
                 + "est inférieur au nombre de \n"
-                + "possibelité dans l'intervalle donnée: ["+from+" - "+to+"]"; 
+                + "possibelité dans l'intervalle donnée: [" + from + " - " + to + "]";
     }
+
+    public String messageErrorStringCombinition(int nbrRowsToGenerate, double pow) {
+        return "Le nombre de colonne demander à \ngeneré(" + nbrRowsToGenerate + ") "
+                + "est supérieur au nombre de \n"
+                + "combinision possible : (" + (int) pow + ")";
+    }
+
+    public String messageErrorFromTo(Attribute attrebute) {
+        return "vous avez formez le min = " + attrebute.getDataFaker().getFrom() + " et max = " + attrebute.getDataFaker().getTo() + ""
+                + " dans la colonne : " + attrebute.getName() + " " + attrebute.getDataType();
+    }
+
 }

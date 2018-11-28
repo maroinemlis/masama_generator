@@ -8,6 +8,8 @@ package db.bean;
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,32 +23,19 @@ public final class Table implements Serializable {
     private String tableName;
     private List<Attribute> attributes = new LinkedList();
     private PrimaryKey primaryKey = new PrimaryKey();
-    private List<ForeignKey> foreignKeys = new LinkedList<>();
-    private boolean rootTable = true;
-    private boolean generated = false;
     private int howMuch;
-    private int nullsRate;
 
     public int getHowMuch() {
         return howMuch;
-    }
-
-    public int getNullsRate() {
-        return nullsRate;
     }
 
     public void setHowMuch(int howMuch) {
         this.howMuch = howMuch;
     }
 
-    public void setNullsRate(int nullsRate) {
-        this.nullsRate = nullsRate;
-    }
-
     public Table(String tableName) throws Exception {
         this.tableName = tableName;
         this.howMuch = 10;
-        this.nullsRate = 5;
         fillAttributes();
         fillPrimaryKey();
     }
@@ -72,10 +61,6 @@ public final class Table implements Serializable {
         return attributes;
     }
 
-    public List<ForeignKey> getForeignKeys() {
-        return foreignKeys;
-    }
-
     public Attribute getAttribute(String name) {
         for (Attribute a : attributes) {
             if (a.getName().equals(name)) {
@@ -98,6 +83,7 @@ public final class Table implements Serializable {
             String nullable = rs.getString("NULLABLE");
             Attribute attribute = new Attribute(name, dataType, nullable);
             attributes.add(attribute);
+            attribute.getDataFaker().setHowMuch(howMuch);
         }
     }
 
@@ -124,60 +110,13 @@ public final class Table implements Serializable {
      */
     public void fillForeignKeys(SQLSchema schema) throws Exception {
         ResultSet rs = getDatabaseMetaData().getImportedKeys(null, null, tableName);
-        int foreignKeyNumber = 0;
         while (rs.next()) {
-
             Attribute fkTuplePart = getAttribute(rs.getString("FKCOLUMN_NAME"));
-
             Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
             Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
-            //System.out.println(fkTuplePart.getName() + " " + this.getTableName() + " -> " + pkTuplePart.getName() + " " + pkTable.getTableName() + " 3");
-            String seq = rs.getString("KEY_SEQ");
-            ForeignKey foreignKey = null;
-            if (seq.equals("1")) {
-                foreignKeyNumber++;
-                foreignKey = new ForeignKey(pkTable, foreignKeyNumber);
-                foreignKeys.add(foreignKey);
-            } else {
-                foreignKey = getForeignKeyByNumber(foreignKeyNumber);
-            }
-            foreignKey.addToTupels(fkTuplePart, pkTuplePart);
+            fkTuplePart.setReferences(pkTuplePart);
 
         }
-    }
-
-    private ForeignKey getForeignKeyByNumber(int foreignKeyNumber) {
-        for (ForeignKey foreignKey : foreignKeys) {
-            if (foreignKey.getForeignKeyNumber() == foreignKeyNumber) {
-                return foreignKey;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String toString() {
-        String string = "CREATE TABLE " + tableName + " (\n";
-        int i = 0;
-        for (; i < attributes.size() - 1; i++) {
-            string += "\t" + attributes.get(i).toString() + ",\n";
-        }
-        if (primaryKey.getTuple().isEmpty() && foreignKeys.isEmpty()) {
-            string += "\t" + attributes.get(i).toString() + "\n";
-        } else {
-            string += "\t" + attributes.get(i).toString() + ",\n";
-            if (foreignKeys.isEmpty()) {
-                string += "\t" + primaryKey.toString() + "\n";
-            } else {
-                int j = 0;
-                for (; j < foreignKeys.size() - 1; j++) {
-                    string += "\t" + foreignKeys.get(j).toString() + ",\n";
-                }
-                string += "\t" + foreignKeys.get(j).toString() + "\n";
-            }
-        }
-        return string + ");";
-
     }
 
     /**
@@ -185,27 +124,43 @@ public final class Table implements Serializable {
      *
      */
     public void startToGenerateInstances() {
+        System.out.println(tableName);
         for (Attribute a : attributes) {
-            a.startToGenerateRootValues(this.howMuch, this.nullsRate);
-        }
-
-        for (ForeignKey fk : foreignKeys) {
-            List<Attribute> fkTuple = fk.getFkTuple();
-            List<Attribute> pkTuple = fk.getPkTuple();
-            for (int i = 0; i < pkTuple.size(); i++) {
-                if (pkTuple.get(i).getInstances() != null) {
-                    fkTuple.get(i).setInstances(pkTuple.get(i).getInstances());
-                }
+            if (a.getReference() == null) {
+                a.startToGenerateRootValues();
             }
         }
+    }
+
+    public void startToGenerateInstancesForForeignKey() {
+        for (Attribute a : attributes) {
+            if (a.getInstances().isEmpty() && a.getReference() != null) {
+                a.getInstances().addAll(getListForeigKey(a, a.getReference()));
+            }
+        }
+    }
+
+    private List<String> getListForeigKey(Attribute fkPart, Attribute pkPart) {
+        int fkHowMuch = fkPart.getDataFaker().getHowMuch();
+        int pkHowMuch = pkPart.getDataFaker().getHowMuch();
+        int mDiv = fkHowMuch / pkHowMuch;
+        int size = pkPart.getInstances().size();
+        List<String> list = new ArrayList<>();
+        for (int j = 0; j < mDiv; j++) {
+            list.addAll(pkPart.getInstances());
+            fkHowMuch = fkHowMuch - size;
+        }
+        System.out.println(fkHowMuch);
+        return list;
     }
 
     /**
      * Shows instances exemples for each attribtute
      */
     public void show() {
+        System.out.println("-------------------------" + this.getTableName());
         int rowNumber = attributes.get(0).getInstances().size();
-        for (int j = 0; j < rowNumber - 1; j++) {
+        for (int j = 0; j < rowNumber; j++) {
             String insert = "INSERT INTO " + this.getTableName() + " VALUES (";
             int i = 0;
             Attribute a = null;
@@ -214,6 +169,7 @@ public final class Table implements Serializable {
                 insert += a.getInstances().get(j) + ", ";
             }
             a = attributes.get(i);
+
             insert += a.getInstances().get(j) + ");";
             System.out.println(insert);
         }

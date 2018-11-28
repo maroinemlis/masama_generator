@@ -35,15 +35,12 @@ public class SaveProject {
         }
         String mPathFile = path + "/txt.txt";
         FileUtil fileUtil = new FileUtil();
-        Attribute attribute = sqlSchema.getTable("Movie").getAttribute("mID");
-        Table table = sqlSchema.getTable("Movie");
 
         fileUtil.writeObjectInFile(mPathFile, sqlSchema);
 
         SQLSchema sqlSchema1 = (SQLSchema) fileUtil.readFileObject(mPathFile);
 
         System.err.println("-----------------From file ");
-        System.err.println(sqlSchema1.getTableByName("Movie").getTableName());
         for (Table table1 : sqlSchema1.getTables()) {
             System.out.println(table1);
             table1.show();

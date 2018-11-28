@@ -12,8 +12,13 @@ import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
+import db.bean.Table;
 import db.utils.Types;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javafx.scene.control.Control;
+import javafx.scene.control.TreeTableView;
 
 /**
  *
@@ -29,13 +34,38 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     private JFXComboBox specificType = null;
     private Control from;
     private Control to;
+    private JFXCheckBox checked;
+    private Table table;
+    String fromString = "";
+    String toString = "";
+    String generatorTypeString = "'system";
+    String specificTypeString = "'system";
 
-    public Attribute getAttribute() {
-        return attribute;
+    public void setDisable(boolean selected) {
+        if (generatorTypes != null) {
+            generatorTypes.setDisable(selected);
+        }
+        if (specificType != null) {
+            specificType.setDisable(selected);
+        }
+        from.setDisable(selected);
+        to.setDisable(selected);
     }
 
-    public AttributeModel(Attribute attribute) {
+    public AttributeModel(Attribute attribute, Table table) {
+        this.table = table;
         this.attribute = attribute;
+        checked = new JFXCheckBox();
+        fromString = attribute.getDataFaker().getFrom();
+        toString = attribute.getDataFaker().getTo();
+        checked.selectedProperty().addListener((observable) -> {
+            boolean notChecked = !checked.isSelected();
+            setDisable(notChecked);
+            if (notChecked) {
+                update();
+                attribute.getDataFaker().setConfiguration(fromString, toString, generatorTypeString, specificTypeString);
+            }
+        });
         if (attribute.isUnique()) {
             isUnique = new JFXCheckBox();
             isUnique.setDisable(true);
@@ -51,32 +81,46 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             isNullable.setDisable(true);
             isNullable.setSelected(true);
         }
+
         switch (attribute.getDataType()) {
             case "TEXT":
-                this.from = new JFXSlider(1, 255, 20);
-                this.to = new JFXSlider(1, 255, 20);
+                from = new JFXSlider(1, 255, Integer.parseInt(fromString));
+                to = new JFXSlider(1, 255, Integer.parseInt(toString));
                 generatorTypes = new JFXComboBox();
                 specificType = new JFXComboBox();
                 generatorTypes.getItems().addAll(Types.getInstances().TYPES_MAPPING.keySet());
+                generatorTypes.getSelectionModel().selectFirst();
+                generatorTypeString = generatorTypes.getItems().get(0).toString();
+                specificType.getItems().addAll(Types.getInstances().TYPES_MAPPING.get(generatorTypeString));
+                specificTypeString = specificType.getItems().get(0).toString();
                 generatorTypes.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
                     specificType.getItems().clear();
                     specificType.getItems().addAll(Types.getInstances().TYPES_MAPPING.get(n));
+                    specificType.getSelectionModel().selectFirst();
+                    generatorTypeString = n.toString();
+
+                });
+                specificType.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
+                    specificTypeString = n.toString();
                 });
                 break;
             case "DATE":
-                this.from = new JFXDatePicker();
-                this.to = new JFXDatePicker();
-
+                this.from = new JFXDatePicker(LocalDate.parse(fromString));
+                this.to = new JFXDatePicker(LocalDate.parse(toString));
                 break;
             case "INT":
             case "INTEGER":
             case "DOUBLE":
             case "FLOAT":
-
-                this.from = new JFXTextField();
-                this.to = new JFXTextField();
+                this.from = new JFXTextField(fromString);
+                this.to = new JFXTextField(toString);
                 break;
         }
+        setDisable(true);
+    }
+
+    public JFXCheckBox getChecked() {
+        return checked;
     }
 
     public String getName() {
@@ -105,7 +149,6 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     public JFXCheckBox getIsNullable() {
         return isNullable;
-
     }
 
     public Control getFrom() {
@@ -113,11 +156,31 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     }
 
     public Control getTo() {
-
         return to;
     }
 
-    public String toString() {
-        return this.attribute.toString();
+    public void update() {
+        switch (attribute.getDataType()) {
+            case "TEXT":
+                fromString = ((int) ((JFXSlider) from).getValue()) + "";
+                toString = ((int) ((JFXSlider) to).getValue()) + "";
+                break;
+            case "DATE":
+                fromString = ((JFXDatePicker) from).getValue().toString();
+                toString = ((JFXDatePicker) to).getValue().toString();
+                break;
+            case "INT":
+            case "INTEGER":
+            case "DOUBLE":
+            case "FLOAT":
+                fromString = ((JFXTextField) from).getText();
+                toString = ((JFXTextField) to).getText();
+                break;
+        }
+
+    }
+
+    public Table getTable() {
+        return table;
     }
 }

@@ -9,11 +9,15 @@ import db.bean.Attribute;
 import db.bean.ForeignKey;
 import db.bean.SQLSchema;
 import db.bean.Table;
+import static db.connection.SQLConnection.getDatabaseMetaData;
 import db.utils.DateUtil;
 import db.utils.StringUtil;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -42,10 +46,15 @@ public class PreCondetion {
      *
      * @return
      */
-    public String checkSqlSchema() throws ParseException {
-        //check from and to ::from<to
+    public String checkSqlSchema() throws ParseException, SQLException {
+        //check if circuler
 
-        //check ForingAndKPrimery
+        if (isCircular()) {
+            return "Le schéma est circulaire...";
+        }
+
+        //check from and to ::from<to
+        //check ForingAndKPrimery todo:: rendre la method return true or false
         String result = checkForingAndKPrimery();
         if (!result.equals(CHECKED_TRUE)) {
             return result;
@@ -86,6 +95,44 @@ public class PreCondetion {
             }
         }
         return CHECKED_TRUE;
+    }
+
+    public boolean isCircular() throws SQLException {
+        boolean result = true;
+        for (Table table : sqlSchema.getTables()) {
+            boolean b = isCirculedInTable(table);
+            if (b) {
+
+            }
+            for (ForeignKey fk : table.getForeignKeys()) {
+                //System.out.println(fk.getReferences().getTableName());
+            }
+            return b;
+        }
+        return result;
+    }
+
+    List<String> listTable = new ArrayList();
+
+    private boolean isCirculedInTable(Table table) {
+        boolean result = false;
+        if (!listTable.contains(table.getTableName())) {
+            listTable.add(table.getTableName());
+            System.err.println(" ->" + listTable.toString());
+            if (!table.getForeignKeys().isEmpty()) {
+                result = isCirculedInTable(table.getForeignKeys().get(0).getReferences());
+            }
+        } else {
+            System.err.println(" ----------------END" + table.getTableName());
+            result = true;
+        }
+
+        /*if (table.getForeignKeys().isEmpty()) {
+
+        } else {
+
+        }*/
+        return result;
     }
 
     private String checkForingAndKPrimery() {

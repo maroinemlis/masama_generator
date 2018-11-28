@@ -11,6 +11,8 @@ import db.connection.SQLConnection;
 import db.save_and_load.SaveProject;
 import db.validation.PreCondetion;
 import static db.validation.PreCondetion.CHECKED_TRUE;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.sqlite.SQLiteException;
@@ -34,15 +36,17 @@ public class TestClass_amirouche {
         //  try with file
         //todo :: add exeption(message) when we drop table not exist
         //todo :: check the spealing of message text in String Util.java
-
         //todo :: the tables is generated in alphabitique order
-        SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/masama_generator/SQL/5_tables.sql", "SQLite", false);
+        //todo :: tow tuple foreign key reference to on tuple
+        //todo :: virifie l'exmple de profe
+        SQLConnection cnx = new SQLConnection(
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/circulaire.sql", "SQLite", false);
         sqlSchema = new SQLSchema();
 
         sqlSchema.getTables().get(0).setHowMuch(3);
         sqlSchema.getTables().get(1).setHowMuch(3);
-        sqlSchema.getTables().get(2).setHowMuch(3);
-        sqlSchema.getTables().get(3).setHowMuch(3);
+        //sqlSchema.getTables().get(2).setHowMuch(3);
+        //sqlSchema.getTables().get(3).setHowMuch(3);
 
         //sqlSchema.getTables().get(3).setHowMuch(3);
         //sqlSchema.getTables().get(4).setHowMuch(3);
@@ -69,7 +73,9 @@ public class TestClass_amirouche {
         if (msgCheck.equals(CHECKED_TRUE)) {
             System.out.println("we can generate");
             sqlSchema.startToGenerateInstances();
-            for (Table table : sqlSchema.getTables()) {
+            List<Table> tables = sqlSchema.getTables();
+            Collections.sort(tables);
+            for (Table table : tables) {
                 table.show();
             }
         } else {

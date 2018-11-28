@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Maroine
  */
-public final class Table implements Serializable {
+public final class Table implements Serializable, Comparable<Table> {
 
     private String tableName;
     private List<Attribute> attributes = new LinkedList();
@@ -202,6 +202,29 @@ public final class Table implements Serializable {
 
             insert += a.getInstances().get(j) + ");";
             System.out.println(insert);
+        }
+    }
+
+    List<String> listTable = new ArrayList();
+
+    @Override
+    public int compareTo(Table table) {
+        int result;
+        if (table.getTableName().equals(this.getTableName())) {
+            result = 0;
+        }
+        result = isParentOfthisTable(table);
+        return result;
+    }
+
+    private int isParentOfthisTable(Table table) {
+        if (!listTable.contains(table.getTableName())) {
+            listTable.add(table.getTableName());
+            if (!table.getForeignKeys().isEmpty()) {
+                result = isCirculedInTable(table.getForeignKeys().get(0).getReferences());
+            }
+        } else {
+            result = true;
         }
     }
 

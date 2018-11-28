@@ -6,6 +6,8 @@
 package test_classes;
 
 import com.github.javafaker.Faker;
+import db.bean.SQLSchema;
+import db.connection.SQLConnection;
 import java.util.ArrayList;
 
 /**
@@ -14,6 +16,15 @@ import java.util.ArrayList;
  */
 public class TestClass_maroine {
 
-    public static void test() {
+    public void main() throws Exception {
+
+        SQLConnection cnx = new SQLConnection("C:\\netbeansProjects\\masama_generator\\SQL\\4_tables.sql", "SQLite", false);
+        SQLSchema sqlSchema = new SQLSchema();
+
+        sqlSchema.getTables().get(0).setHowMuch(3);
+        sqlSchema.getTables().get(1).setHowMuch(3);
+        sqlSchema.getTables().get(2).setHowMuch(3);
+        sqlSchema.getTables().get(3).setHowMuch(3);
+
     }
 }

@@ -28,6 +28,11 @@ public class Attribute implements Serializable {
     private List<String> instances = new ArrayList<>();
     private DataFaker dataFaker;
     private Attribute reference;
+    private List<Attribute> referencesMe = new ArrayList<Attribute>();
+
+    public List<Attribute> getReferencesMe() {
+        return referencesMe;
+    }
 
     /**
      *

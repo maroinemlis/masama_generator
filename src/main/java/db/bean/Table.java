@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Maroine
  */
-public final class Table implements Serializable, Comparable<Table> {
+public final class Table implements Serializable {
 
     private String tableName;
     private List<Attribute> attributes = new LinkedList();
@@ -31,6 +31,7 @@ public final class Table implements Serializable, Comparable<Table> {
 
     public void setHowMuch(int howMuch) {
         this.howMuch = howMuch;
+        attributes.forEach(a -> a.getDataFaker().setHowMuch(howMuch));
     }
 
     public Table(String tableName) throws Exception {
@@ -115,6 +116,7 @@ public final class Table implements Serializable, Comparable<Table> {
             Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
             Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
             fkTuplePart.setReferences(pkTuplePart);
+            pkTuplePart.getReferencesMe().add(fkTuplePart);
 
         }
     }
@@ -144,6 +146,7 @@ public final class Table implements Serializable, Comparable<Table> {
         int fkHowMuch = fkPart.getDataFaker().getHowMuch();
         int pkHowMuch = pkPart.getDataFaker().getHowMuch();
         int mDiv = fkHowMuch / pkHowMuch;
+        int mMod = fkHowMuch % pkHowMuch;
         int size = pkPart.getInstances().size();
         List<String> list = new ArrayList<>();
         for (int j = 0; j < mDiv; j++) {
@@ -176,26 +179,5 @@ public final class Table implements Serializable, Comparable<Table> {
     }
 
     List<String> listTable = new ArrayList();
-
-    @Override
-    public int compareTo(Table table) {
-        int result;
-        if (table.getTableName().equals(this.getTableName())) {
-            result = 0;
-        }
-        result = isParentOfthisTable(table);
-        return result;
-    }
-
-    private int isParentOfthisTable(Table table) {
-        if (!listTable.contains(table.getTableName())) {
-            listTable.add(table.getTableName());
-            if (!table.getForeignKeys().isEmpty()) {
-                result = isCirculedInTable(table.getForeignKeys().get(0).getReferences());
-            }
-        } else {
-            result = true;
-        }
-    }
 
 }

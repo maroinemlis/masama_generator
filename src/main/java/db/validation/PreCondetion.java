@@ -49,10 +49,9 @@ public class PreCondetion {
     public String checkSqlSchema() throws ParseException, SQLException {
         //check if circuler
 
-        if (isCircular()) {
+        /*if (isCircular()) {
             return "Le schéma est circulaire...";
-        }
-
+        }*/
         //check from and to ::from<to
         //check ForingAndKPrimery todo:: rendre la method return true or false
         String result = checkForingAndKPrimery();
@@ -102,10 +101,6 @@ public class PreCondetion {
         for (Table table : sqlSchema.getTables()) {
             boolean b = isCirculedInTable(table);
             if (b) {
-
-            }
-            for (ForeignKey fk : table.getForeignKeys()) {
-                //System.out.println(fk.getReferences().getTableName());
             }
             return b;
         }
@@ -114,13 +109,21 @@ public class PreCondetion {
 
     List<String> listTable = new ArrayList();
 
+    //todo :we need to get the name of table from reference
     private boolean isCirculedInTable(Table table) {
         boolean result = false;
         if (!listTable.contains(table.getTableName())) {
             listTable.add(table.getTableName());
             System.err.println(" ->" + listTable.toString());
-            if (!table.getForeignKeys().isEmpty()) {
-                result = isCirculedInTable(table.getForeignKeys().get(0).getReferences());
+            for (Attribute attribute : table.getAttributes()) {
+
+            }//todo
+            if (!table.getAttributes().get(0).getReference().equals(null)) {
+                Attribute a = table.getAttributes().get(0);
+                Attribute b = a.getReference();
+                Attribute c = b.getReference();
+
+                //result = isCirculedInTable(table.getAttributes(0).getReference().get(0));
             }
         } else {
             System.err.println(" ----------------END" + table.getTableName());
@@ -196,7 +199,7 @@ public class PreCondetion {
         String from = attrebute.getDataFaker().getFrom();
         String to = attrebute.getDataFaker().getTo();
         int numberOfDay = numberDaysBetween(from, to);
-        System.out.println(numberOfDay);
+        //System.out.println(numberOfDay);
         if (numberOfDay >= nbrRowsToGenerate) {
             result = true;
         } else {

@@ -39,15 +39,25 @@ public class TestClass_amirouche {
         //todo :: the tables is generated in alphabitique order
         //todo :: tow tuple foreign key reference to on tuple
         //todo :: virifie l'exmple de profe
+
+        //Résolu :: setHowMuch ne fonction pas avec les table
+        //    pour spicéfai le how much il faut le donné au primery key
+        //Résolu :: les préCondetion ne marchent plus c'est le howMush de table ne marche pas
+        //
         SQLConnection cnx = new SQLConnection(
-                "/home/amirouche/NetBeansProjects/masama_generator/SQL/circulaire.sql", "SQLite", false);
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/1_table.sql", "SQLite", false);
         sqlSchema = new SQLSchema();
 
         sqlSchema.getTables().get(0).setHowMuch(3);
+        //sqlSchema.getTables().get(0).getAttributes().get(0).getDataFaker().setHowMuch(3);
+        //sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setHowMuch(3);
+
+        /*sqlSchema.getTables().get(0).setHowMuch(3);
         sqlSchema.getTables().get(1).setHowMuch(3);
+        sqlSchema.getTables().get(2).setHowMuch(30);
+        sqlSchema.getTables().get(3).setHowMuch(3);*/
         //sqlSchema.getTables().get(2).setHowMuch(3);
         //sqlSchema.getTables().get(3).setHowMuch(3);
-
         //sqlSchema.getTables().get(3).setHowMuch(3);
         //sqlSchema.getTables().get(4).setHowMuch(3);
         //sqlSchema.getTables().get(0).getAttributes().get(2).getDataFaker().setFrom("3");
@@ -74,7 +84,6 @@ public class TestClass_amirouche {
             System.out.println("we can generate");
             sqlSchema.startToGenerateInstances();
             List<Table> tables = sqlSchema.getTables();
-            Collections.sort(tables);
             for (Table table : tables) {
                 table.show();
             }

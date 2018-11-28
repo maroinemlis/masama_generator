@@ -1,6 +1,0 @@
-
-CREATE TABLE InfoA
-(    
-    iID INT PRIMARY KEY
-);
-

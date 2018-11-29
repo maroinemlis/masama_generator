@@ -45,10 +45,10 @@ public class TestClass_amirouche {
         //Résolu :: les préCondetion ne marchent plus c'est le howMush de table ne marche pas
         //
         SQLConnection cnx = new SQLConnection(
-                "/home/amirouche/NetBeansProjects/masama_generator/SQL/1_table.sql", "SQLite", false);
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/testCirc.sql", "SQLite", false);
         sqlSchema = new SQLSchema();
 
-        sqlSchema.getTables().get(0).setHowMuch(3);
+        //sqlSchema.getTables().get(0).setHowMuch(97);
         //sqlSchema.getTables().get(0).getAttributes().get(0).getDataFaker().setHowMuch(3);
         //sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setHowMuch(3);
 

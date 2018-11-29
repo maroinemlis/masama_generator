@@ -44,14 +44,14 @@ public class PreCondetion {
      * value CHECKED_TRUE if it is possible to generate else return message
      * describe the reason way it is not possible to generate data
      *
-     * @return
+     * @return String
      */
     public String checkSqlSchema() throws ParseException, SQLException {
         //check if circuler
 
-        /*if (isCircular()) {
-            return "Le schéma est circulaire...";
-        }*/
+        if (isCircular()) {
+            return "Notre application ne génére pas les données pour les schémas circulaires ...";
+        }
         //check from and to ::from<to
         //check ForingAndKPrimery todo:: rendre la method return true or false
         String result = checkForingAndKPrimery();
@@ -158,6 +158,12 @@ public class PreCondetion {
         return result;
     }
 
+    /**
+     * this class is for to check if it is possible to generate data or not
+     *
+     ** @param
+     * @author amirouche
+     */
     private boolean isReferenceToPK(ForeignKey foreignKey) {
         boolean result = false;
         for (Attribute attribute : foreignKey.getPkTuple()) {

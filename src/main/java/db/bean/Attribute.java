@@ -30,15 +30,21 @@ public class Attribute implements Serializable {
     private Attribute reference;
     private List<Attribute> referencesMe = new ArrayList<Attribute>();
 
+    /**
+     * getReferencesMe represents the list attributes of the table
+     *
+     * @return List<Attribute>
+     */
     public List<Attribute> getReferencesMe() {
         return referencesMe;
     }
 
     /**
+     * Constructor for class Attribute
      *
-     * @param attributeName
-     * @param dataType
-     * @param nullable
+     * @param attributeName The name of the attribute
+     * @param dataType The type of the attribute
+     * @param nullable Specify if the attribute is nullable
      */
     public Attribute(String attributeName, String dataType, String nullable) {
         this.name = attributeName;
@@ -65,16 +71,18 @@ public class Attribute implements Serializable {
     }
 
     /**
+     * Get the name of the attribute
      *
-     * @return get the name of the attribute
+     * @return String
      */
     public String getName() {
         return name;
     }
 
     /**
+     * Get SQL data type
      *
-     * @return get SQL data type string
+     * @return String
      */
     public String getDataType() {
         return dataType;
@@ -83,7 +91,7 @@ public class Attribute implements Serializable {
     /**
      * Set the name of the attribute
      *
-     * @param attributeName
+     * @param attributeName The name of attribute
      */
     public void setName(String attributeName) {
         this.name = attributeName;
@@ -92,7 +100,7 @@ public class Attribute implements Serializable {
     /**
      * Set the data type of the attribute
      *
-     * @param dataType
+     * @param dataType The type of attribute
      */
     public void setDataType(String dataType) {
         this.dataType = dataType;
@@ -108,16 +116,28 @@ public class Attribute implements Serializable {
         return this.name.hashCode();
     }
 
+    /**
+     *
+     */
     public void startToGenerateRootValues() {
         instances.clear();
         dataFaker.values();
-
     }
 
+    /**
+     * Get a primary key, verify if the attribute is a primary key,
+     *
+     * @return boolean True if a primary key attribute, false if not
+     */
     public boolean isPrimary() {
         return isPrimary;
     }
 
+    /**
+     * Set a primary key
+     *
+     * @param bool True if the attribute is a primary key
+     */
     public void isPrimary(boolean bool) {
         isPrimary = bool;
     }
@@ -138,6 +158,11 @@ public class Attribute implements Serializable {
         return this.isNullable;
     }
 
+    /**
+     * Verify if the attribute is unique
+     *
+     * @return boolean True if a unique atribute, false if not
+     */
     public boolean isUnique() {
         return this.isUnique;
     }

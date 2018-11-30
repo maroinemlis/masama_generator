@@ -12,10 +12,21 @@ public final class SQLSchema implements Serializable {
     private List<Table> tables = new ArrayList<>();
     private String name;
 
+    /**
+     * Get the list of table schema
+     *
+     * @return List<Table>
+     */
     public List<Table> getTables() {
         return tables;
     }
 
+    /**
+     * Get the table by name
+     *
+     * @param tableName
+     * @return Table
+     */
     public Table getTable(String tableName) {
         for (Table t : tables) {
             if (t.getTableName().equals(tableName)) {
@@ -30,6 +41,7 @@ public final class SQLSchema implements Serializable {
     }
 
     /**
+     * Construcor for class SQLSchema, Generate Tables and fill their foreinkeys
      *
      * @throws Exception
      */
@@ -52,6 +64,10 @@ public final class SQLSchema implements Serializable {
         }
     }
 
+    /**
+     * Schow the table list
+     *
+     */
     public void showSQLSchema() {
         for (Table table : tables) {
             System.out.println(table);
@@ -73,7 +89,7 @@ public final class SQLSchema implements Serializable {
      * search table instance by its name
      *
      * @param tableName
-     * @return instance of the table searched
+     * @return Table
      */
     public Table getTableByName(String tableName) {
         for (Table table : tables) {

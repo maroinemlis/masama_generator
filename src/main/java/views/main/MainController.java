@@ -54,6 +54,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import views.export.ExportController;
+import views.option.OptionController;
 
 /**
  * FXML Controller class
@@ -199,7 +200,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void onConnection(ActionEvent event) throws Exception {
-       // FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("fxml/connection.fxml"));
+        // FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("fxml/connection.fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("fxml/sidebar.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         JFXAlert alert = new JFXAlert();
@@ -242,7 +243,17 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void onOption(ActionEvent event) {
+    private void onOption(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/option.fxml"));
+        Parent root1 = (Parent) loader.load();
+        OptionController controller = loader.<OptionController>getController();
+        // controller.initData(tables);
+        Stage primaryStage = new Stage();
+        Scene scene = new Scene(root1);
+        scene.getStylesheets().add("styles/main.css");
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Configuration");
+        primaryStage.show();
     }
 
     @FXML

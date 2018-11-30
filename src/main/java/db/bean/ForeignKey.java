@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
- * An object represente a foreign key constraint for a table. constraint foreign
+ * An object represent a foreign key constraint for a table. constraint foreign
  * key (fkTuple) references pkTuple(references)
  *
  * @author Maroine
@@ -24,6 +24,7 @@ public class ForeignKey implements Serializable {
     private int foreignKeyNumber;
 
     /**
+     * Construcor for class ForeignKey
      *
      * @param references
      * @param foreignKeyNumber
@@ -44,22 +45,38 @@ public class ForeignKey implements Serializable {
         this.pkTuple.add(pkTuplePart);
     }
 
+    /**
+     * Get the tuple of Foreign key
+     *
+     * @return List<Attribute>
+     */
     public List<Attribute> getFkTuple() {
         return fkTuple;
     }
 
+    /**
+     * Get the tuple Primary key
+     *
+     * @return List<Attribute>
+     */
     public List<Attribute> getPkTuple() {
         return pkTuple;
     }
 
     /**
+     * Get the number(a unique id) of foreign key in the table
      *
-     * @return a forein key a unque id in the table
+     * @return int
      */
     public int getForeignKeyNumber() {
         return this.foreignKeyNumber;
     }
 
+    /**
+     * get the table that the tuple Foreign key is referring to it
+     *
+     * @return Table
+     */
     public Table getReferences() {
         return references;
     }

@@ -25,15 +25,32 @@ public final class Table implements Serializable {
     private PrimaryKey primaryKey = new PrimaryKey();
     private int howMuch;
 
+    /**
+     * get the number of ligne to be generated
+     *
+     * @return int
+     */
     public int getHowMuch() {
         return howMuch;
     }
 
+    /**
+     * set the number of ligne to be generated
+     *
+     * @param int
+     */
     public void setHowMuch(int howMuch) {
         this.howMuch = howMuch;
         attributes.forEach(a -> a.getDataFaker().setHowMuch(howMuch));
     }
 
+    /**
+     * Construcor for class Tabel set table name set number of ligne to be
+     * generated fill attributes and primary key of table
+     *
+     * @throws Exception
+     * @param tableName
+     */
     public Table(String tableName) throws Exception {
         this.tableName = tableName;
         this.howMuch = 10;
@@ -42,8 +59,9 @@ public final class Table implements Serializable {
     }
 
     /**
+     * get name of the table
      *
-     * @return get name of the table
+     * @return String
      */
     public String getTableName() {
         return tableName;
@@ -52,16 +70,27 @@ public final class Table implements Serializable {
     /**
      * add attribute to the table
      *
-     * @param attribute
+     * @param Attribute
      */
     public void addAttibute(Attribute attribute) {
         attributes.add(attribute);
     }
 
+    /**
+     * return the list attributes of a specific table
+     *
+     * @return List<Attribute>
+     */
     public List<Attribute> getAttributes() {
         return attributes;
     }
 
+    /**
+     * return an attribute by its name
+     *
+     * @param name
+     * @return Attribute
+     */
     public Attribute getAttribute(String name) {
         for (Attribute a : attributes) {
             if (a.getName().equals(name)) {
@@ -134,6 +163,10 @@ public final class Table implements Serializable {
         }
     }
 
+    /**
+     * Generates instances exemples for ForeignKeys
+     *
+     */
     public void startToGenerateInstancesForForeignKey() {
         for (Attribute a : attributes) {
             if (a.getInstances().isEmpty() && a.getReference() != null) {
@@ -142,6 +175,13 @@ public final class Table implements Serializable {
         }
     }
 
+    /**
+     * return list of foreign key
+     *
+     * @param pkPart
+     * @param fkPart
+     * @return List<String>
+     */
     private List<String> getListForeigKey(Attribute fkPart, Attribute pkPart) {
         int fkHowMuch = fkPart.getDataFaker().getHowMuch();
         int pkHowMuch = pkPart.getDataFaker().getHowMuch();

@@ -76,9 +76,9 @@ public class ExportController implements Initializable {
         if (sql.isSelected()) {
             exportOnSql();
         } else if (json.isSelected()) {
-            exportOnJson();
+            //exportOnJson();
         } else {
-            selected = "db";
+            exportOnXml();
         }
         onCancel(event);
 
@@ -92,8 +92,9 @@ public class ExportController implements Initializable {
         // TODO
     }
 
-    public void initData(List<TableView> tables) {
+    public void initData(List<TableView> tables, Path path) {
         this.tables = tables;
+        this.path = path;
     }
 
     private void exportOnSql() throws FileNotFoundException, IOException {
@@ -101,6 +102,8 @@ public class ExportController implements Initializable {
         fileChooser.setTitle("Choisir le répertoire d'enregistrement");
         fileChooser.setInitialDirectory(new File("."));
         File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
+        OutputStream output = new FileOutputStream(showSaveDialog.getAbsolutePath());
+        Files.copy(path, output);
         for (TableView t : tables) {
             List<List<StringProperty>> lines = t.getLines();
             for (List<StringProperty> line : lines) {
@@ -114,6 +117,33 @@ public class ExportController implements Initializable {
             }
         }
 
+    }
+    
+    private void exportOnXml() throws Exception{
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir le répertoire d'enregistrement");
+        fileChooser.setInitialDirectory(new File("."));
+        File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
+        for (TableView t : tables) {
+            List<List<StringProperty>> lines = t.getLines();
+            for (List<StringProperty> line : lines) {
+                String insert = "<" + t.get().getTableName() + "> "+System.lineSeparator();
+                int i=0 ;
+                String columnName = "";
+                for (; i<line.size(); i++) {
+                    columnName = schema.getTableByName(t.get().getTableName()).getAttributes().get(i).getName();
+                    insert += "<"+columnName+"> ";
+                    insert += line.get(i).get();
+                    insert += " </"+columnName+">"+System.lineSeparator();
+                }
+                insert += "</"+t.get().getTableName()+">"+System.lineSeparator();
+                Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert).getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
+        
+            }
+        }
+            
+        
     }
 
     private void exportOnJson() throws FileNotFoundException, IOException {

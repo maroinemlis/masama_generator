@@ -42,7 +42,7 @@ public class PreCondetion {
     /**
      * the checkSqlSchema check if we can generate or not data return final
      * value CHECKED_TRUE if it is possible to generate else return message
-     * describe the reason way it is not possible to generate data
+     * describe the reason why it is not possible to generate data
      *
      * @return
      */

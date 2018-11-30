@@ -22,6 +22,8 @@ public class PrimaryKey extends Constraint implements Serializable {
     /**
      * Get the tuple Primary key
      *
+     * a tuple is a list of attribute
+     *
      * @return List<Attribute>
      */
     public List<Attribute> getTuple() {

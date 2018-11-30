@@ -36,6 +36,11 @@ public final class SQLSchema implements Serializable {
         return null;
     }
 
+    /**
+     * Get the name of table
+     *
+     * @return String
+     */
     public String getName() {
         return name;
     }
@@ -65,7 +70,7 @@ public final class SQLSchema implements Serializable {
     }
 
     /**
-     * Schow the table list
+     * Show the table list of SQLschema
      *
      */
     public void showSQLSchema() {
@@ -100,6 +105,9 @@ public final class SQLSchema implements Serializable {
         return null;
     }
 
+    /**
+     * generate instances
+     */
     public void startToGenerateInstances() {
         for (Table t : tables) {
             t.startToGenerateInstances();
@@ -109,6 +117,11 @@ public final class SQLSchema implements Serializable {
         }
     }
 
+    /**
+     * get tables as tables view
+     *
+     * @return List<TableView>
+     */
     public List<TableView> getTablesAsTablesView() {
         return tables.stream().map(t -> new TableView(t)).collect(Collectors.toList());
     }

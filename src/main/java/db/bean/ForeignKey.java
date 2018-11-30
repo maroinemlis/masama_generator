@@ -26,8 +26,8 @@ public class ForeignKey implements Serializable {
     /**
      * Construcor for class ForeignKey
      *
-     * @param references
-     * @param foreignKeyNumber
+     * @param references its type is Table
+     * @param foreignKeyNumber its type is int
      */
     public ForeignKey(Table references, int foreignKeyNumber) {
         this.references = references;
@@ -37,8 +37,8 @@ public class ForeignKey implements Serializable {
     /**
      * Add primary key and foreign key part of the two tupels
      *
-     * @param fkTuplePart
-     * @param pkTuplePart
+     * @param fkTuplePart an Attribute
+     * @param pkTuplePart an Attribute
      */
     public void addToTupels(Attribute fkTuplePart, Attribute pkTuplePart) {
         this.fkTuple.add(fkTuplePart);
@@ -48,6 +48,8 @@ public class ForeignKey implements Serializable {
     /**
      * Get the tuple of Foreign key
      *
+     * a tuple is a list of attribute
+     *
      * @return List<Attribute>
      */
     public List<Attribute> getFkTuple() {
@@ -56,6 +58,8 @@ public class ForeignKey implements Serializable {
 
     /**
      * Get the tuple Primary key
+     *
+     * a tuple is a list of attribute
      *
      * @return List<Attribute>
      */

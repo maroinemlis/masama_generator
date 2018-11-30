@@ -15,7 +15,7 @@ import java.util.List;
 import views.alertMeg.AlertExeption;
 
 /**
- * An object represente a table
+ * An object represent a table
  *
  * @author Maroine
  */
@@ -51,8 +51,11 @@ public final class Table implements Serializable {
     }
 
     /**
-     * Construcor for class Tabel set table name set number of ligne to be
-     * generated fill attributes and primary key of table
+     * Construcor for class Tabel
+     *
+     * set table name, set number of ligne to be generated
+     *
+     * fill attributes and primary key of the table
      *
      * @throws Exception
      * @param tableName
@@ -83,7 +86,7 @@ public final class Table implements Serializable {
     }
 
     /**
-     * return the list attributes of a specific table
+     * return the list attributes of a table
      *
      * @return List<Attribute>
      */
@@ -107,7 +110,7 @@ public final class Table implements Serializable {
     }
 
     /**
-     * Fill all the attributes of the table
+     * Fill the attributes of the table
      *
      * @throws SQLException
      */
@@ -245,8 +248,8 @@ public final class Table implements Serializable {
     /**
      * return list of foreign key
      *
-     * @param pkPart
-     * @param fkPart
+     * @param pkPart is an Attribute
+     * @param fkPart is an Attribute
      * @return List<String>
      */
     private List<String> getListForeigKey(Attribute fkPart, Attribute pkPart) {

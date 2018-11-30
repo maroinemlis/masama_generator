@@ -36,7 +36,8 @@ public class Attribute implements Serializable {
     }
 
     /**
-     * getReferencesMe represents the list attributes of the table
+     * get the list of attributes that make references to the current attribute
+     * of the table
      *
      * @return List<Attribute>
      */
@@ -76,7 +77,7 @@ public class Attribute implements Serializable {
     }
 
     /**
-     * Get the name of the attribute
+     * get the name of the attribute
      *
      * @return String
      */
@@ -85,7 +86,7 @@ public class Attribute implements Serializable {
     }
 
     /**
-     * Get SQL data type
+     * get SQL data type
      *
      * @return String
      */
@@ -96,7 +97,7 @@ public class Attribute implements Serializable {
     /**
      * Set the name of the attribute
      *
-     * @param attributeName The name of attribute
+     * @param attributeName The name of the attribute
      */
     public void setName(String attributeName) {
         this.name = attributeName;
@@ -122,6 +123,7 @@ public class Attribute implements Serializable {
     }
 
     /**
+     * generate the attributes that do not have references
      *
      */
     public void startToGenerateRootValues() {
@@ -130,16 +132,16 @@ public class Attribute implements Serializable {
     }
 
     /**
-     * Get a primary key, verify if the attribute is a primary key,
+     * verify if the attribute is a primary key,
      *
-     * @return boolean True if a primary key attribute, false if not
+     * @return boolean True if the attribute is a primary key, false if not
      */
     public boolean isPrimary() {
         return isPrimary;
     }
 
     /**
-     * Set a primary key
+     * define a primary key
      *
      * @param bool True if the attribute is a primary key
      */
@@ -147,14 +149,29 @@ public class Attribute implements Serializable {
         isPrimary = bool;
     }
 
+    /**
+     * get the list of instances
+     *
+     * @return List<String>
+     */
     public List<String> getInstances() {
         return this.instances;
     }
 
+    /**
+     * get a dataFaker generation
+     *
+     * @param DataFaker
+     */
     public DataFaker getDataFaker() {
         return dataFaker;
     }
 
+    /**
+     * Set the instance
+     *
+     * @param List<String>
+     */
     public void setInstances(List<String> instances) {
         this.instances = instances;
     }
@@ -164,19 +181,25 @@ public class Attribute implements Serializable {
     }
 
     /**
-     * Verify if the attribute is unique
+     * Verify if the attribute is unique,True if a unique atribute, false if not
      *
-     * @return boolean True if a unique atribute, false if not
+     * @return boolean
      */
     public boolean isUnique() {
         return this.isUnique;
     }
 
+    /**
+     * get the reference attribute
+     *
+     * @return Attribute
+     */
     public Attribute getReference() {
         return reference;
     }
 
     public void setReference(Attribute a) {
+
         this.reference = a;
     }
 

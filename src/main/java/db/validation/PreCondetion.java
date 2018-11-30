@@ -32,15 +32,20 @@ public class PreCondetion {
     public static final String CHECKED_TRUE = "correct_generation";
     private String msgError;
 
+    /**
+     * Constructor for class PreCondetion
+     *
+     * @param sqlSchema Specify if the attribute is nullable
+     */
     public PreCondetion(SQLSchema sqlSchema) {
         this.sqlSchema = sqlSchema;
     }
 
     /**
-     * the checkSqlSchema check if we can generate or not data return final
-     * value CHECKED_TRUE if it is possible to generate else return message
-     * describe the reason way it is not possible to generate data
+     * return final variable CHECKED_TRUE if there no error in the schema else
+     * return the message error
      *
+     * @throws ParseException, SQLException
      * @return String
      */
     public String checkSqlSchema() throws ParseException, SQLException {

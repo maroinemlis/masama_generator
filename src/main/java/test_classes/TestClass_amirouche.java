@@ -102,8 +102,6 @@ public class TestClass_amirouche {
                 for (Table table : tables) {
                     table.show();
                 }
-            } else {
-                System.out.println("ERROR");
             }
         } else {
             System.out.println(msgCheck);

@@ -17,8 +17,8 @@ DROP TABLE IF EXISTS A;
 		FOREIGN KEY (b2,b3) REFERENCES A (a1,a2)	
 	);
 
-insert into A values(1,1);
-insert into B values(1,2,1);
+--insert into A values(1,1);
+--insert into B values(1,2,1);
 	
 select * from A;
 select * from B;

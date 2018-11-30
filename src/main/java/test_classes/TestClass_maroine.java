@@ -5,26 +5,35 @@
  */
 package test_classes;
 
-import com.github.javafaker.Faker;
 import db.bean.SQLSchema;
 import db.connection.SQLConnection;
-import java.util.ArrayList;
+import static db.validation.PreCondetion.CHECKED_TRUE;
 
 /**
  *
- * @author Maroine
+ * @author amirouche
  */
 public class TestClass_maroine {
 
+    SQLSchema sqlSchema;
+
     public void main() throws Exception {
 
-        SQLConnection cnx = new SQLConnection("C:\\netbeansProjects\\masama_generator\\SQL\\4_tables.sql", "SQLite", false);
-        SQLSchema sqlSchema = new SQLSchema();
+        SQLConnection cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql", "SQLite", false);
+        sqlSchema = new SQLSchema();
 
         sqlSchema.getTables().get(0).setHowMuch(3);
-        sqlSchema.getTables().get(1).setHowMuch(3);
-        sqlSchema.getTables().get(2).setHowMuch(3);
-        sqlSchema.getTables().get(3).setHowMuch(3);
+        System.out.println("end");
+
+        long startTime = System.nanoTime();
+
+        sqlSchema.startToGenerateInstances();
+
+        long elapsedTime = System.nanoTime() - startTime;
+
+        System.out.println("Total execution time to create 1000K objects in Java in millis: "
+                + elapsedTime / 1000000);
 
     }
+
 }

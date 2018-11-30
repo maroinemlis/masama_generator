@@ -91,6 +91,9 @@ public final class SQLSchema implements Serializable {
         for (Table t : tables) {
             t.startToGenerateInstancesForForeignKey();
         }
+        for (Table t : tables) {
+            t.startToGenerateInstancesForCircles();
+        }
     }
 
     public List<TableView> getTablesAsTablesView() {

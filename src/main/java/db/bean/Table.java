@@ -31,6 +31,7 @@ public final class Table implements Serializable {
 
     public void setHowMuch(int howMuch) {
         this.howMuch = howMuch;
+        attributes.forEach(a -> a.getDataFaker().setHowMuch(howMuch));
     }
 
     public Table(String tableName) throws Exception {
@@ -140,17 +141,29 @@ public final class Table implements Serializable {
         }
     }
 
+    public void startToGenerateInstancesForCircles() {
+        for (Attribute a : attributes) {
+            if (a.getInstances().isEmpty()) {
+                a.startToGenerateRootValues();
+                Attribute next = a;
+                while (next.getReference() != null && next.getReference() != a) {
+                    next.getInstances().addAll(getListForeigKey(next, next.getReference()));
+                    next = a.getReference();
+                }
+            }
+        }
+    }
+
     private List<String> getListForeigKey(Attribute fkPart, Attribute pkPart) {
         int fkHowMuch = fkPart.getDataFaker().getHowMuch();
         int pkHowMuch = pkPart.getDataFaker().getHowMuch();
         int mDiv = fkHowMuch / pkHowMuch;
-        int size = pkPart.getInstances().size();
+        int mMod = fkHowMuch % pkHowMuch;
         List<String> list = new ArrayList<>();
         for (int j = 0; j < mDiv; j++) {
             list.addAll(pkPart.getInstances());
-            fkHowMuch = fkHowMuch - size;
         }
-        System.out.println(fkHowMuch);
+        //list.addAll(pkPart.getInstances().subList(0, mMod));
         return list;
     }
 

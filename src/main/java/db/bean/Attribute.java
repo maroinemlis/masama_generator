@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A object represent a column of SQL table
+ * An object represent a column of SQL table
  *
  * @author Maroine
  */

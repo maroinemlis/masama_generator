@@ -201,16 +201,15 @@ public class MainController implements Initializable {
     private void onConnection(ActionEvent event) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("fxml/connection.fxml"));
         Parent root = (Parent) fxmlLoader.load();
+        ConnectionController controller = fxmlLoader.<ConnectionController>getController();
         JFXAlert alert = new JFXAlert();
+        controller.setAlert(alert);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setTitle("Connection");
         alert.setContent(root);
         alert.show();
-
         alert.setOnCloseRequest((e) -> {
-
             try {
-                ConnectionController controller = fxmlLoader.<ConnectionController>getController();
                 if (!controller.isServer()) {
                     new SQLConnection(controller.getFileString(), "SQLite", controller.isBinary());
                 }

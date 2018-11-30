@@ -1,6 +1,6 @@
-drop table if exists InfoA;
-drop table if exists InfoB;
-drop table if exists InfoC;
+drop table InfoA;
+drop table InfoB;
+drop table InfoC;
 CREATE TABLE InfoA
 (    
 	idA INT PRIMARY KEY,
@@ -9,12 +9,12 @@ CREATE TABLE InfoA
 CREATE TABLE InfoB
 (    
    	idB INT PRIMARY KEY,
-	bInt int 
+	bInt int ,
+	FOREIGN KEY (idB) REFERENCES InfoB (idA)
 );
 CREATE TABLE InfoC
 (    
 	idC INT PRIMARY KEY,
-	cInt int ,
-	FOREIGN KEY (idC) REFERENCES InfoD (idB)
+	cInt int 
 );
 

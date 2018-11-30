@@ -9,14 +9,11 @@ import db.bean.Attribute;
 import db.bean.ForeignKey;
 import db.bean.SQLSchema;
 import db.bean.Table;
-import static db.connection.SQLConnection.getDatabaseMetaData;
 import db.utils.DateUtil;
 import db.utils.StringUtil;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,9 +46,9 @@ public class PreCondetion {
     public String checkSqlSchema() throws ParseException, SQLException {
         //check if circuler
 
-        if (isCircular()) {
+        /*if (isCircular()) {
             return "Notre application ne génére pas les données pour les schémas circulaires ...";
-        }
+        }*/
         //check from and to ::from<to
         //check ForingAndKPrimery todo:: rendre la method return true or false
         String result = checkForingAndKPrimery();
@@ -115,9 +112,6 @@ public class PreCondetion {
         if (!listTable.contains(table.getTableName())) {
             listTable.add(table.getTableName());
             System.err.println(" ->" + listTable.toString());
-            for (Attribute attribute : table.getAttributes()) {
-
-            }//todo
             if (!table.getAttributes().get(0).getReference().equals(null)) {
                 Attribute a = table.getAttributes().get(0);
                 Attribute b = a.getReference();
@@ -140,29 +134,47 @@ public class PreCondetion {
 
     private String checkForingAndKPrimery() {
         String result = CHECKED_TRUE;
-        /*
 
         for (Table table : sqlSchema.getTables()) {
-            for (ForeignKey foreignKey : table.getForeignKeys()) {
+            for (Attribute attribute : table.getAttributes()) {
+                try {
+                    int nbrHowMushP = attribute.getDataFaker().getHowMuch();
+                    int nbrHowMushF = attribute.getReference().getDataFaker().getHowMuch();
+                    System.out.println(nbrHowMushF + ">" + nbrHowMushP);
+                    if (nbrHowMushF > nbrHowMushP) {
+                        return new StringUtil().getMsgErrorKeyReferences();
+                    } else {
+                        result = CHECKED_TRUE;
+                    }
+                } catch (NullPointerException e) {
+                    //System.out.println("NullPointerException");
+                }
+                /*if (!attribute.getReference().equals(null)) {
 
+                }*/
+            }
+            /*
+            for (ForeignKey foreignKey : table.getForeignKeys()) {
                 boolean isReferenceToPK = isReferenceToPK(foreignKey);
                 if (isReferenceToPK
                         && (foreignKey.getReferences().getHowMuch() < table.getHowMuch())) {
-                    result = new StringUtil().getMsgErrorKeyReferences();
+
                 } else {
                     result = CHECKED_TRUE;
                 }
             }
+             */
+
         }
-         */
+
         return result;
     }
 
     /**
      * this class is for to check if it is possible to generate data or not
      *
-     ** @param
-     * @author amirouche
+     * @param foreignKey
+     * @return boolean
      */
     private boolean isReferenceToPK(ForeignKey foreignKey) {
         boolean result = false;

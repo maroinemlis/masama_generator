@@ -43,12 +43,26 @@ public class TestClass_amirouche {
         //Résolu :: setHowMuch ne fonction pas avec les table
         //    pour spicéfai le how much il faut le donné au primery key
         //Résolu :: les préCondetion ne marchent plus c'est le howMush de table ne marche pas
-        //
+        //todo:: c'est l'un des exeptions gérér est survicu ne continuit pas
+        //dans la génération c'est
+        //todo :: it is possible to have more then one tuple primary key
         SQLConnection cnx = new SQLConnection(
-                "/home/amirouche/NetBeansProjects/masama_generator/SQL/testCirc.sql", "SQLite", false);
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/errorSchema.sql", "SQLite", false);
         sqlSchema = new SQLSchema();
 
-        //sqlSchema.getTables().get(0).setHowMuch(97);
+        /*
+        sqlSchema.getTables().get(0).setHowMuch(3);
+        sqlSchema.getTables().get(1).setHowMuch(3);
+        sqlSchema.getTables().get(2).setHowMuch(3);
+        sqlSchema.getTables().get(3).setHowMuch(3);
+        sqlSchema.getTables().get(4).setHowMuch(3);
+        sqlSchema.getTables().get(5).setHowMuch(3);
+        sqlSchema.getTables().get(6).setHowMuch(3);
+        sqlSchema.getTables().get(7).setHowMuch(3);
+        sqlSchema.getTables().get(8).setHowMuch(3);
+        sqlSchema.getTables().get(9).setHowMuch(3);
+         */
+        //sqlSchema.getTables().get(3).setHowMuch(3);
         //sqlSchema.getTables().get(0).getAttributes().get(0).getDataFaker().setHowMuch(3);
         //sqlSchema.getTables().get(0).getAttributes().get(1).getDataFaker().setHowMuch(3);
 
@@ -82,14 +96,28 @@ public class TestClass_amirouche {
         String msgCheck = preCondetion.checkSqlSchema();
         if (msgCheck.equals(CHECKED_TRUE)) {
             System.out.println("we can generate");
-            sqlSchema.startToGenerateInstances();
-            List<Table> tables = sqlSchema.getTables();
-            for (Table table : tables) {
-                table.show();
+            if (!isErrorInTable()) {
+                sqlSchema.startToGenerateInstances();
+                List<Table> tables = sqlSchema.getTables();
+                for (Table table : tables) {
+                    table.show();
+                }
+            } else {
+                System.out.println("ERROR");
             }
         } else {
             System.out.println(msgCheck);
         }
+
+    }
+
+    private boolean isErrorInTable() {
+        for (Table table : sqlSchema.getTables()) {
+            if (table.getIsErrorInTable()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void testSaveProject() {

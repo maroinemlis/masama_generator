@@ -13,6 +13,9 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import views.alertMeg.AlertExeption;
 
 /**
  * An object represente an SQL Connection, it serves to get the meta data infos
@@ -35,11 +38,19 @@ public final class SQLConnection {
         return new String(encoded, encoding);
     }
 
-    public void executeSQLFile(String file) throws IOException, SQLException {
-        String[] queries = readFile(file, StandardCharsets.UTF_8).split(";");
-        for (String query : queries) {
-            stm.executeUpdate(query);
+    public void executeSQLFile(String file) {
+        try {
+            String[] queries = readFile(file, StandardCharsets.UTF_8).split(";");
+            for (String query : queries) {
+                stm.executeUpdate(query);
+            }
+        } catch (IOException e) {
+        } catch (SQLException ex) {
+            System.out.println("db.connection.SQLConnection.executeSQLFile()");
+            AlertExeption alertExeption = new AlertExeption(ex.getMessage());
+            alertExeption.showStandarAlert();
         }
+
     }
 
     /**

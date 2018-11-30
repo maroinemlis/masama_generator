@@ -1,6 +1,7 @@
 drop table if exists InfoA;
 drop table if exists InfoB;
 drop table if exists InfoC;
+drop table if exists InfoD;
 
 CREATE TABLE InfoA
 (    
@@ -20,4 +21,6 @@ CREATE TABLE InfoC
 	cInt int ,
 	FOREIGN KEY (idC) REFERENCES InfoB (idB)
 );
+
+
 

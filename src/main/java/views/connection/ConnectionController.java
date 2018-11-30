@@ -5,6 +5,7 @@
  */
 package views.connection;
 
+import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
@@ -61,6 +62,7 @@ public class ConnectionController implements Initializable {
     private static Path filePath;
     @FXML
     private JFXTextField path;
+    private JFXAlert alert;
 
     /**
      * Initializes the controller class.
@@ -96,13 +98,12 @@ public class ConnectionController implements Initializable {
         File fileUrl = fileChooser.showOpenDialog(primaryStage);
         this.fileString = fileUrl.getAbsolutePath();
         filePath = fileUrl.toPath();
+        path.setText(fileString);
     }
 
     @FXML
     private void onConnect(ActionEvent event) {
-        this.driverString = driver.selectionModelProperty().getValue();
-        
-
+        alert.close();
     }
 
     public String getFileString() {
@@ -139,5 +140,9 @@ public class ConnectionController implements Initializable {
 
     public String getPassword() {
         return password.getText();
+    }
+
+    public void setAlter(JFXAlert alert) {
+        this.alert = alert;
     }
 }

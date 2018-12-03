@@ -7,15 +7,21 @@ package views.connection;
 
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
@@ -32,8 +38,6 @@ public class ConnectionController implements Initializable {
 
     @FXML
     private ToggleGroup cnxType;
-    @FXML
-    private JFXTextField path;
     @FXML
     private JFXComboBox<String> driver;
     @FXML
@@ -52,9 +56,12 @@ public class ConnectionController implements Initializable {
     private AnchorPane auth;
     @FXML
     private JFXTextField url;
+
     private SingleSelectionModel<String> driverString;
     private String fileString;
     private static Path filePath;
+    @FXML
+    private JFXTextField path;
     private JFXAlert alert;
 
     /**
@@ -80,23 +87,23 @@ public class ConnectionController implements Initializable {
     }
 
     @FXML
-    private void onChose(ActionEvent event) {
+    private void onChose(ActionEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
         if (r2.isSelected()) {
             fileChooser.setTitle("Choisir un fichier sql binaire");
+
         } else if (r3.isSelected()) {
             fileChooser.setTitle("Choisir un script sql");
         }
         File fileUrl = fileChooser.showOpenDialog(primaryStage);
         this.fileString = fileUrl.getAbsolutePath();
         filePath = fileUrl.toPath();
+        path.setText(fileString);
     }
 
     @FXML
     private void onConnect(ActionEvent event) {
         //this.driverString = driver.selectionModelProperty().getValue();
-        //alert.close();
-        System.out.println("close");
         alert.close();
     }
 

@@ -13,12 +13,17 @@ import java.io.*;
 
 /**
  *
- * @author amirouche
+ * @author asma
  */
 public class SaveProject {
 
     SQLSchema sqlSchema;
 
+    /**
+     * Constructor for class SaveProject
+     *
+     * @param sqlSchema The name of the attribute
+     */
     public SaveProject(SQLSchema sqlSchema) {
         this.sqlSchema = sqlSchema;
     }
@@ -27,7 +32,7 @@ public class SaveProject {
      * return true if it is saved successfully else false
      *
      * @param path
-     * @return
+     * @return boolean
      */
     public boolean saveSQLSchema(String path) {
         boolean success = (new File(path)).mkdirs();

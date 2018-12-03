@@ -19,14 +19,31 @@ public class PrimaryKey extends Constraint implements Serializable {
 
     private List<Attribute> tuple = new LinkedList();
 
+    /**
+     * Get the tuple Primary key
+     *
+     * a tuple is a list of attribute
+     *
+     * @return List<Attribute>
+     */
     public List<Attribute> getTuple() {
         return tuple;
     }
 
+    /**
+     * Add an atribute to the list(tuple) of primary key
+     *
+     * @param Attribute
+     */
     public void addToPrimaryKey(Attribute a) {
         tuple.add(a);
     }
 
+    /**
+     * Return the description of primary key list in a string
+     *
+     * @return String
+     */
     public String toString() {
         return "PRIMARY KEY" + StringUtil.tupelToString(tuple);
     }

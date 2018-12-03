@@ -9,11 +9,15 @@ import db.bean.Attribute;
 import db.bean.ForeignKey;
 import db.bean.SQLSchema;
 import db.bean.Table;
+import static db.connection.SQLConnection.getDatabaseMetaData;
 import db.utils.DateUtil;
 import db.utils.StringUtil;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -38,14 +42,18 @@ public class PreCondetion {
     /**
      * the checkSqlSchema check if we can generate or not data return final
      * value CHECKED_TRUE if it is possible to generate else return message
-     * describe the reason way it is not possible to generate data
+     * describe the reason why it is not possible to generate data
      *
      * @return
      */
-    public String checkSqlSchema() throws ParseException {
-        //check from and to ::from<to
+    public String checkSqlSchema() throws ParseException, SQLException {
+        //check if circuler
 
-        //check ForingAndKPrimery
+        /*if (isCircular()) {
+            return "Le schéma est circulaire...";
+        }*/
+        //check from and to ::from<to
+        //check ForingAndKPrimery todo:: rendre la method return true or false
         String result = checkForingAndKPrimery();
         if (!result.equals(CHECKED_TRUE)) {
             return result;
@@ -86,6 +94,48 @@ public class PreCondetion {
             }
         }
         return CHECKED_TRUE;
+    }
+
+    public boolean isCircular() throws SQLException {
+        boolean result = true;
+        for (Table table : sqlSchema.getTables()) {
+            boolean b = isCirculedInTable(table);
+            if (b) {
+            }
+            return b;
+        }
+        return result;
+    }
+
+    List<String> listTable = new ArrayList();
+
+    //todo :we need to get the name of table from reference
+    private boolean isCirculedInTable(Table table) {
+        boolean result = false;
+        if (!listTable.contains(table.getTableName())) {
+            listTable.add(table.getTableName());
+            System.err.println(" ->" + listTable.toString());
+            for (Attribute attribute : table.getAttributes()) {
+
+            }//todo
+            if (!table.getAttributes().get(0).getReference().equals(null)) {
+                Attribute a = table.getAttributes().get(0);
+                Attribute b = a.getReference();
+                Attribute c = b.getReference();
+
+                //result = isCirculedInTable(table.getAttributes(0).getReference().get(0));
+            }
+        } else {
+            System.err.println(" ----------------END" + table.getTableName());
+            result = true;
+        }
+
+        /*if (table.getForeignKeys().isEmpty()) {
+
+        } else {
+
+        }*/
+        return result;
     }
 
     private String checkForingAndKPrimery() {
@@ -149,7 +199,7 @@ public class PreCondetion {
         String from = attrebute.getDataFaker().getFrom();
         String to = attrebute.getDataFaker().getTo();
         int numberOfDay = numberDaysBetween(from, to);
-        System.out.println(numberOfDay);
+        //System.out.println(numberOfDay);
         if (numberOfDay >= nbrRowsToGenerate) {
             result = true;
         } else {

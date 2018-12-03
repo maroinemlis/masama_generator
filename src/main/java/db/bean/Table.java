@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * An object represente a table
+ * An object represent a table
  *
  * @author Maroine
  */
@@ -25,15 +25,35 @@ public final class Table implements Serializable {
     private PrimaryKey primaryKey = new PrimaryKey();
     private int howMuch;
 
+    /**
+     * get the number of ligne to be generated
+     *
+     * @return int
+     */
     public int getHowMuch() {
         return howMuch;
     }
 
+    /**
+     * set the number of ligne to be generated
+     *
+     * @param int
+     */
     public void setHowMuch(int howMuch) {
         this.howMuch = howMuch;
         attributes.forEach(a -> a.getDataFaker().setHowMuch(howMuch));
     }
 
+    /**
+     * Construcor for class Tabel
+     *
+     * set table name, set number of ligne to be generated
+     *
+     * fill attributes and primary key of the table
+     *
+     * @throws Exception
+     * @param tableName
+     */
     public Table(String tableName) throws Exception {
         this.tableName = tableName;
         this.howMuch = 10;
@@ -42,8 +62,9 @@ public final class Table implements Serializable {
     }
 
     /**
+     * get name of the table
      *
-     * @return get name of the table
+     * @return String
      */
     public String getTableName() {
         return tableName;
@@ -52,16 +73,27 @@ public final class Table implements Serializable {
     /**
      * add attribute to the table
      *
-     * @param attribute
+     * @param Attribute
      */
     public void addAttibute(Attribute attribute) {
         attributes.add(attribute);
     }
 
+    /**
+     * return the list attributes of a table
+     *
+     * @return List<Attribute>
+     */
     public List<Attribute> getAttributes() {
         return attributes;
     }
 
+    /**
+     * return an attribute by its name
+     *
+     * @param name
+     * @return Attribute
+     */
     public Attribute getAttribute(String name) {
         for (Attribute a : attributes) {
             if (a.getName().equals(name)) {
@@ -72,7 +104,7 @@ public final class Table implements Serializable {
     }
 
     /**
-     * Fill all the attributes of the table
+     * Fill the attributes of the table
      *
      * @throws SQLException
      */
@@ -116,6 +148,7 @@ public final class Table implements Serializable {
             Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
             Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
             fkTuplePart.setReferences(pkTuplePart);
+            pkTuplePart.getReferencesMe().add(fkTuplePart);
 
         }
     }
@@ -133,6 +166,10 @@ public final class Table implements Serializable {
         }
     }
 
+    /**
+     * Generates instances exemples for ForeignKeys
+     *
+     */
     public void startToGenerateInstancesForForeignKey() {
         for (Attribute a : attributes) {
             if (a.getInstances().isEmpty() && a.getReference() != null) {
@@ -154,11 +191,19 @@ public final class Table implements Serializable {
         }
     }
 
+    /**
+     * return list of foreign key
+     *
+     * @param pkPart is an Attribute
+     * @param fkPart is an Attribute
+     * @return List<String>
+     */
     private List<String> getListForeigKey(Attribute fkPart, Attribute pkPart) {
         int fkHowMuch = fkPart.getDataFaker().getHowMuch();
         int pkHowMuch = pkPart.getDataFaker().getHowMuch();
         int mDiv = fkHowMuch / pkHowMuch;
         int mMod = fkHowMuch % pkHowMuch;
+        int size = pkPart.getInstances().size();
         List<String> list = new ArrayList<>();
         for (int j = 0; j < mDiv; j++) {
             list.addAll(pkPart.getInstances());
@@ -187,5 +232,7 @@ public final class Table implements Serializable {
             System.out.println(insert);
         }
     }
+
+    List<String> listTable = new ArrayList();
 
 }

@@ -15,7 +15,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.*;
 
 /**
- * An object represente an SQL Connection, it serves to get the meta data infos
+ * An object represent an SQL Connection, it serves to get the meta data infos
  * (bdMetaDate object)
  *
  * @author Maroine
@@ -29,12 +29,24 @@ public final class SQLConnection {
     private static DatabaseMetaData bdMetaDate;
     private Statement stm;
 
+    /**
+     * read file of sql shema
+     *
+     * @param fileUrl
+     * @param Charset
+     * @return String
+     */
     private String readFile(String fileUrl, Charset encoding)
             throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(fileUrl));
         return new String(encoded, encoding);
     }
 
+    /**
+     * execute the SQL file
+     *
+     * @param file
+     */
     public void executeSQLFile(String file) throws IOException, SQLException {
         String[] queries = readFile(file, StandardCharsets.UTF_8).split(";");
         for (String query : queries) {
@@ -49,17 +61,25 @@ public final class SQLConnection {
     public static DatabaseMetaData getDatabaseMetaData() {
         return bdMetaDate;
     }
-//type de sgbd mysql oracle derby
-    //server
-    //binary
-    //.sql text
 
+    /**
+     *
+     *
+     * @throw exception
+     */
     public void connect() throws Exception {
         connection = DriverManager.getConnection(url, user, password);
         bdMetaDate = connection.getMetaData();
         stm = connection.createStatement();
     }
 
+    /**
+     * define the type of sgbd connexion, it's can be:
+     *
+     * SQLite,Oracle,Postgresql,mySQL,SQLServer,Derby
+     *
+     * @param sqlType
+     */
     public void setConnexionType(String sqlType) throws Exception {
         switch (sqlType) {
             case "SQLite":
@@ -89,6 +109,14 @@ public final class SQLConnection {
         }
     }
 
+    /**
+     * Constructor for class SQLConnection
+     *
+     * @param url
+     * @param user
+     * @param password
+     * @param sqlType
+     */
     public SQLConnection(String url, String user, String password, String sqlType) throws Exception {
         setConnexionType(sqlType);
         this.user = user;
@@ -96,6 +124,13 @@ public final class SQLConnection {
         connect();
     }
 
+    /**
+     * Constructor for class SQLConnection binary file or a SQL file
+     *
+     * @param fileUrl
+     * @param sqlType
+     * @param isBinaryFile
+     */
     public SQLConnection(String fileUrl, String sqlType, boolean isBinaryFile) throws Exception {
         if (isBinaryFile) {
             this.url = "//" + fileUrl;

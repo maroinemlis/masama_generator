@@ -12,10 +12,21 @@ public final class SQLSchema implements Serializable {
     private List<Table> tables = new ArrayList<>();
     private String name;
 
+    /**
+     * Get the list of table schema
+     *
+     * @return List<Table>
+     */
     public List<Table> getTables() {
         return tables;
     }
 
+    /**
+     * Get the table by name
+     *
+     * @param tableName
+     * @return Table
+     */
     public Table getTable(String tableName) {
         for (Table t : tables) {
             if (t.getTableName().equals(tableName)) {
@@ -25,11 +36,17 @@ public final class SQLSchema implements Serializable {
         return null;
     }
 
+    /**
+     * Get the name of table
+     *
+     * @return String
+     */
     public String getName() {
         return name;
     }
 
     /**
+     * Construcor for class SQLSchema, Generate Tables and fill their foreinkeys
      *
      * @throws Exception
      */
@@ -52,6 +69,10 @@ public final class SQLSchema implements Serializable {
         }
     }
 
+    /**
+     * Show the table list of SQLschema
+     *
+     */
     public void showSQLSchema() {
         for (Table table : tables) {
             System.out.println(table);
@@ -73,7 +94,7 @@ public final class SQLSchema implements Serializable {
      * search table instance by its name
      *
      * @param tableName
-     * @return instance of the table searched
+     * @return Table
      */
     public Table getTableByName(String tableName) {
         for (Table table : tables) {
@@ -84,6 +105,9 @@ public final class SQLSchema implements Serializable {
         return null;
     }
 
+    /**
+     * generate instances
+     */
     public void startToGenerateInstances() {
         for (Table t : tables) {
             t.startToGenerateInstances();
@@ -96,6 +120,11 @@ public final class SQLSchema implements Serializable {
         }
     }
 
+    /**
+     * get tables as tables view
+     *
+     * @return List<TableView>
+     */
     public List<TableView> getTablesAsTablesView() {
         return tables.stream().map(t -> new TableView(t)).collect(Collectors.toList());
     }

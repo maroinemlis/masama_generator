@@ -9,14 +9,11 @@ import db.bean.Attribute;
 import db.bean.ForeignKey;
 import db.bean.SQLSchema;
 import db.bean.Table;
-import static db.connection.SQLConnection.getDatabaseMetaData;
 import db.utils.DateUtil;
 import db.utils.StringUtil;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,24 +32,24 @@ public class PreCondetion {
     public static final String CHECKED_TRUE = "correct_generation";
     private String msgError;
 
+    /**
+     * Constructor for class PreCondetion
+     *
+     * @param sqlSchema
+     */
     public PreCondetion(SQLSchema sqlSchema) {
         this.sqlSchema = sqlSchema;
     }
 
     /**
-     * the checkSqlSchema check if we can generate or not data return final
-     * value CHECKED_TRUE if it is possible to generate else return message
-     * describe the reason why it is not possible to generate data
+     * return final variable CHECKED_TRUE if there no error in the schema else
+     * return the message error
      *
-     * @return
+     * @throws ParseException, SQLException
+     * @return String
      */
     public String checkSqlSchema() throws ParseException, SQLException {
-        //check if circuler
 
-        /*if (isCircular()) {
-            return "Le schéma est circulaire...";
-        }*/
-        //check from and to ::from<to
         //check ForingAndKPrimery todo:: rendre la method return true or false
         String result = checkForingAndKPrimery();
         if (!result.equals(CHECKED_TRUE)) {
@@ -96,83 +93,100 @@ public class PreCondetion {
         return CHECKED_TRUE;
     }
 
+    /**
+     * return true if a schema is circular else false
+     *
+     * @throws SQLException
+     * @return boolean
+     */
     public boolean isCircular() throws SQLException {
-        boolean result = true;
+        boolean result = false;
         for (Table table : sqlSchema.getTables()) {
-            boolean b = isCirculedInTable(table);
-            if (b) {
-            }
-            return b;
+            result = isCirculedInTable(table);
         }
         return result;
     }
 
     List<String> listTable = new ArrayList();
 
-    //todo :we need to get the name of table from reference
+    /**
+     * todo :return true if a schema is circular else false used from
+     * isCircular()
+     *
+     * @param table
+     * @return boolean
+     */
     private boolean isCirculedInTable(Table table) {
         boolean result = false;
         if (!listTable.contains(table.getTableName())) {
             listTable.add(table.getTableName());
             System.err.println(" ->" + listTable.toString());
-            for (Attribute attribute : table.getAttributes()) {
-
-            }//todo
             if (!table.getAttributes().get(0).getReference().equals(null)) {
                 Attribute a = table.getAttributes().get(0);
                 Attribute b = a.getReference();
                 Attribute c = b.getReference();
-
-                //result = isCirculedInTable(table.getAttributes(0).getReference().get(0));
             }
         } else {
             System.err.println(" ----------------END" + table.getTableName());
             result = true;
         }
-
-        /*if (table.getForeignKeys().isEmpty()) {
-
-        } else {
-
-        }*/
         return result;
     }
 
+    /**
+     * return the String message error if the table T2 in A is primary key or
+     * unique is reference to table T1 in B and T1 have less row then T1 else
+     * return the final variable CHECKED_TRUE
+     *
+     * @return String
+     */
     private String checkForingAndKPrimery() {
         String result = CHECKED_TRUE;
-        /*
 
         for (Table table : sqlSchema.getTables()) {
-            for (ForeignKey foreignKey : table.getForeignKeys()) {
-
-                boolean isReferenceToPK = isReferenceToPK(foreignKey);
-                if (isReferenceToPK
-                        && (foreignKey.getReferences().getHowMuch() < table.getHowMuch())) {
-                    result = new StringUtil().getMsgErrorKeyReferences();
-                } else {
-                    result = CHECKED_TRUE;
+            for (Attribute attribute : table.getAttributes()) {
+                try {
+                    int nbrHowMushP = attribute.getDataFaker().getHowMuch();
+                    int nbrHowMushF = attribute.getReference().getDataFaker().getHowMuch();
+                    System.out.println(nbrHowMushF + ">" + nbrHowMushP);
+                    if (nbrHowMushF > nbrHowMushP) {
+                        return new StringUtil().getMsgErrorKeyReferences();
+                    } else {
+                        result = CHECKED_TRUE;
+                    }
+                } catch (NullPointerException e) {
+                    //System.out.println("NullPointerException");
                 }
             }
+
         }
-         */
+
         return result;
     }
 
+    /**
+     * return true if attribute is unique or primary key and reference to
+     * another table
+     *
+     * @param foreignKey
+     * @return boolean
+     */
     private boolean isReferenceToPK(ForeignKey foreignKey) {
         boolean result = false;
         for (Attribute attribute : foreignKey.getPkTuple()) {
             if (attribute.isPrimary() || attribute.isUnique()) {
                 return true;
             }
-
         }
         return result;
-        //todo in the case thier are multi pk and fk
     }
 
     /**
-     * TODO ): Bug : check this only if the son is unique or primary key
+     * return true if it is possible to generate unique values TODO ): Bug :
+     * check this only if the son is unique or primary key
      *
+     * @param attrebute
+     * @param nbrRowsToGenerate
      * @return boolean
      */
     private boolean checkInt(Attribute attrebute, int nbrRowsToGenerate) {
@@ -189,12 +203,13 @@ public class PreCondetion {
     }
 
     /**
-     * TODO ): Bug : it does not take into account the number of months
      *
-     * @param attrebute
+     *
+     * @param attrebute, nbrRowsToGenerate
      * @return boolean
      */
     private boolean checkDate(Attribute attrebute, int nbrRowsToGenerate) throws ParseException {
+        //TODO ): Bug : it does not take into account the number of months
         boolean result;
         String from = attrebute.getDataFaker().getFrom();
         String to = attrebute.getDataFaker().getTo();
@@ -210,13 +225,14 @@ public class PreCondetion {
     }
 
     /**
-     * TODO ): Bug : it does not take into account the number of months todo ):
-     * BUG: it shold work oly with unique
      *
-     * @param attrebute
-     * @return boolean
+     *
+     * @param from ,to
+     * @return int
      */
     private int numberDaysBetween(String from, String to) throws ParseException {
+        // * TODO ): Bug : it does not take into account the number of months todo ):
+        // BUG: it shold work oly with unique
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         Date toDate = dateFormat.parse(to);
         Date fromDate = dateFormat.parse(from);
@@ -231,15 +247,16 @@ public class PreCondetion {
     }
 
     /**
-     * todo :( BUG: it shold work oly with unique return True if it is possible
      * to generate the method check if the attrebute.getDataFaker().getTO() is
      * superior then attrebute.getDataFaker().getFrom() || example : 4
      * caractères || A à Z = 26 Lettres donc 26*26*26*26
      *
-     * @param attrebute
+     * @param attrebute ,nbrRowsToGenerate
      * @return boolean
      */
     private boolean checkString(Attribute attrebute, int nbrRowsToGenerate) {
+        // todo :( BUG: it shold work oly with unique return True if it is possible
+
         boolean result = true;
         if (attrebute.getDataType().equals("INT")
                 || attrebute.getDataType().equals("TEXT")) {

@@ -29,6 +29,11 @@ public class Attribute implements Serializable {
     private DataFaker dataFaker;
     private Attribute reference;
     private List<Attribute> referencesMe = new ArrayList<Attribute>();
+    private List<Attribute> references = new ArrayList<Attribute>();
+
+    public List<Attribute> getReferences() {
+        return references;
+    }
 
     /**
      * get the list of attributes that make references to the current attribute
@@ -193,11 +198,8 @@ public class Attribute implements Serializable {
         return reference;
     }
 
-    /**
-     * set the reference attribute
-     *
-     */
-    public void setReferences(Attribute a) {
+    public void setReference(Attribute a) {
+
         this.reference = a;
     }
 

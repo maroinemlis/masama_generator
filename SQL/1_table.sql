@@ -1,7 +1,6 @@
 
 CREATE TABLE InfoA
 (    
-    iID INT PRIMARY KEY,
-    a int 
+    iID INT PRIMARY KEY
 );
 

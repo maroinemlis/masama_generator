@@ -31,7 +31,7 @@ public abstract class DataFaker implements Serializable {
 
     public DataFaker(Attribute att) {
         this.attribute = att;
-        this.from = "3";
+        this.from = "1";
         this.to = "100";
         this.generatorType = "'system";
         this.specificType = "'system";

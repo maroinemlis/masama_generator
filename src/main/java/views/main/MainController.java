@@ -125,6 +125,15 @@ public class MainController implements Initializable {
         });
     }
 
+    private boolean isErrorInTable() {
+        for (Table table : schema.getTables()) {
+            if (table.getIsErrorInTable()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @FXML
     private void onGenerate(ActionEvent event) throws Exception {
 
@@ -133,11 +142,14 @@ public class MainController implements Initializable {
         String msgCheck = preCondetion.checkSqlSchema();
 
         if (msgCheck.equals(CHECKED_TRUE)) {
-            System.out.println("we can generate");
-            schema.startToGenerateInstances();
-            for (TableView t : tables) {
-                t.updateTableViewInserts();
+            if (!isErrorInTable()) {
+                System.out.println("we can generate");
+                schema.startToGenerateInstances();
+                for (TableView t : tables) {
+                    t.updateTableViewInserts();
+                }
             }
+
             /*
             new Thread() {
                 int x = 0;
@@ -163,7 +175,6 @@ public class MainController implements Initializable {
                 }
             }.start();
              */
-
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur dans les contrainte");
@@ -222,7 +233,7 @@ public class MainController implements Initializable {
                 path = controller.getFilePath();
 
             } catch (Exception ex) {
-                Alerts.error();
+                //Alerts.error();
             }
 
         });

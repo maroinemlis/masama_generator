@@ -8,10 +8,11 @@ package db.bean;
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import views.alertMeg.AlertExeption;
 
 /**
  * An object represent a table
@@ -24,6 +25,11 @@ public final class Table implements Serializable {
     private List<Attribute> attributes = new LinkedList();
     private PrimaryKey primaryKey = new PrimaryKey();
     private int howMuch;
+    private boolean isErrorInTable = false;
+
+    public boolean getIsErrorInTable() {
+        return isErrorInTable;
+    }
 
     /**
      * get the number of ligne to be generated
@@ -141,14 +147,27 @@ public final class Table implements Serializable {
      * @param schema
      * @throws SQLException
      */
-    public void fillForeignKeys(SQLSchema schema) throws Exception {
-        ResultSet rs = getDatabaseMetaData().getImportedKeys(null, null, tableName);
-        while (rs.next()) {
-            Attribute fkTuplePart = getAttribute(rs.getString("FKCOLUMN_NAME"));
-            Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
-            Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
-            fkTuplePart.setReferences(pkTuplePart);
-            pkTuplePart.getReferencesMe().add(fkTuplePart);
+    public void fillForeignKeys(SQLSchema schema) {
+        try {
+            ResultSet rs = getDatabaseMetaData().getImportedKeys(null, null, tableName);
+            while (rs.next()) {
+                Attribute fkTuplePart = getAttribute(rs.getString("FKCOLUMN_NAME"));
+                Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
+                Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
+                fkTuplePart.setReference(pkTuplePart);
+                pkTuplePart.getReferencesMe().add(fkTuplePart);
+                fkTuplePart.getReferences().add(pkTuplePart);
+            }
+        } catch (Exception ex) {
+            isErrorInTable = true;
+            System.out.println("db.bean.Table.fillForeignKeys()");
+            String msg = ex.getMessage();
+
+            if (msg == null) {
+                msg = "Error in SQL File";
+            }
+            AlertExeption alertExeption = new AlertExeption(msg);
+            alertExeption.showStandarAlert();
 
         }
     }
@@ -158,12 +177,60 @@ public final class Table implements Serializable {
      *
      */
     public void startToGenerateInstances() {
+
         System.out.println(tableName);
         for (Attribute a : attributes) {
             if (a.getReference() == null) {
                 a.startToGenerateRootValues();
             }
         }
+        generateIdentiqueInTupleIfExist();
+    }
+
+    public void generateIdentiqueInTupleIfExist() {
+        List<Attribute> list = eachTupleSholdBeIdentique();
+        int i = 0;
+        Attribute tempAttribute = null;
+        for (Attribute attribute : list) {
+            if (i != 0) {
+                attribute.setInstances(tempAttribute.getInstances());
+            }
+            tempAttribute = attribute;
+            i++;
+        }
+    }
+
+    /**
+     * return List of
+     *
+     * @return List<Attribute>
+     */
+    private List<Attribute> eachTupleSholdBeIdentique() {
+
+        List<Attribute> l = new ArrayList<>();
+        for (Attribute attribute : this.getAttributes()) {
+            try {
+                l = new ArrayList<>();
+                for (Attribute attributeReferenceMe : attribute.getReferencesMe()) {
+                    if (l.contains(attributeReferenceMe) || l.isEmpty()) {
+                        l.add(attributeReferenceMe);
+                    } else {
+                        l.clear();
+                        for (Attribute attribute1 : this.getAttributes()) {
+                            if (attribute1.isPrimary()) {
+                                l.add(attribute1);
+                            }
+                        }
+                        return l;
+                    }
+                }
+            } catch (NullPointerException e) {
+                System.out.println("db.validation.PreCondetion.checkIfReferenceExist()");
+            }
+        }
+        l.clear();
+        return l;
+
     }
 
     /**

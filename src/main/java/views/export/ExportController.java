@@ -7,7 +7,6 @@ package views.export;
  */
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
-import static db.utils.FileUtil.writeObjectInFile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -132,7 +131,7 @@ public class ExportController implements Initializable {
                 int i = 0;
                 String columnName = "";
                 for (; i < line.size(); i++) {
-                    columnName = schema.getTableByName(t.get().getTableName()).getAttributes().get(i).getName();
+                    columnName = schema.getTable(t.get().getTableName()).getAttributes().get(i).getName();
                     insert += "<" + columnName + "> ";
                     insert += line.get(i).get();
                     insert += " </" + columnName + ">" + System.lineSeparator();

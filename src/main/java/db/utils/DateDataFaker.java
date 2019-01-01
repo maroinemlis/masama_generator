@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class DateDataFaker extends DataFaker {
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 
     public DateDataFaker(Attribute att) {
         super(att);

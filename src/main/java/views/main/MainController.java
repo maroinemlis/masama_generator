@@ -136,7 +136,6 @@ public class MainController implements Initializable {
 
     @FXML
     private void onGenerate(ActionEvent event) throws Exception {
-
         currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
         PreCondetion preCondetion = new PreCondetion(schema);
         String msgCheck = preCondetion.checkSqlSchema();
@@ -150,31 +149,6 @@ public class MainController implements Initializable {
                 }
             }
 
-            /*
-            new Thread() {
-                int x = 0;
-                public void run() {
-                    while (x < 1) {
-                        try {
-                            progress_Bar.setVisible(true);
-                            chargement_en_cours.setVisible(true);
-                            sleep(200);
-                            schema.startToGenerateInstances();
-                            for (TableView t : tables) {
-                                t.updateTableViewInserts();
-                            }
-                            x += 1;
-                            progress_Bar.setVisible(false);
-                            chargement_en_cours.setVisible(false);
-                            sleep(10);
-                            break;
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-            }.start();
-             */
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur dans les contrainte");

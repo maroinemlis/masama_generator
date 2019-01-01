@@ -5,7 +5,6 @@
  */
 package db.save_and_load;
 
-import db.bean.Attribute;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.utils.FileUtil;
@@ -48,7 +47,6 @@ public class SaveProject {
         System.err.println("-----------------From file ");
         for (Table table1 : sqlSchema1.getTables()) {
             System.out.println(table1);
-            table1.show();
 
         }
 

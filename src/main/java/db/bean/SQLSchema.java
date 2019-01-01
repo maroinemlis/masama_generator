@@ -28,12 +28,7 @@ public final class SQLSchema implements Serializable {
      * @return Table
      */
     public Table getTable(String tableName) {
-        for (Table t : tables) {
-            if (t.getTableName().equals(tableName)) {
-                return t;
-            }
-        }
-        return null;
+        return tables.stream().filter(t -> t.getTableName().equals(tableName)).findFirst().get();
     }
 
     /**
@@ -70,54 +65,27 @@ public final class SQLSchema implements Serializable {
     }
 
     /**
-     * Show the table list of SQLschema
-     *
-     */
-    public void showSQLSchema() {
-        for (Table table : tables) {
-            System.out.println(table);
-        }
-    }
-
-    /**
      * Fill the imported ForeignKeys for each table
      *
      * @throws SQLException
      */
     private void fillForeignKeysForTables() throws Exception {
-        for (Table table : tables) {
-            table.fillForeignKeys(this);
-        }
-    }
-
-    /**
-     * search table instance by its name
-     *
-     * @param tableName
-     * @return Table
-     */
-    public Table getTableByName(String tableName) {
-        for (Table table : tables) {
-            if (table.getTableName().equals(tableName)) {
-                return table;
-            }
-        }
-        return null;
+        tables.forEach(t -> t.fillForeignKeys(this));
     }
 
     /**
      * generate instances
      */
     public void startToGenerateInstances() {
-        for (Table t : tables) {
-            t.startToGenerateInstances();
-        }
-        for (Table t : tables) {
-            t.startToGenerateInstancesForForeignKey();
-        }
-        for (Table t : tables) {
-            t.startToGenerateInstancesForCircles();
-        }
+        clearInstances();
+        tables.forEach(Table::startToGenerateInstances);
+        tables.forEach(Table::fixAttributesInstances);
+        //tables.forEach(Table::show);
+    }
+
+    public void clearInstances() {
+        tables.forEach(t -> t.getAttributes().forEach(a -> a.getInstances().clear()));
+
     }
 
     /**

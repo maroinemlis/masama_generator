@@ -12,6 +12,7 @@ import db.utils.TextDataFaker;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * An object represent a column of SQL table
@@ -27,9 +28,8 @@ public class Attribute implements Serializable {
     private boolean isNullable;
     private List<String> instances = new ArrayList<>();
     private DataFaker dataFaker;
-    private Attribute reference;
-    private List<Attribute> referencesMe = new ArrayList<Attribute>();
-    private List<Attribute> references = new ArrayList<Attribute>();
+    private List<Attribute> referencesMe = new ArrayList<>();
+    private List<Attribute> references = new ArrayList<>();
 
     public List<Attribute> getReferences() {
         return references;
@@ -58,7 +58,6 @@ public class Attribute implements Serializable {
         this.isPrimary = false;
         this.isUnique = false;
         this.isNullable = !nullable.equals("0");
-        this.reference = null;
         switch (dataType) {
             case "TEXT":
                 dataFaker = new TextDataFaker(this);
@@ -127,8 +126,38 @@ public class Attribute implements Serializable {
      *
      */
     public void startToGenerateRootValues() {
-        instances.clear();
         dataFaker.values();
+        startToGenerateWhoReferenceMe();
+
+    }
+
+    public void startToGenerateWhoReferenceMe() {
+        referencesMe.forEach(ref -> {
+            int diffrence = ref.dataFaker.getHowMuch() - ref.instances.size();
+            if (diffrence > 0) {
+                ref.instances.addAll(instances.stream().limit(diffrence).collect(Collectors.toList()));
+            }
+        });
+        referencesMe.forEach(ref -> {
+            ref.startToGenerateWhoReferenceMe();
+        });
+
+    }
+
+    void fixInstancesHowMuch() {
+        if (references.isEmpty()) {
+            return;
+        }
+        int rest = dataFaker.getHowMuch() - instances.size();
+        if (rest > 0) {
+            int restDiv = rest / instances.size();
+            int restMod = rest % instances.size();
+            for (int i = 0; i < restDiv; i++) {
+                instances.addAll(instances.stream().limit(instances.size()).collect(Collectors.toList()));
+
+                instances.addAll(instances.stream().limit(restMod).collect(Collectors.toList()));
+            }
+        }
     }
 
     /**
@@ -187,20 +216,6 @@ public class Attribute implements Serializable {
      */
     public boolean isUnique() {
         return this.isUnique;
-    }
-
-    /**
-     * get the reference attribute
-     *
-     * @return Attribute
-     */
-    public Attribute getReference() {
-        return reference;
-    }
-
-    public void setReference(Attribute a) {
-
-        this.reference = a;
     }
 
 }

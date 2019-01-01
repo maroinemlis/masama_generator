@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -45,31 +47,20 @@ public abstract class DataFaker implements Serializable {
 
     public abstract String generateValue();
 
-    private void generateNulls(Collection<String> values) {
-        for (int i = 0; i < nullsNumber; i++) {
-            values.add("NULL");
-        }
+    private void generateUniqueValues() {
+        List<String> collect = Stream.concat(
+                Stream.generate(() -> "NULL").limit(nullsNumber),
+                Stream.generate(() -> generateValue()).distinct().limit(howMuch - nullsNumber)
+        ).collect(Collectors.toList());
+        attribute.setInstances(collect);
     }
 
     private void generateValues() {
-        List<String> values = attribute.getInstances();
-        generateNulls(values);
-        for (int i = 0; i < howMuch - nullsNumber; i++) {
-            values.add(generateValue());
-        }
-    }
-
-    private void generateUniqueValues() {
-        HashSet<String> values = new HashSet<>();
-        generateNulls(values);
-        for (int i = 0; i < howMuch - nullsNumber; i++) {
-            String value = null;
-            do {
-                value = generateValue();
-            } while (values.contains(value));
-            values.add(value);
-        }
-        attribute.getInstances().addAll(values);
+        List<String> collect = Stream.concat(
+                Stream.generate(() -> "NULL").limit(nullsNumber),
+                Stream.generate(() -> generateValue()).limit(howMuch - nullsNumber)
+        ).collect(Collectors.toList());
+        attribute.setInstances(collect);
     }
 
     public void values() {
@@ -81,11 +72,8 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void setConfiguration(String from, String to, String generatorType, String specificType) {
-        System.out.println(this.from + " " + this.to);
-
         this.from = from;
         this.to = to;
-        System.out.println(this.from + " " + this.to);
         this.generatorType = generatorType;
         this.specificType = specificType;
     }

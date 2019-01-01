@@ -14,11 +14,8 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.bean.Attribute;
 import db.bean.Table;
 import db.utils.Types;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import javafx.scene.control.Control;
-import javafx.scene.control.TreeTableView;
 
 /**
  *
@@ -42,6 +39,9 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     String specificTypeString = "'system";
 
     public void setDisable(boolean selected) {
+        if (!attribute.getReferences().isEmpty()) {
+            return;
+        }
         if (generatorTypes != null) {
             generatorTypes.setDisable(selected);
         }
@@ -81,7 +81,9 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             isNullable.setDisable(true);
             isNullable.setSelected(true);
         }
-
+        if (!attribute.getReferences().isEmpty()) {
+            return;
+        }
         switch (attribute.getDataType()) {
             case "TEXT":
                 from = new JFXSlider(1, 255, Integer.parseInt(fromString));

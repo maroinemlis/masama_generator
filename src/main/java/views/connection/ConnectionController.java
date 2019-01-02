@@ -56,7 +56,7 @@ public class ConnectionController implements Initializable {
     private AnchorPane auth;
     @FXML
     private JFXTextField url;
-    
+
     private SingleSelectionModel<String> driverString;
     private String fileString;
     private static Path filePath;
@@ -90,8 +90,8 @@ public class ConnectionController implements Initializable {
     private void onChose(ActionEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
         if (r2.isSelected()) {
-            fileChooser.setTitle("Choisir un fichier sql binaire"); 
-             
+            fileChooser.setTitle("Choisir un fichier sql binaire");
+
         } else if (r3.isSelected()) {
             fileChooser.setTitle("Choisir un script sql");
         }
@@ -103,13 +103,14 @@ public class ConnectionController implements Initializable {
 
     @FXML
     private void onConnect(ActionEvent event) {
+        //this.driverString = driver.selectionModelProperty().getValue();
         alert.close();
     }
 
     public String getFileString() {
         return fileString;
     }
-    
+
     public Path getFilePath() {
         return filePath;
     }
@@ -142,7 +143,7 @@ public class ConnectionController implements Initializable {
         return password.getText();
     }
 
-    public void setAlter(JFXAlert alert) {
+    public void setAlert(JFXAlert alert) {
         this.alert = alert;
     }
 }

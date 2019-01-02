@@ -100,7 +100,7 @@ public class TestClass_amirouche {
                 sqlSchema.startToGenerateInstances();
                 List<Table> tables = sqlSchema.getTables();
                 for (Table table : tables) {
-                    table.show();
+                    //table.show();
                 }
             }
         } else {

@@ -13,8 +13,6 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import views.alertMeg.AlertExeption;
 
 /**

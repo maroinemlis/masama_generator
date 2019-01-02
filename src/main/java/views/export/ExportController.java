@@ -7,7 +7,6 @@ package views.export;
  */
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
-import static db.utils.FileUtil.writeObjectInFile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -118,9 +117,9 @@ public class ExportController implements Initializable {
         }
 
     }
-    
-    private void exportOnXml() throws Exception{
-        
+
+    private void exportOnXml() throws Exception {
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le répertoire d'enregistrement");
         fileChooser.setInitialDirectory(new File("."));
@@ -128,22 +127,21 @@ public class ExportController implements Initializable {
         for (TableView t : tables) {
             List<List<StringProperty>> lines = t.getLines();
             for (List<StringProperty> line : lines) {
-                String insert = "<" + t.get().getTableName() + "> "+System.lineSeparator();
-                int i=0 ;
+                String insert = "<" + t.get().getTableName() + "> " + System.lineSeparator();
+                int i = 0;
                 String columnName = "";
-                for (; i<line.size(); i++) {
-                    columnName = schema.getTableByName(t.get().getTableName()).getAttributes().get(i).getName();
-                    insert += "<"+columnName+"> ";
+                for (; i < line.size(); i++) {
+                    columnName = schema.getTable(t.get().getTableName()).getAttributes().get(i).getName();
+                    insert += "<" + columnName + "> ";
                     insert += line.get(i).get();
-                    insert += " </"+columnName+">"+System.lineSeparator();
+                    insert += " </" + columnName + ">" + System.lineSeparator();
                 }
-                insert += "</"+t.get().getTableName()+">"+System.lineSeparator();
-                Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert).getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
-        
+                insert += "</" + t.get().getTableName() + ">" + System.lineSeparator();
+                Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
             }
         }
-            
-        
+
     }
 
     private void exportOnJson() throws FileNotFoundException, IOException {

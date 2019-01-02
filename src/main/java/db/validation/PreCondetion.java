@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * this class is for to check if it is possible to generate data or not
@@ -55,39 +53,43 @@ public class PreCondetion {
         if (!result.equals(CHECKED_TRUE)) {
             return result;
         }
-
         //check intervales
         boolean check;
+
         for (Table table : sqlSchema.getTables()) {
             int nbrRowsToGenerate = table.getHowMuch();
-            for (Attribute attrebute : table.getAttributes()) {
-                if (!checkFromTo(attrebute)) {
+            for (Attribute attribute : table.getAttributes()) {
+
+                if (!checkFromTo(attribute)) {
                     return msgError;
                 }
-                String type = attrebute.getDataType();
-                switch (type) {
-                    case "INT":
-                    case "INTEGER":
-                    case "DOUBLE":
-                    case "FLOAT":
-                        check = checkInt(attrebute, nbrRowsToGenerate);
-                        if (!check) {
-                            return msgError;
-                        }
-                        break;
-                    case "DATE":
-                        check = checkDate(attrebute, nbrRowsToGenerate);
-                        if (!check) {
-                            return msgError;
-                        }
-                    case "TEXT":
-                        check = checkString(attrebute, nbrRowsToGenerate);
-                        if (!check) {
-                            return msgError;
-                        }
-                    default:
-                        break;
+                if (attribute.getReferences().isEmpty()) {
+                    String type = attribute.getDataType();
+                    switch (type) {
+                        case "INT":
+                        case "INTEGER":
+                        case "DOUBLE":
+                        case "FLOAT":
+                            check = checkInt(attribute, nbrRowsToGenerate);
+                            if (!check) {
+                                return msgError;
+                            }
+                            break;
+                        case "DATE":
+                            check = checkDate(attribute, nbrRowsToGenerate);
+                            if (!check) {
+                                return msgError;
+                            }
+                            break;
+                        case "TEXT":
+                            check = checkString(attribute, nbrRowsToGenerate);
+                            if (!check) {
+                                return msgError;
+                            }
+                            break;
+                    }
                 }
+
             }
         }
         return CHECKED_TRUE;
@@ -118,7 +120,7 @@ public class PreCondetion {
      */
     private boolean isCirculedInTable(Table table) {
         boolean result = false;
-        if (!listTable.contains(table.getTableName())) {
+        /*if (!listTable.contains(table.getTableName())) {
             listTable.add(table.getTableName());
             System.err.println(" ->" + listTable.toString());
             if (!table.getAttributes().get(0).getReference().equals(null)) {
@@ -129,7 +131,7 @@ public class PreCondetion {
         } else {
             System.err.println(" ----------------END" + table.getTableName());
             result = true;
-        }
+        }*/
         return result;
     }
 
@@ -147,14 +149,15 @@ public class PreCondetion {
             for (Attribute attribute : table.getAttributes()) {
                 try {
                     int nbrHowMushP = attribute.getDataFaker().getHowMuch();
-                    int nbrHowMushF = attribute.getReference().getDataFaker().getHowMuch();
+                    int nbrHowMushF = attribute.getReferences()
+                            .stream().map(a -> a.getDataFaker().getHowMuch()).min(Integer::compare).get();
                     System.out.println(nbrHowMushF + ">" + nbrHowMushP);
                     if (nbrHowMushF > nbrHowMushP) {
                         return new StringUtil().getMsgErrorKeyReferences();
                     } else {
                         result = CHECKED_TRUE;
                     }
-                } catch (NullPointerException e) {
+                } catch (Exception e) {
                     //System.out.println("NullPointerException");
                 }
             }
@@ -185,14 +188,14 @@ public class PreCondetion {
      * return true if it is possible to generate unique values TODO ): Bug :
      * check this only if the son is unique or primary key
      *
-     * @param attrebute
+     * @param attribute
      * @param nbrRowsToGenerate
      * @return boolean
      */
-    private boolean checkInt(Attribute attrebute, int nbrRowsToGenerate) {
+    private boolean checkInt(Attribute attribute, int nbrRowsToGenerate) {
         boolean result;
-        double from = Integer.valueOf(attrebute.getDataFaker().getFrom());
-        double to = Integer.valueOf(attrebute.getDataFaker().getTo());
+        double from = Integer.valueOf(attribute.getDataFaker().getFrom());
+        double to = Integer.valueOf(attribute.getDataFaker().getTo());
         if (nbrRowsToGenerate <= (to - from)) {
             result = true;
         } else {
@@ -205,14 +208,14 @@ public class PreCondetion {
     /**
      *
      *
-     * @param attrebute, nbrRowsToGenerate
+     * @param attribute, nbrRowsToGenerate
      * @return boolean
      */
-    private boolean checkDate(Attribute attrebute, int nbrRowsToGenerate) throws ParseException {
+    private boolean checkDate(Attribute attribute, int nbrRowsToGenerate) throws ParseException {
         //TODO ): Bug : it does not take into account the number of months
         boolean result;
-        String from = attrebute.getDataFaker().getFrom();
-        String to = attrebute.getDataFaker().getTo();
+        String from = attribute.getDataFaker().getFrom();
+        String to = attribute.getDataFaker().getTo();
         int numberOfDay = numberDaysBetween(from, to);
         //System.out.println(numberOfDay);
         if (numberOfDay >= nbrRowsToGenerate) {
@@ -247,35 +250,27 @@ public class PreCondetion {
     }
 
     /**
-     * to generate the method check if the attrebute.getDataFaker().getTO() is
-     * superior then attrebute.getDataFaker().getFrom() || example : 4
+     * to generate the method check if the attribute.getDataFaker().getTO() is
+     * superior then attribute.getDataFaker().getFrom() || example : 4
      * caractères || A à Z = 26 Lettres donc 26*26*26*26
      *
-     * @param attrebute ,nbrRowsToGenerate
+     * @param attribute ,nbrRowsToGenerate
      * @return boolean
      */
-    private boolean checkString(Attribute attrebute, int nbrRowsToGenerate) {
+    private boolean checkString(Attribute attribute, int nbrRowsToGenerate) {
         // todo :( BUG: it shold work oly with unique return True if it is possible
-
         boolean result = true;
-        if (attrebute.getDataType().equals("INT")
-                || attrebute.getDataType().equals("TEXT")) {
-
-            int from = Integer.valueOf(attrebute.getDataFaker().getFrom());
-            int to = Integer.valueOf(attrebute.getDataFaker().getTo());
-            double nbrCombinision = 0;
-            for (int i = from; i <= to; i++) {
-                nbrCombinision += Math.pow(26, i);
-            }
-            if (nbrCombinision >= nbrRowsToGenerate) {
-                result = true;
-            } else {
-                msgError = new StringUtil().messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
-                result = false;
-            }
-        } else if (attrebute.getDataType().equals("DATE")) {
-
+        int from = Integer.valueOf(attribute.getDataFaker().getFrom());
+        int to = Integer.valueOf(attribute.getDataFaker().getTo());
+        double nbrCombinision = 0;
+        for (int i = from; i <= to; i++) {
+            nbrCombinision += Math.pow(26, i);
+        }
+        if (nbrCombinision >= nbrRowsToGenerate) {
             result = true;
+        } else {
+            msgError = new StringUtil().messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
+            result = false;
         }
         return result;
     }
@@ -283,30 +278,28 @@ public class PreCondetion {
     /**
      * return True if the MIN > MAX else false
      *
-     * @param attrebute
+     * @param attribute
      * @return boolean
      */
-    private boolean checkFromTo(Attribute attrebute) {
+    private boolean checkFromTo(Attribute attribute) throws ParseException {
         boolean result = true;
-        String from = attrebute.getDataFaker().getFrom();
-        String to = attrebute.getDataFaker().getTo();
-        if (attrebute.getDataType().equals("INT")
-                || attrebute.getDataType().equals("TEXT")) {
-            int fromInt = Integer.valueOf(from);
-            int toInt = Integer.valueOf(to);
-            result = fromInt <= toInt;
-            msgError = ((result) ? "" : new StringUtil().messageErrorFromTo(attrebute));
-        } else if (attrebute.getDataType().equals("DATE")) {
-            try {
+        if (attribute.getReferences().isEmpty()) {
+            return true;
+        }
+        String from = attribute.getDataFaker().getFrom();
+        String to = attribute.getDataFaker().getTo();
+        switch (attribute.getDataType()) {
+            case "TEXT":
+            case "INT":
+                result = Integer.parseInt(from) <= Integer.parseInt(to);
+                msgError = result ? "" : new StringUtil().messageErrorFromTo(attribute);
+                break;
+            case "DATE":
                 result = new DateUtil().CompareDate(from, to);
-                msgError = ((result) ? "" : new StringUtil().messageErrorFromTo(attrebute));
-            } catch (ParseException ex) {
-                System.out.println("db.validation.PreCondetion.checkFromTo()");
-                Logger.getLogger(PreCondetion.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                msgError = result ? "" : new StringUtil().messageErrorFromTo(attribute);
+                break;
         }
         return result;
-
     }
 
 }

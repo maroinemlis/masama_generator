@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import views.alertMeg.AlertExeption;
 
 /**
@@ -22,10 +23,11 @@ import views.alertMeg.AlertExeption;
 public final class Table implements Serializable {
 
     private String tableName;
-    private List<Attribute> attributes = new LinkedList();
+    private List<Attribute> attributes = new ArrayList<>();
     private PrimaryKey primaryKey = new PrimaryKey();
     private int howMuch;
     private boolean isErrorInTable = false;
+    List<String> listTable = new ArrayList();
 
     public boolean getIsErrorInTable() {
         return isErrorInTable;
@@ -152,9 +154,8 @@ public final class Table implements Serializable {
             ResultSet rs = getDatabaseMetaData().getImportedKeys(null, null, tableName);
             while (rs.next()) {
                 Attribute fkTuplePart = getAttribute(rs.getString("FKCOLUMN_NAME"));
-                Table pkTable = schema.getTableByName(rs.getString("PKTABLE_NAME"));
+                Table pkTable = schema.getTable(rs.getString("PKTABLE_NAME"));
                 Attribute pkTuplePart = pkTable.getAttribute(rs.getString("PKCOLUMN_NAME"));
-                fkTuplePart.setReference(pkTuplePart);
                 pkTuplePart.getReferencesMe().add(fkTuplePart);
                 fkTuplePart.getReferences().add(pkTuplePart);
             }
@@ -177,117 +178,22 @@ public final class Table implements Serializable {
      *
      */
     public void startToGenerateInstances() {
-
-        System.out.println(tableName);
-        for (Attribute a : attributes) {
-            if (a.getReference() == null) {
+        attributes.forEach(a -> {
+            if (a.getReferences().isEmpty()) {
                 a.startToGenerateRootValues();
             }
-        }
-        generateIdentiqueInTupleIfExist();
+        });
     }
 
-    public void generateIdentiqueInTupleIfExist() {
-        List<Attribute> list = eachTupleSholdBeIdentique();
-        int i = 0;
-        Attribute tempAttribute = null;
-        for (Attribute attribute : list) {
-            if (i != 0) {
-                attribute.setInstances(tempAttribute.getInstances());
-            }
-            tempAttribute = attribute;
-            i++;
-        }
+    public void fixAttributesInstances() {
+        attributes.forEach(Attribute::fixInstancesHowMuch);
     }
 
-    /**
-     * return List of
-     *
-     * @return List<Attribute>
-     */
-    private List<Attribute> eachTupleSholdBeIdentique() {
-
-        List<Attribute> l = new ArrayList<>();
-        for (Attribute attribute : this.getAttributes()) {
-            try {
-                l = new ArrayList<>();
-                for (Attribute attributeReferenceMe : attribute.getReferencesMe()) {
-                    if (l.contains(attributeReferenceMe) || l.isEmpty()) {
-                        l.add(attributeReferenceMe);
-                    } else {
-                        l.clear();
-                        for (Attribute attribute1 : this.getAttributes()) {
-                            if (attribute1.isPrimary()) {
-                                l.add(attribute1);
-                            }
-                        }
-                        return l;
-                    }
-                }
-            } catch (NullPointerException e) {
-                System.out.println("db.validation.PreCondetion.checkIfReferenceExist()");
-            }
-        }
-        l.clear();
-        return l;
+    void show() {
+        System.out.println(tableName);
+        attributes.forEach(a -> {
+            System.out.println(a.getName() + " : " + a.getInstances());
+        });
 
     }
-
-    /**
-     * Generates instances exemples for ForeignKeys
-     *
-     */
-    public void startToGenerateInstancesForForeignKey() {
-        for (Attribute a : attributes) {
-            if (a.getInstances().isEmpty() && a.getReference() != null) {
-                a.getInstances().addAll(getListForeigKey(a, a.getReference()));
-            }
-        }
-    }
-
-    /**
-     * return list of foreign key
-     *
-     * @param pkPart is an Attribute
-     * @param fkPart is an Attribute
-     * @return List<String>
-     */
-    private List<String> getListForeigKey(Attribute fkPart, Attribute pkPart) {
-        int fkHowMuch = fkPart.getDataFaker().getHowMuch();
-        int pkHowMuch = pkPart.getDataFaker().getHowMuch();
-        int mDiv = fkHowMuch / pkHowMuch;
-        int mMod = fkHowMuch % pkHowMuch;
-        int size = pkPart.getInstances().size();
-        List<String> list = new ArrayList<>();
-        for (int j = 0; j < mDiv; j++) {
-            list.addAll(pkPart.getInstances());
-            fkHowMuch = fkHowMuch - size;
-        }
-        System.out.println(fkHowMuch);
-        return list;
-    }
-
-    /**
-     * Shows instances exemples for each attribtute
-     */
-    public void show() {
-        System.out.println("-------------------------" + this.getTableName());
-        int rowNumber = attributes.get(0).getInstances().size();
-        for (int j = 0; j < rowNumber; j++) {
-            String insert = "INSERT INTO " + this.getTableName() + " VALUES (";
-            int i = 0;
-            Attribute a = null;
-            for (; i < attributes.size() - 1; i++) {
-                a = attributes.get(i);
-                insert += a.getInstances().get(j) + ", ";
-            }
-            a = attributes.get(i);
-
-            insert += a.getInstances().get(j) + ");";
-            System.out.println(insert);
-        }
-    }
-
-    List<String> listTable = new ArrayList();
-
 }

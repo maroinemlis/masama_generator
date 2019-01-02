@@ -33,15 +33,15 @@ public class StringUtil {
     }
 
     public String messageErrorFromTo(int nbrRowsToGenerate, String from, String to) {
-        return "Le nombre de colonne demander à \ngeneré(" + nbrRowsToGenerate + ") "
+        return "Le nombre de colonne demandé à \ngenerer(" + nbrRowsToGenerate + ") "
                 + "est inférieur au nombre de \n"
                 + "possibelité dans l'intervalle donnée: [" + from + " - " + to + "]";
     }
 
     public String messageErrorStringCombinition(int nbrRowsToGenerate, double pow) {
-        return "Le nombre de colonne demander à \ngeneré(" + nbrRowsToGenerate + ") "
+        return "Le nombre de colonne demandé à \ngenerer(" + nbrRowsToGenerate + ") "
                 + "est supérieur au nombre de \n"
-                + "combinision possible : (" + (int) pow + ")";
+                + "combinaison possible : (" + (int) pow + ")";
     }
 
     public String messageErrorFromTo(Attribute attrebute) {

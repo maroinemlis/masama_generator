@@ -25,12 +25,30 @@ public class Attribute implements Serializable {
     private boolean isUnique;
     private boolean isNullable;
     private List<String> instances = new ArrayList<>();
+    private List<String> preInstances = new ArrayList<>();
+    private boolean isTakePreData = false;
     private DataFaker dataFaker;
     private List<Attribute> referencesMe = new ArrayList<>();
     private List<Attribute> references = new ArrayList<>();
 
     public List<Attribute> getReferences() {
         return references;
+    }
+
+    public boolean getIsIsTakePreData() {
+        return isTakePreData;
+    }
+
+    public void setIsIsTakePreData(boolean isTakePreData) {
+        this.isTakePreData = isTakePreData;
+    }
+
+    public void setPreInstances(List<String> preInstances) {
+        this.preInstances = preInstances;
+    }
+
+    public List<String> getPreInstances() {
+        return preInstances;
     }
 
     /**

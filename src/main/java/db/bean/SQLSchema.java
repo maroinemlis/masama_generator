@@ -1,5 +1,6 @@
 package db.bean;
 
+import db.connection.SQLConnection;
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.io.Serializable;
 import java.sql.*;
@@ -11,12 +12,37 @@ public final class SQLSchema implements Serializable {
 
     private List<Table> tables = new ArrayList<>();
     private String name;
+    private boolean isTakePreData = false;
 
     /**
-     * Get the list of table schema
+     * Construcor for class SQLSchema, Generate Tables and fill their foreinkeys
      *
-     * @return List<Table>
+     * @throws Exception
      */
+    public SQLSchema() throws Exception {
+        GenerateTables();
+        fillForeignKeysForTables();
+    }
+
+    public SQLSchema(boolean isTakePreData, SQLConnection cnx) throws Exception {
+        this.isTakePreData = isTakePreData;
+        GenerateTables();
+        fillForeignKeysForTables();
+        if (isTakePreData) {
+            for (Table table : tables) {
+                table.setIsIsTakePreData(isTakePreData, cnx);
+            }
+        }
+    }
+
+    public boolean getIsIsTakePreData() {
+        return isTakePreData;
+    }
+
+    public void setIsIsTakePreData(boolean isTakePreData) {
+        this.isTakePreData = isTakePreData;
+    }
+
     public List<Table> getTables() {
         return tables;
     }
@@ -38,16 +64,6 @@ public final class SQLSchema implements Serializable {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Construcor for class SQLSchema, Generate Tables and fill their foreinkeys
-     *
-     * @throws Exception
-     */
-    public SQLSchema() throws Exception {
-        GenerateTables();
-        fillForeignKeysForTables();
     }
 
     /**

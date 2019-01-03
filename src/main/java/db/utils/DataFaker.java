@@ -44,27 +44,35 @@ public abstract class DataFaker implements Serializable {
 
     public abstract String generateValue();
 
-    private void generateUniqueValues() {
+    private void generateUniqueValues(List<String> collectPreDate, int limit) {
         List<String> collect = Stream.concat(
-                Stream.generate(() -> "NULL").limit(nullsNumber),
-                Stream.generate(() -> generateValue()).distinct().limit(howMuch - nullsNumber)
+                collectPreDate.stream(),
+                Stream.generate(() -> generateValue()).distinct().limit(limit)
         ).collect(Collectors.toList());
         attribute.setInstances(collect);
     }
 
-    private void generateValues() {
+    private void generateValues(List<String> collectPreDate, int limit) {
+
         List<String> collect = Stream.concat(
-                Stream.generate(() -> "NULL").limit(nullsNumber),
-                Stream.generate(() -> generateValue()).limit(howMuch - nullsNumber)
+                collectPreDate.stream(),
+                Stream.generate(() -> generateValue()).limit(limit)
         ).collect(Collectors.toList());
         attribute.setInstances(collect);
     }
 
     public void values() {
+        List<String> collectPreDate = Stream.concat(
+                attribute.getPreInstances().stream().limit(howMuch),
+                Stream.generate(() -> "NULL").limit(nullsNumber)
+        ).collect(Collectors.toList());
+        int limit = howMuch - nullsNumber - attribute.getPreInstances().size();
+        limit = (limit > 0) ? limit : 0;
+
         if (attribute.isUnique() || attribute.isPrimary()) {
-            generateUniqueValues();
+            generateUniqueValues(collectPreDate, limit);
         } else {
-            generateValues();
+            generateValues(collectPreDate, limit);
         }
     }
 

@@ -189,8 +189,8 @@ public final class Table implements Serializable {
         attributes.forEach(Attribute::fixInstancesHowMuch);
     }
 
-    void show() {
-        System.out.println(tableName);
+    public void show() {
+        System.out.println(tableName + "----------------------");
         attributes.forEach(a -> {
             System.out.println(a.getName() + " : " + a.getInstances());
         });

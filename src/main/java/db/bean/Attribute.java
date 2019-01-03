@@ -1,12 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package db.bean;
 
+import db.utils.BlobDataFaker;
+import db.utils.BooleanDataFaker;
 import db.utils.DataFaker;
 import db.utils.DateDataFaker;
+import db.utils.DoubleDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.TextDataFaker;
 import java.io.Serializable;
@@ -66,10 +64,20 @@ public class Attribute implements Serializable {
                 dataFaker = new DateDataFaker(this);
                 break;
             case "INT":
+            case "NUMERIC":
             case "INTEGER":
+                dataFaker = new IntegerDataFaker(this);
+                break;
             case "DOUBLE":
             case "FLOAT":
-                dataFaker = new IntegerDataFaker(this);
+            case "REAL":
+                dataFaker = new DoubleDataFaker(this);
+                break;
+            case "BOOLEAN":
+                dataFaker = new BooleanDataFaker(this);
+                break;
+            case "BLOB":
+                dataFaker = new BlobDataFaker(this);
                 break;
         }
 

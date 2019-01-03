@@ -85,7 +85,6 @@ public final class SQLSchema implements Serializable {
 
     public void clearInstances() {
         tables.forEach(t -> t.getAttributes().forEach(a -> a.getInstances().clear()));
-
     }
 
     /**

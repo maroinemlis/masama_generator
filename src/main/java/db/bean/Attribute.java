@@ -8,6 +8,7 @@ package db.bean;
 import db.utils.DataFaker;
 import db.utils.DateDataFaker;
 import db.utils.IntegerDataFaker;
+import db.utils.RealDataFaker;
 import db.utils.TextDataFaker;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -67,9 +68,12 @@ public class Attribute implements Serializable {
                 break;
             case "INT":
             case "INTEGER":
+                dataFaker = new IntegerDataFaker(this);
+                break;
             case "DOUBLE":
             case "FLOAT":
-                dataFaker = new IntegerDataFaker(this);
+            case "REAL":
+                dataFaker = new RealDataFaker(this);
                 break;
         }
 
@@ -145,18 +149,14 @@ public class Attribute implements Serializable {
     }
 
     void fixInstancesHowMuch() {
-        if (references.isEmpty()) {
-            return;
-        }
         int rest = dataFaker.getHowMuch() - instances.size();
         if (rest > 0) {
             int restDiv = rest / instances.size();
-            int restMod = rest % instances.size();
             for (int i = 0; i < restDiv; i++) {
                 instances.addAll(instances.stream().limit(instances.size()).collect(Collectors.toList()));
-
-                instances.addAll(instances.stream().limit(restMod).collect(Collectors.toList()));
             }
+            rest = dataFaker.getHowMuch() - instances.size();
+            instances.addAll(instances.stream().limit(rest).collect(Collectors.toList()));
         }
     }
 

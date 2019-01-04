@@ -6,23 +6,18 @@ package views.main;
  * and open the template in the editor.
  */
 import com.jfoenix.controls.JFXAlert;
-import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
-import db.bean.Attribute;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXToggleButton;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
-import db.models.AttributeModel;
 import static db.utils.FileUtil.readFileObject;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,20 +31,14 @@ import static views.main.LuncherApp.primaryStage;
 import static db.utils.FileUtil.writeObjectInFile;
 import db.validation.PreCondetion;
 import static db.validation.PreCondetion.CHECKED_TRUE;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import views.connection.ConnectionController;
 import java.io.IOException;
-import java.io.OutputStream;
-import static java.lang.Thread.sleep;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -196,8 +185,11 @@ public class MainController implements Initializable {
         alert.show();
         alert.setOnCloseRequest((e) -> {
             try {
-                if (!controller.isServer()) {
-                    new SQLConnection(controller.getFileString(), "SQLite", controller.isBinary());
+                if (controller.getIsFile()) {
+                    SQLConnection sqlConnection = new SQLConnection(controller.getFileString(), controller.getDriver(), controller.isBinary());
+                } else {
+                    SQLConnection sqlConnection = new SQLConnection(controller.getURL(), controller.getUser(), controller.getPassword(), controller.getDriver()
+                    );
                 }
                 schema = new SQLSchema();
                 tables = schema.getTablesAsTablesView();
@@ -207,7 +199,7 @@ public class MainController implements Initializable {
                 path = controller.getFilePath();
 
             } catch (Exception ex) {
-                //Alerts.error();
+                System.out.println(ex);
             }
 
         });

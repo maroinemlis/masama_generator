@@ -81,6 +81,7 @@ public final class SQLConnection {
         connection = DriverManager.getConnection(url, user, password);
         bdMetaDate = connection.getMetaData();
         stm = connection.createStatement();
+        System.out.println(bdMetaDate.getDatabaseProductName());
     }
 
     /**
@@ -128,9 +129,13 @@ public final class SQLConnection {
      * @param sqlType
      */
     public SQLConnection(String url, String user, String password, String sqlType) throws Exception {
-        setConnexionType(sqlType);
         this.user = user;
         this.password = password;
+        setConnexionType(sqlType);
+        System.out.println(url + " " + user + " " + password);
+        if (sqlType.equals("MySQL")) {
+            this.url += "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+        }
         connect();
     }
 

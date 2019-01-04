@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import views.alertMeg.AlertExeption;
 
 /**
@@ -81,7 +83,6 @@ public final class SQLConnection {
         connection = DriverManager.getConnection(url, user, password);
         bdMetaDate = connection.getMetaData();
         stm = connection.createStatement();
-        System.out.println(bdMetaDate.getDatabaseProductName());
     }
 
     /**
@@ -129,13 +130,9 @@ public final class SQLConnection {
      * @param sqlType
      */
     public SQLConnection(String url, String user, String password, String sqlType) throws Exception {
+        setConnexionType(sqlType);
         this.user = user;
         this.password = password;
-        setConnexionType(sqlType);
-        System.out.println(url + " " + user + " " + password);
-        if (sqlType.equals("MySQL")) {
-            this.url += "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-        }
         connect();
     }
 
@@ -156,6 +153,25 @@ public final class SQLConnection {
             this.url = "//localhost";
             executeSQLFile(fileUrl);
         }
+    }
+
+    public List<String> executeQuerySelecte(String nameTable, String nameAttribute) throws SQLException {
+        List<String> result = new ArrayList<>();
+        String query = "select " + nameAttribute + " from " + nameTable + ";";
+        ResultSet rs = null;
+        try {
+            Connection conn = this.connection;
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                result.add(rs.getString(nameAttribute));
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            rs.close();
+        }
+        return result;
     }
 
 }

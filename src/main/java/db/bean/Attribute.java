@@ -6,6 +6,7 @@ import db.utils.DataFaker;
 import db.utils.DateDataFaker;
 import db.utils.DoubleDataFaker;
 import db.utils.IntegerDataFaker;
+import db.utils.ShemaUtil;
 import db.utils.TextDataFaker;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class Attribute implements Serializable {
     private boolean isTakePreData = false;
     private DataFaker dataFaker;
     private List<Attribute> referencesMe = new ArrayList<>();
-    private List<Attribute> references = new ArrayList<>();
+    public List<Attribute> references = new ArrayList<>();
 
     public List<Attribute> getReferences() {
         return references;
@@ -152,12 +153,15 @@ public class Attribute implements Serializable {
      *
      */
     public void startToGenerateRootValues() {
+        //System.out.println("1" + this);
+
         dataFaker.values();
         startToGenerateWhoReferenceMe();
 
     }
 
     public void startToGenerateWhoReferenceMe() {
+        //System.out.println("2" + this);
         referencesMe.forEach(ref -> {
             int diffrence = ref.dataFaker.getHowMuch() - ref.instances.size();
             if (diffrence > 0) {
@@ -171,6 +175,16 @@ public class Attribute implements Serializable {
     }
 
     void fixInstancesHowMuch() {
+        //System.out.println("3" + this);
+        if (ShemaUtil.isCirculerAndEmpty(this)) {
+            dataFaker.values();
+            return;
+        } else {
+            if (ShemaUtil.isCirculer(this)) {
+                generateInstanceRecurcive(this);
+                return;
+            }
+        }
         if (references.isEmpty()) {
             return;
         }
@@ -183,6 +197,14 @@ public class Attribute implements Serializable {
 
                 instances.addAll(instances.stream().limit(restMod).collect(Collectors.toList()));
             }
+        }
+    }
+
+    private void generateInstanceRecurcive(Attribute attribute) {
+        //todo resolve problem of get(0)
+        instances.addAll(attribute.getReferences().get(0).instances);
+        if (instances.isEmpty()) {
+            generateInstanceRecurcive(attribute.getReferences().get(0));
         }
     }
 
@@ -242,6 +264,11 @@ public class Attribute implements Serializable {
      */
     public boolean isUnique() {
         return this.isUnique;
+    }
+
+    @Override
+    public String toString() {
+        return this.name; //To change body of generated methods, choose Tools | Templates.
     }
 
 }

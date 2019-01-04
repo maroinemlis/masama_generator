@@ -30,6 +30,7 @@ public class PreCondetion {
     public static final String CHECKED_TRUE = "correct_generation";
     private String msgError;
 
+    //todo : if thier  circuler the howMuch must equel
     /**
      * Constructor for class PreCondetion
      *

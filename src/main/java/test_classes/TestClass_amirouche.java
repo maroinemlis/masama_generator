@@ -24,11 +24,14 @@ public class TestClass_amirouche {
     public void main() throws Exception {
 
         SQLConnection cnx = new SQLConnection(
-                "/home/amirouche/NetBeansProjects/masama_generator/SQL/table_withe_data.sql", "SQLite", false);
-        int nbrRow = 3;
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/circuler.sql", "SQLite", false);
+        int nbrRow = 5;
         sqlSchema = new SQLSchema(true, cnx);
-        sqlSchema.getTables().get(0).setHowMuch(nbrRow);
-        sqlSchema.getTables().get(1).setHowMuch(nbrRow);
+        for (Table table : sqlSchema.getTables()) {
+            table.setHowMuch(nbrRow);
+        }
+        //sqlSchema.getTables().get(1).setHowMuch(4);
+
         sqlSchema.startToGenerateInstances();
         for (Table table : sqlSchema.getTables()) {
             table.show();

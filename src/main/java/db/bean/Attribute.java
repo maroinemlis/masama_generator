@@ -1,14 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package db.bean;
 
+import db.utils.BlobDataFaker;
+import db.utils.BooleanDataFaker;
 import db.utils.DataFaker;
 import db.utils.DateDataFaker;
+import db.utils.DoubleDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.RealDataFaker;
+import db.utils.ShemaUtil;
 import db.utils.TextDataFaker;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,12 +27,30 @@ public class Attribute implements Serializable {
     private boolean isUnique;
     private boolean isNullable;
     private List<String> instances = new ArrayList<>();
+    private List<String> preInstances = new ArrayList<>();
+    private boolean isTakePreData = false;
     private DataFaker dataFaker;
     private List<Attribute> referencesMe = new ArrayList<>();
-    private List<Attribute> references = new ArrayList<>();
+    public List<Attribute> references = new ArrayList<>();
 
     public List<Attribute> getReferences() {
         return references;
+    }
+
+    public boolean getIsIsTakePreData() {
+        return isTakePreData;
+    }
+
+    public void setIsIsTakePreData(boolean isTakePreData) {
+        this.isTakePreData = isTakePreData;
+    }
+
+    public void setPreInstances(List<String> preInstances) {
+        this.preInstances = preInstances;
+    }
+
+    public List<String> getPreInstances() {
+        return preInstances;
     }
 
     /**
@@ -67,13 +84,21 @@ public class Attribute implements Serializable {
                 dataFaker = new DateDataFaker(this);
                 break;
             case "INT":
+            case "NUMERIC":
             case "INTEGER":
                 dataFaker = new IntegerDataFaker(this);
                 break;
             case "DOUBLE":
             case "FLOAT":
             case "REAL":
+
                 dataFaker = new RealDataFaker(this);
+                break;
+            case "BOOLEAN":
+                dataFaker = new BooleanDataFaker(this);
+                break;
+            case "BLOB":
+                dataFaker = new BlobDataFaker(this);
                 break;
         }
 
@@ -130,12 +155,15 @@ public class Attribute implements Serializable {
      *
      */
     public void startToGenerateRootValues() {
+        //System.out.println("1" + this);
+
         dataFaker.values();
         startToGenerateWhoReferenceMe();
 
     }
 
     public void startToGenerateWhoReferenceMe() {
+        //System.out.println("2" + this);
         referencesMe.forEach(ref -> {
             int diffrence = ref.dataFaker.getHowMuch() - ref.instances.size();
             if (diffrence > 0) {
@@ -149,6 +177,18 @@ public class Attribute implements Serializable {
     }
 
     void fixInstancesHowMuch() {
+        if (ShemaUtil.isCirculerAndEmpty(this)) {
+            dataFaker.values();
+            return;
+        } else {
+            if (ShemaUtil.isCirculer(this)) {
+                generateInstanceRecurcive(this);
+                return;
+            }
+        }
+        if (references.isEmpty()) {
+            return;
+        }
         int rest = dataFaker.getHowMuch() - instances.size();
         if (rest > 0) {
             int restDiv = rest / instances.size();
@@ -157,6 +197,14 @@ public class Attribute implements Serializable {
             }
             rest = dataFaker.getHowMuch() - instances.size();
             instances.addAll(instances.stream().limit(rest).collect(Collectors.toList()));
+        }
+    }
+
+    private void generateInstanceRecurcive(Attribute attribute) {
+        //todo resolve problem of get(0)
+        instances.addAll(attribute.getReferences().get(0).instances);
+        if (instances.isEmpty()) {
+            generateInstanceRecurcive(attribute.getReferences().get(0));
         }
     }
 
@@ -216,6 +264,11 @@ public class Attribute implements Serializable {
      */
     public boolean isUnique() {
         return this.isUnique;
+    }
+
+    @Override
+    public String toString() {
+        return this.name; //To change body of generated methods, choose Tools | Templates.
     }
 
 }

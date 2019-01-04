@@ -133,7 +133,7 @@ public class ExportController implements Initializable {
                 for (; i < line.size(); i++) {
                     columnName = schema.getTable(t.get().getTableName()).getAttributes().get(i).getName();
                     insert += "<" + columnName + "> ";
-                    insert += line.get(i).get();
+                    insert += line.get(i).get().replace("'", "");
                     insert += " </" + columnName + ">" + System.lineSeparator();
                 }
                 insert += "</" + t.get().getTableName() + ">" + System.lineSeparator();

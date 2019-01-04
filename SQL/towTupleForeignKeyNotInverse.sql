@@ -1,7 +1,7 @@
 PRAGMA foreign_keys = OFF;
 DROP TABLE IF EXISTS B;
 DROP TABLE IF EXISTS A;
-	PRAGMA foreign_keys = ON;
+PRAGMA foreign_keys = ON;
 
 	CREATE TABLE A(
 		a1 INT ,

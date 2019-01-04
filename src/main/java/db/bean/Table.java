@@ -5,14 +5,13 @@
  */
 package db.bean;
 
+import db.connection.SQLConnection;
 import static db.connection.SQLConnection.getDatabaseMetaData;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import views.alertMeg.AlertExeption;
 
 /**
@@ -27,10 +26,24 @@ public final class Table implements Serializable {
     private PrimaryKey primaryKey = new PrimaryKey();
     private int howMuch;
     private boolean isErrorInTable = false;
+    private boolean isTakePreData = false;
     List<String> listTable = new ArrayList();
 
     public boolean getIsErrorInTable() {
         return isErrorInTable;
+    }
+
+    public boolean getIsIsTakePreData() {
+        return isTakePreData;
+    }
+
+    public void setIsIsTakePreData(boolean isTakePreData, SQLConnection connection) throws SQLException {
+        this.isTakePreData = isTakePreData;
+        for (Attribute attribute : attributes) {
+            attribute.setIsIsTakePreData(isTakePreData);
+            List<String> listPreInstances = connection.executeQuerySelecte(this.getTableName(), attribute.getName());
+            attribute.setPreInstances(listPreInstances);
+        }
     }
 
     /**
@@ -189,8 +202,8 @@ public final class Table implements Serializable {
         attributes.forEach(Attribute::fixInstancesHowMuch);
     }
 
-    void show() {
-        System.out.println(tableName);
+    public void show() {
+        System.out.println(tableName + "----------------------");
         attributes.forEach(a -> {
             System.out.println(a.getName() + " : " + a.getInstances());
         });

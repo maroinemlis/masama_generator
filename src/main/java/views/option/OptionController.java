@@ -9,12 +9,19 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
+import db.utils.DateDataFaker;
+import db.utils.IntegerDataFaker;
+import db.utils.TextDataFaker;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +31,7 @@ import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import views.main.MainController;
 
 /**
  * FXML Controller class
@@ -57,85 +65,104 @@ public class OptionController implements Initializable {
      * Initializes the controller class.
      */
     @FXML
-
     void onConfig(ActionEvent event) throws IOException {
-
-        //*********************************************Write object into file JSON**********************************************************
-        HashMap map = new HashMap();
+        saveConfig();
+        Stage stage = (Stage) nbLigne.getScene().getWindow();
+        stage.close();
+        
+    }
+    
+    public void saveConfig(){
         JSONObject obj = new JSONObject();
 
         obj.put("nbLigne", nbLigne.getText());
-        map.put(nbLigne, nbLigne.getText());
-
         obj.put("pNull", pNull.getText());
-        map.put(pNull, pNull.getText());
-
         obj.put("vMin", vMin.getText());
-        map.put(vMin, vMin.getText());
-
         obj.put("vMax", vMax.getText());
-        map.put(vMax, vMax.getText());
-
         obj.put("longMin", longMin.getValue());
-        map.put(longMin, longMin.getValue());
-
         obj.put("longMax", longMax.getValue());
-        map.put(longMax, longMax.getValue());
-
         obj.put("expR", expR.getText());
-        map.put(expR, expR.getText());
-
-//        obj.put("dateMin", dateMin.getValue().toString());
-//        map.put(dateMin, dateMin.getValue().toString());
-//
-//        obj.put("dateMax", dateMax.getValue().toString());
-//        map.put(dateMax, dateMax.getValue().toString());
-        System.out.println(map);
-
-        // try-with-resources statement based on post comment below :)
-        try (FileWriter file = new FileWriter("C:\\Users\\abidi asma\\Desktop\\ProjetLongUPEC\\Projet\\masama_generator\\config.json")) {
+        obj.put("dateMin", dateMin.getValue().toString());
+        obj.put("dateMax", dateMax.getValue().toString());
+        try (FileWriter file = new FileWriter("config.json")) {
             file.write(obj.toJSONString());
-//            System.out.println("Successfully Copied JSON Object to File...");
-//            System.out.println("\nJSON Object: " + obj);
-        }
-
-        //*********************************************Read object from file JSON**********************************************************
-        JSONParser parser = new JSONParser();
-        try {
-
-            Object objpARSER = parser.parse(new FileReader("C:\\Users\\abidi asma\\Desktop\\ProjetLongUPEC\\Projet\\masama_generator\\config.json"));
-
-            JSONObject jsonObject = (JSONObject) obj;
-
-            Object nbLigne = jsonObject.get("nbLigne");
-            Object pNull = jsonObject.get("pNull");
-            Object vMin = jsonObject.get("vMin");
-            Object vMax = jsonObject.get("vMax");
-            Object longMin = jsonObject.get("longMin");
-            Object longMax = jsonObject.get("longMax");
-            Object expR = jsonObject.get("expR");
-
-//            Object dateMin = jsonObject.get("dateMin").toString();
-//
-//            Object dateMax = jsonObject.get("dateMax");
-//            System.out.println("nbLigne: " + nbLigne);
-//            System.out.println("pNull: " + pNull);
-//            System.out.println("vMin: " + vMin);
-//            System.out.println("vMax: " + vMax);
-//            System.out.println("longMin: " + longMin);
-//            System.out.println("longMax: " + longMax);
-//            System.out.println("expR: " + expR);
-//            System.out.println("dateMin: " + dateMin);
-//            System.out.println("dateMax: " + dateMax);
+            file.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        if(MainController.schema!=null){
+            MainController.schema.getTables().forEach(t -> t.setHowMuch(Integer.parseInt((String)obj.get("nbLigne"))));
+            MainController.schema.getTables().forEach(t -> 
+                    t.getAttributes().forEach(at ->{
+                        switch (at.getDataType()) {
+                            case "TEXT":
+                                at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("longMin")), toString().valueOf(obj.get("longMax")), Integer.parseInt((String)obj.get("pNull")));
+                                break;
+                            case "DATE":
+                                at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("dateMin")), toString().valueOf(obj.get("dateMax")), Integer.parseInt((String)obj.get("pNull")));
+                                break;
+                            case "INT":
+                            case "INTEGER":
+                            case "DOUBLE":
+                            case "FLOAT":
+                                at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("vMin")), toString().valueOf(obj.get("vMax")), Integer.parseInt((String)obj.get("pNull")));
+                                break;
+                        }
+                    }));
     }
+    }
+    
+    public void readConfig(){
+        JSONParser parser = new JSONParser();
+        try {
 
+            Object obj = parser.parse(new FileReader("config.json"));
+            JSONObject jsonObject = (JSONObject) obj;
+
+            String nbLigne = (String) jsonObject.get("nbLigne");
+            String pNull = (String) jsonObject.get("pNull");
+            String vMin = (String) jsonObject.get("vMin");
+            String vMax = (String) jsonObject.get("vMax");
+            double longMin = (double) jsonObject.get("longMin");
+            double longMax = (double) jsonObject.get("longMax");
+            String expR = (String) jsonObject.get("expR");
+            String dateMin = (String) jsonObject.get("dateMin");
+            String dateMax = (String) jsonObject.get("dateMax");
+
+            this.nbLigne.setText(nbLigne);
+            this.pNull.setText(pNull);
+            this.vMin.setText(vMin);
+            this.vMax.setText(vMax);
+            this.longMin.setValue(longMin);
+            this.longMax.setValue(longMax);
+            this.expR.setText(expR);
+            String[] TdateMax = dateMax.split("-");
+            this.dateMax.setValue(LocalDate.of(Integer.parseInt(TdateMax[0]), Integer.parseInt(TdateMax[1]), Integer.parseInt(TdateMax[2])));
+            String[] TdateMin = dateMin.split("-");
+            this.dateMin.setValue(LocalDate.of(Integer.parseInt(TdateMin[0]), Integer.parseInt(TdateMin[1]), Integer.parseInt(TdateMin[2])));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // force the field to be numeric only
+    public void justNumber(JFXTextField textField){
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    textField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        readConfig();
+        justNumber(nbLigne); justNumber(pNull);
+        justNumber(vMax); justNumber(vMin);
     }
 
 }

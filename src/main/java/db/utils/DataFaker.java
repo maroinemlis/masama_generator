@@ -48,35 +48,33 @@ public abstract class DataFaker implements Serializable {
 
     public abstract String generateValue();
 
-    private void generateUniqueValues(List<String> collectPreDate, int limit) {
-        List<String> collect = Stream.concat(
-                collectPreDate.stream(),
-                Stream.generate(() -> generateValue()).distinct().limit(limit)
-        ).collect(Collectors.toList());
-        attribute.setInstances(collect);
+    private void generateUniqueValues() {
+        int rest = howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
+        for (int i = 0; i < rest; i++) {
+            String value = null;
+            do {
+                value = generateValue();
+            } while (attribute.getInstances().contains(value));
+            attribute.getInstances().add(generateValue());
+        }
     }
 
-    private void generateValues(List<String> collectPreDate, int limit) {
+    private void generateValues() {
+        int rest = howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
+        for (int i = 0; i < rest; i++) {
+            attribute.getInstances().add(generateValue());
+        }
+    }
 
-        List<String> collect = Stream.concat(
-                collectPreDate.stream(),
-                Stream.generate(() -> generateValue()).limit(limit)
-        ).collect(Collectors.toList());
-        attribute.setInstances(collect);
+    public int getRest() {
+        return howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
     }
 
     public void values() {
-        List<String> collectPreDate = Stream.concat(
-                attribute.getPreInstances().stream().limit(howMuch),
-                Stream.generate(() -> "NULL").limit(nullsNumber)
-        ).collect(Collectors.toList());
-        int limit = howMuch - nullsNumber - attribute.getPreInstances().size();
-        limit = (limit > 0) ? limit : 0;
-
         if (attribute.isUnique() || attribute.isPrimary()) {
-            generateUniqueValues(collectPreDate, limit);
+            generateUniqueValues();
         } else {
-            generateValues(collectPreDate, limit);
+            generateValues();
         }
     }
 

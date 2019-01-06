@@ -121,9 +121,9 @@ public class MainController implements Initializable {
     private void onGenerate(ActionEvent event) throws Exception {
         currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
         PreCondetion preCondetion = new PreCondetion(schema);
-        String msgCheck = preCondetion.checkSqlSchema();
+        boolean isNoContradiction = preCondetion.checkSqlSchema();
 
-        if (msgCheck.equals(PreCondetion.CHECKED_TRUE)) {
+        if (isNoContradiction) {
             if (!isErrorInTable()) {
                 System.out.println("we can generate");
                 schema.startToGenerateInstances();
@@ -135,9 +135,9 @@ public class MainController implements Initializable {
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur dans les contrainte");
-            alert.setHeaderText(msgCheck);
+            alert.setHeaderText(preCondetion.getMsgError());
             alert.showAndWait();
-            System.out.println(msgCheck);
+            System.out.println(preCondetion.getMsgError());
         }
 
     }

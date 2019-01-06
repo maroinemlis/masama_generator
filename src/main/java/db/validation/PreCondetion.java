@@ -45,61 +45,6 @@ public class PreCondetion {
         return msgError;
     }
 
-    /**
-     * return final variable CHECKED_TRUE if there no error in the schema else
-     * return the message error
-     *
-     * @throws ParseException, SQLException
-     * @return String
-     */
-    /*
-    public String checkSqlSchema() throws ParseException, SQLException {
-
-        //check ForingAndKPrimery todo:: rendre la method return true or false
-        String result = checkForingAndKPrimery();
-        if (!result.equals(CHECKED_TRUE)) {
-            return result;
-        }
-        //check intervales
-        boolean check;
-
-        for (Table table : sqlSchema.getTables()) {
-            int nbrRowsToGenerate = table.getHowMuch();
-            for (Attribute attribute : table.getAttributes()) {
-
-                if (!checkFromTo(attribute)) {
-                    return msgError;
-                }
-                if (attribute.getReferences().isEmpty()) {
-                    String type = attribute.getDataType();
-                    switch (type) {
-                        case "INT":
-                        case "INTEGER":
-                            check = checkInt(attribute, nbrRowsToGenerate);
-                            if (!check) {
-                                return msgError;
-                            }
-                            break;
-                        case "DATE":
-                            check = checkDate(attribute, nbrRowsToGenerate);
-                            if (!check) {
-                                return msgError;
-                            }
-                            break;
-                        case "TEXT":
-                            check = checkString(attribute, nbrRowsToGenerate);
-                            if (!check) {
-                                return msgError;
-                            }
-                            break;
-                    }
-                }
-
-            }
-        }
-        return CHECKED_TRUE;
-    }
-     */
     public boolean checkSqlSchema() throws ParseException, SQLException {
         if (!ShemaUtil.isAttrCirculairesEquals(sqlSchema)) {
             msgError = StringUtil.getMsgErrorCirculairesAttNotEquals();
@@ -150,45 +95,7 @@ public class PreCondetion {
         return true;
     }
 
-    /**
-     * return true if a schema is circular else false
-     *
-     * @throws SQLException
-     * @return boolean
-     */
-    public boolean isCircular() throws SQLException {
-        boolean result = false;
-        for (Table table : sqlSchema.getTables()) {
-            result = isCirculedInTable(table);
-        }
-        return result;
-    }
-
     List<String> listTable = new ArrayList();
-
-    /**
-     * todo :return true if a schema is circular else false used from
-     * isCircular()
-     *
-     * @param table
-     * @return boolean
-     */
-    private boolean isCirculedInTable(Table table) {
-        boolean result = false;
-        /*if (!listTable.contains(table.getTableName())) {
-            listTable.add(table.getTableName());
-            System.err.println(" ->" + listTable.toString());
-            if (!table.getAttributes().get(0).getReference().equals(null)) {
-                Attribute a = table.getAttributes().get(0);
-                Attribute b = a.getReference();
-                Attribute c = b.getReference();
-            }
-        } else {
-            System.err.println(" ----------------END" + table.getTableName());
-            result = true;
-        }*/
-        return result;
-    }
 
     /**
      * return the String message error if the table T2 in A is primary key or

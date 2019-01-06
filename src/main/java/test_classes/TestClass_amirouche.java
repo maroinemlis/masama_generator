@@ -37,16 +37,15 @@ public class TestClass_amirouche {
     private void testPrecondetion() throws Exception {
 
         PreCondetion preCondetion = new PreCondetion(sqlSchema);
-        String msgCheck = preCondetion.checkSqlSchema();
-
-        if (msgCheck.equals(PreCondetion.CHECKED_TRUE)) {
+        boolean isNoContradiction = preCondetion.checkSqlSchema();
+        if (isNoContradiction) {
             System.out.println("we can generate");
-            if (!isErrorInTable()) {
-                sqlSchema.startToGenerateInstances();
-                List<Table> tables = sqlSchema.getTables();
+            sqlSchema.startToGenerateInstances();
+            for (Table table : sqlSchema.getTables()) {
+                table.show();
             }
         } else {
-            System.out.println(msgCheck);
+            System.out.println(preCondetion.getMsgError());
         }
 
     }

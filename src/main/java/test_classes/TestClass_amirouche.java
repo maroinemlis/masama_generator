@@ -22,8 +22,9 @@ public class TestClass_amirouche {
     public void main() throws Exception {
         //todo: db.utils.ShemaUtil.whichIsCircular() || resolve problem of get(0)
         //todo: whene took the pre data check the unique contrainte
+        //todo: one table to Tow table the value of to table must have the same
         SQLConnection cnx = new SQLConnection(
-                "/home/amirouche/NetBeansProjects/masama_generator/SQL/oneToTowTables.sql", "SQLite", false);
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/circuler.sql", "SQLite", false);
         int nbrRow = 5;
         sqlSchema = new SQLSchema(true, cnx);
         for (Table table : sqlSchema.getTables()) {

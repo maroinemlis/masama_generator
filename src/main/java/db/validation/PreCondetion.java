@@ -10,6 +10,7 @@ import db.bean.ForeignKey;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.utils.DateUtil;
+import db.utils.ShemaUtil;
 import db.utils.StringUtil;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -40,6 +41,10 @@ public class PreCondetion {
         this.sqlSchema = sqlSchema;
     }
 
+    public String getMsgError() {
+        return msgError;
+    }
+
     /**
      * return final variable CHECKED_TRUE if there no error in the schema else
      * return the message error
@@ -47,6 +52,7 @@ public class PreCondetion {
      * @throws ParseException, SQLException
      * @return String
      */
+    /*
     public String checkSqlSchema() throws ParseException, SQLException {
 
         //check ForingAndKPrimery todo:: rendre la method return true or false
@@ -69,8 +75,6 @@ public class PreCondetion {
                     switch (type) {
                         case "INT":
                         case "INTEGER":
-                        case "DOUBLE":
-                        case "FLOAT":
                             check = checkInt(attribute, nbrRowsToGenerate);
                             if (!check) {
                                 return msgError;
@@ -94,6 +98,56 @@ public class PreCondetion {
             }
         }
         return CHECKED_TRUE;
+    }
+     */
+    public boolean checkSqlSchema() throws ParseException, SQLException {
+        if (!ShemaUtil.isAttrCirculairesEquals(sqlSchema)) {
+            msgError = StringUtil.getMsgErrorCirculairesAttNotEquals();
+            return false;
+        }
+        //check ForingAndKPrimery todo:: rendre la method return true or false
+        String result = checkForingAndKPrimery();
+        if (!result.equals(CHECKED_TRUE)) {
+            return false;
+        }
+        //check intervales
+        boolean check;
+
+        for (Table table : sqlSchema.getTables()) {
+            int nbrRowsToGenerate = table.getHowMuch();
+            for (Attribute attribute : table.getAttributes()) {
+
+                if (!checkFromTo(attribute)) {
+                    return false;
+                }
+                if (attribute.getReferences().isEmpty()) {
+                    String type = attribute.getDataType();
+                    switch (type) {
+                        case "INT":
+                        case "INTEGER":
+                            check = checkInt(attribute, nbrRowsToGenerate);
+                            if (!check) {
+                                return false;
+                            }
+                            break;
+                        case "DATE":
+                            check = checkDate(attribute, nbrRowsToGenerate);
+                            if (!check) {
+                                return false;
+                            }
+                            break;
+                        case "TEXT":
+                            check = checkString(attribute, nbrRowsToGenerate);
+                            if (!check) {
+                                return false;
+                            }
+                            break;
+                    }
+                }
+
+            }
+        }
+        return true;
     }
 
     /**
@@ -152,9 +206,9 @@ public class PreCondetion {
                     int nbrHowMushP = attribute.getDataFaker().getHowMuch();
                     int nbrHowMushF = attribute.getReferences()
                             .stream().map(a -> a.getDataFaker().getHowMuch()).min(Integer::compare).get();
-                    System.out.println(nbrHowMushF + ">" + nbrHowMushP);
+                    //System.out.println(nbrHowMushF + ">" + nbrHowMushP);
                     if (nbrHowMushF > nbrHowMushP) {
-                        return new StringUtil().getMsgErrorKeyReferences();
+                        return StringUtil.getMsgErrorKeyReferences();
                     } else {
                         result = CHECKED_TRUE;
                     }
@@ -200,7 +254,7 @@ public class PreCondetion {
         if (nbrRowsToGenerate <= (to - from)) {
             result = true;
         } else {
-            msgError = new StringUtil().messageErrorFromTo(nbrRowsToGenerate, String.valueOf(from), String.valueOf(to));
+            msgError = StringUtil.messageErrorFromTo(nbrRowsToGenerate, String.valueOf(from), String.valueOf(to));
             result = false;
         }
         return result;
@@ -222,7 +276,7 @@ public class PreCondetion {
         if (numberOfDay >= nbrRowsToGenerate) {
             result = true;
         } else {
-            msgError = new StringUtil().messageErrorFromTo(nbrRowsToGenerate, from, to);
+            msgError = StringUtil.messageErrorFromTo(nbrRowsToGenerate, from, to);
             result = false;
         }
         return result;
@@ -270,7 +324,7 @@ public class PreCondetion {
         if (nbrCombinision >= nbrRowsToGenerate) {
             result = true;
         } else {
-            msgError = new StringUtil().messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
+            msgError = StringUtil.messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
             result = false;
         }
         return result;

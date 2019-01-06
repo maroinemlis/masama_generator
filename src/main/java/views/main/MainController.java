@@ -1,28 +1,18 @@
 package views.main;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import com.jfoenix.controls.JFXAlert;
-import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
-import db.bean.Attribute;
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXToggleButton;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
-import db.models.AttributeModel;
 import static db.utils.FileUtil.readFileObject;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,21 +25,14 @@ import javafx.stage.Modality;
 import static views.main.LuncherApp.primaryStage;
 import static db.utils.FileUtil.writeObjectInFile;
 import db.validation.PreCondetion;
-import static db.validation.PreCondetion.CHECKED_TRUE;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import views.connection.ConnectionController;
 import java.io.IOException;
-import java.io.OutputStream;
-import static java.lang.Thread.sleep;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -138,9 +121,9 @@ public class MainController implements Initializable {
     private void onGenerate(ActionEvent event) throws Exception {
         currentTable.get().setHowMuch(Integer.parseInt(howMuch.getText()));
         PreCondetion preCondetion = new PreCondetion(schema);
-        String msgCheck = preCondetion.checkSqlSchema();
+        boolean msgCheck = preCondetion.checkSqlSchema();
 
-        if (msgCheck.equals(CHECKED_TRUE)) {
+        if (msgCheck) {
             if (!isErrorInTable()) {
                 System.out.println("we can generate");
                 schema.startToGenerateInstances();
@@ -152,7 +135,7 @@ public class MainController implements Initializable {
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur dans les contrainte");
-            alert.setHeaderText(msgCheck);
+            alert.setHeaderText(preCondetion.getMsgError());
             alert.showAndWait();
             System.out.println(msgCheck);
         }

@@ -5,13 +5,10 @@
  */
 package test_classes;
 
-import db.bean.Attribute;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
 import db.validation.PreCondetion;
-import static db.validation.PreCondetion.CHECKED_TRUE;
-import java.util.List;
 
 /**
  *
@@ -19,46 +16,41 @@ import java.util.List;
  */
 public class TestClass_amirouche {
 
-    SQLSchema sqlSchema;
+    SQLSchema schema;
 
     public void main() throws Exception {
-
+        //todo: db.utils.ShemaUtil.whichIsCircular() || resolve problem of get(0)
+        //todo: whene took the pre data check the unique contrainte
         SQLConnection cnx = new SQLConnection(
-                "/home/amirouche/NetBeansProjects/masama_generator/SQL/circuler.sql", "SQLite", false);
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/oneToTowTables.sql", "SQLite", false);
         int nbrRow = 5;
-        sqlSchema = new SQLSchema(true, cnx);
-        for (Table table : sqlSchema.getTables()) {
+        for (Table table : schema.getTables()) {
             table.setHowMuch(nbrRow);
         }
-        //sqlSchema.getTables().get(1).setHowMuch(4);
-
-        sqlSchema.startToGenerateInstances();
-        for (Table table : sqlSchema.getTables()) {
-            table.show();
-        }
-        //sqlSchema.getTables().get(0).getAttributes().get(3).getDataFaker().setFrom("1");
-        //sqlSchema.getTables().get(0).getAttributes().get(3).getDataFaker().setTo("7");
-        //testPrecondetion();
+        schema = new SQLSchema();
+        //schema.getTables().get(0).getAttributes().get(3).getDataFaker().setFrom("1");
+        //schema.getTables().get(0).getAttributes().get(3).getDataFaker().setTo("7");
+        testPrecondetion();
     }
 
     private void testPrecondetion() throws Exception {
 
-        PreCondetion preCondetion = new PreCondetion(sqlSchema);
-        String msgCheck = preCondetion.checkSqlSchema();
-        if (msgCheck.equals(CHECKED_TRUE)) {
+        PreCondetion preCondetion = new PreCondetion(schema);
+        boolean isNoContradiction = preCondetion.checkSqlSchema();
+        if (isNoContradiction) {
             System.out.println("we can generate");
-            if (!isErrorInTable()) {
-                sqlSchema.startToGenerateInstances();
-                List<Table> tables = sqlSchema.getTables();
+            schema.startToGenerateInstances();
+            for (Table table : schema.getTables()) {
+                table.show();
             }
         } else {
-            System.out.println(msgCheck);
+            System.out.println(preCondetion.getMsgError());
         }
 
     }
 
     private boolean isErrorInTable() {
-        for (Table table : sqlSchema.getTables()) {
+        for (Table table : schema.getTables()) {
             if (table.getIsErrorInTable()) {
                 return true;
             }

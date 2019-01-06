@@ -6,6 +6,8 @@
 package db.utils;
 
 import db.bean.Attribute;
+import db.bean.SQLSchema;
+import db.bean.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,45 @@ public final class ShemaUtil {
         }
         listAttributes.clear();
         return result;
+    }
+
+    public static List<Attribute> whichIsCircular(Attribute attribute) {
+        if (listAttributes.contains(attribute)) {
+            List<Attribute> result = listAttributes;
+            listAttributes.clear();
+            return result;
+        } else {
+            listAttributes.add(attribute);
+            if (!attribute.getReferences().isEmpty()) {
+                whichIsCircular(attribute.getReferences().get(0));
+            }
+        }
+        List<Attribute> result = listAttributes;
+        listAttributes.clear();
+        return result;
+    }
+
+    public static boolean isAttrCirculairesEquals(SQLSchema sqlSchema) {
+        List<Attribute> listAttributes = new ArrayList<>();
+        for (Table table : sqlSchema.getTables()) {
+            for (Attribute attribute : table.getAttributes()) {
+                if (isCirculer(attribute)) {
+                    listAttributes = whichIsCircular(attribute);
+                    if (!isHaveSameRaws(listAttributes)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean isHaveSameRaws(List<Attribute> listAttributes) {
+        return listAttributes.stream().map(a -> a.getDataFaker().getHowMuch())
+                .distinct()
+                .limit(2)
+                .count()
+                <= 1;
     }
 
 }

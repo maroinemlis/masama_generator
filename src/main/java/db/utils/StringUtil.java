@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Maroine
  */
-public class StringUtil {
+public final class StringUtil {
 
     /*
         Return tupel representation of a list of attributes
@@ -27,18 +27,22 @@ public class StringUtil {
         return string + list.get(i).getName() + ")";
     }
 
-    public String getMsgErrorKeyReferences() {
+    public static String getMsgErrorKeyReferences() {
         return "Le nombre des colonnes de clé étrangère\n"
                 + "est superieur que les clés le table reference ";
     }
 
-    public String messageErrorFromTo(int nbrRowsToGenerate, String from, String to) {
+    public static String getMsgErrorCirculairesAttNotEquals() {
+        return "Les attributs quand en circulair ne sont pas égaux ";
+    }
+
+    public static String messageErrorFromTo(int nbrRowsToGenerate, String from, String to) {
         return "Le nombre de colonne demandé à \ngenerer(" + nbrRowsToGenerate + ") "
                 + "est inférieur au nombre de \n"
                 + "possibelité dans l'intervalle donnée: [" + from + " - " + to + "]";
     }
 
-    public String messageErrorStringCombinition(int nbrRowsToGenerate, double pow) {
+    public static String messageErrorStringCombinition(int nbrRowsToGenerate, double pow) {
         return "Le nombre de colonne demandé à \ngenerer(" + nbrRowsToGenerate + ") "
                 + "est supérieur au nombre de \n"
                 + "combinaison possible : (" + (int) pow + ")";

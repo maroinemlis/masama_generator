@@ -8,9 +8,6 @@ package db.utils;
 import db.bean.Attribute;
 import static db.utils.Shared.faker;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,22 +42,32 @@ public abstract class DataFaker implements Serializable {
         return faker.random().nextInt(Integer.parseInt(from), Integer.parseInt(to));
     }
 
+    protected double betweenReal() {
+        return Math.random() * Double.parseDouble(to) + Double.parseDouble(from);
+    }
+
     public abstract String generateValue();
 
     private void generateUniqueValues() {
-        List<String> collect = Stream.concat(
-                Stream.generate(() -> "NULL").limit(nullsNumber),
-                Stream.generate(() -> generateValue()).distinct().limit(howMuch - nullsNumber)
-        ).collect(Collectors.toList());
-        attribute.setInstances(collect);
+        int rest = howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
+        for (int i = 0; i < rest; i++) {
+            String value = null;
+            do {
+                value = generateValue();
+            } while (attribute.getInstances().contains(value));
+            attribute.getInstances().add(generateValue());
+        }
     }
 
     private void generateValues() {
-        List<String> collect = Stream.concat(
-                Stream.generate(() -> "NULL").limit(nullsNumber),
-                Stream.generate(() -> generateValue()).limit(howMuch - nullsNumber)
-        ).collect(Collectors.toList());
-        attribute.setInstances(collect);
+        int rest = howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
+        for (int i = 0; i < rest; i++) {
+            attribute.getInstances().add(generateValue());
+        }
+    }
+
+    public int getRest() {
+        return howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
     }
 
     public void values() {

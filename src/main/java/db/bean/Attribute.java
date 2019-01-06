@@ -155,15 +155,11 @@ public class Attribute implements Serializable {
      *
      */
     public void startToGenerateRootValues() {
-        //System.out.println("1" + this);
-
         dataFaker.values();
         startToGenerateWhoReferenceMe();
-
     }
 
     public void startToGenerateWhoReferenceMe() {
-        //System.out.println("2" + this);
         referencesMe.forEach(ref -> {
             int diffrence = ref.dataFaker.getHowMuch() - ref.instances.size();
             if (diffrence > 0) {

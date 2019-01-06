@@ -6,6 +6,7 @@ import db.utils.DataFaker;
 import db.utils.DateDataFaker;
 import db.utils.DoubleDataFaker;
 import db.utils.IntegerDataFaker;
+import db.utils.RealDataFaker;
 import db.utils.ShemaUtil;
 import db.utils.TextDataFaker;
 import java.io.Serializable;
@@ -90,7 +91,8 @@ public class Attribute implements Serializable {
             case "DOUBLE":
             case "FLOAT":
             case "REAL":
-                dataFaker = new DoubleDataFaker(this);
+
+                dataFaker = new RealDataFaker(this);
                 break;
             case "BOOLEAN":
                 dataFaker = new BooleanDataFaker(this);
@@ -175,7 +177,6 @@ public class Attribute implements Serializable {
     }
 
     void fixInstancesHowMuch() {
-        //System.out.println("3" + this);
         if (ShemaUtil.isCirculerAndEmpty(this)) {
             dataFaker.values();
             return;
@@ -191,12 +192,11 @@ public class Attribute implements Serializable {
         int rest = dataFaker.getHowMuch() - instances.size();
         if (rest > 0) {
             int restDiv = rest / instances.size();
-            int restMod = rest % instances.size();
             for (int i = 0; i < restDiv; i++) {
                 instances.addAll(instances.stream().limit(instances.size()).collect(Collectors.toList()));
-
-                instances.addAll(instances.stream().limit(restMod).collect(Collectors.toList()));
             }
+            rest = dataFaker.getHowMuch() - instances.size();
+            instances.addAll(instances.stream().limit(rest).collect(Collectors.toList()));
         }
     }
 

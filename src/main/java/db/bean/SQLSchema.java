@@ -96,7 +96,7 @@ public final class SQLSchema implements Serializable {
         clearInstances();
         tables.forEach(Table::startToGenerateInstances);
         tables.forEach(Table::fixAttributesInstances);
-        //tables.forEach(Table::show);
+        tables.forEach(Table::show);
     }
 
     public void clearInstances() {

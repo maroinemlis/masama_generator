@@ -9,6 +9,7 @@ import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
 import db.validation.PreCondetion;
+import java.util.List;
 
 /**
  *
@@ -16,7 +17,7 @@ import db.validation.PreCondetion;
  */
 public class TestClass_amirouche {
 
-    SQLSchema schema;
+    SQLSchema sqlSchema;
 
     public void main() throws Exception {
         //todo: db.utils.ShemaUtil.whichIsCircular() || resolve problem of get(0)
@@ -24,10 +25,10 @@ public class TestClass_amirouche {
         SQLConnection cnx = new SQLConnection(
                 "/home/amirouche/NetBeansProjects/masama_generator/SQL/oneToTowTables.sql", "SQLite", false);
         int nbrRow = 5;
-        for (Table table : schema.getTables()) {
+        sqlSchema = new SQLSchema(true, cnx);
+        for (Table table : sqlSchema.getTables()) {
             table.setHowMuch(nbrRow);
         }
-        schema = new SQLSchema();
         //schema.getTables().get(0).getAttributes().get(3).getDataFaker().setFrom("1");
         //schema.getTables().get(0).getAttributes().get(3).getDataFaker().setTo("7");
         testPrecondetion();
@@ -35,22 +36,23 @@ public class TestClass_amirouche {
 
     private void testPrecondetion() throws Exception {
 
-        PreCondetion preCondetion = new PreCondetion(schema);
-        boolean isNoContradiction = preCondetion.checkSqlSchema();
-        if (isNoContradiction) {
+        PreCondetion preCondetion = new PreCondetion(sqlSchema);
+        String msgCheck = preCondetion.checkSqlSchema();
+
+        if (msgCheck.equals(PreCondetion.CHECKED_TRUE)) {
             System.out.println("we can generate");
-            schema.startToGenerateInstances();
-            for (Table table : schema.getTables()) {
-                table.show();
+            if (!isErrorInTable()) {
+                sqlSchema.startToGenerateInstances();
+                List<Table> tables = sqlSchema.getTables();
             }
         } else {
-            System.out.println(preCondetion.getMsgError());
+            System.out.println(msgCheck);
         }
 
     }
 
     private boolean isErrorInTable() {
-        for (Table table : schema.getTables()) {
+        for (Table table : sqlSchema.getTables()) {
             if (table.getIsErrorInTable()) {
                 return true;
             }

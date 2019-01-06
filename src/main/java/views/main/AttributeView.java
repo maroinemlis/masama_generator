@@ -9,10 +9,6 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import db.bean.Attribute;
-import db.utils.DateDataFaker;
-import db.utils.IntegerDataFaker;
-import db.utils.TextDataFaker;
-import db.utils.DataFaker;
 
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
@@ -24,7 +20,6 @@ import javafx.scene.control.DatePicker;
 public class AttributeView {
 
     Attribute attribute;
-    private DataFaker dataFaker;
     private Control fromControl;
     private Control toControl;
     private JFXComboBox typesCombo;
@@ -34,12 +29,10 @@ public class AttributeView {
         this.attribute = attribute;
         switch (attribute.getDataType()) {
             case "TEXT":
-                dataFaker = new TextDataFaker(attribute);
                 fromControl = new JFXSlider();
                 toControl = new JFXSlider();
                 break;
             case "DATE":
-                dataFaker = new DateDataFaker(attribute);
                 fromControl = new DatePicker();
                 toControl = new DatePicker();
                 break;
@@ -47,19 +40,26 @@ public class AttributeView {
             case "INTEGER":
             case "DOUBLE":
             case "FLOAT":
+            case "REAL":
                 fromControl = new JFXTextField();
                 toControl = new JFXTextField();
-                dataFaker = new IntegerDataFaker(attribute);
+                ((JFXTextField) (fromControl)).textProperty().addListener((observable, oldValue, newValue) -> {
+                    if (!newValue.matches("\\d([\\.]\\d)?")) {
+                        ((JFXTextField) (fromControl)).setText(oldValue);
+                    }
+                });
+                ((JFXTextField) (toControl)).textProperty().addListener((observable, oldValue, newValue) -> {
+                    if (!newValue.matches("\\d([\\.]\\d)?")) {
+                        ((JFXTextField) (fromControl)).setText(oldValue);
+                    }
+                });
                 break;
         }
     }
 
     public void startToGenerateRootValues(int howMuch) {
-        dataFaker.setHowMuch(howMuch);
+        attribute.getDataFaker().setHowMuch(howMuch);
         attribute.startToGenerateRootValues();
     }
 
-    public DataFaker getDataFaker() {
-        return dataFaker;
-    }
 }

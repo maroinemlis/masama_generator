@@ -10,7 +10,6 @@ import db.bean.ForeignKey;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.utils.DateUtil;
-import db.utils.ShemaUtil;
 import db.utils.StringUtil;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -41,10 +40,6 @@ public class PreCondetion {
         this.sqlSchema = sqlSchema;
     }
 
-    public String getMsgError() {
-        return msgError;
-    }
-
     /**
      * return final variable CHECKED_TRUE if there no error in the schema else
      * return the message error
@@ -52,15 +47,12 @@ public class PreCondetion {
      * @throws ParseException, SQLException
      * @return String
      */
-    /*
     public String checkSqlSchema() throws ParseException, SQLException {
-
         //check ForingAndKPrimery todo:: rendre la method return true or false
-        String result = checkForingAndKPrimery();
+        String result = checkUniqueReferenceUnique();
         if (!result.equals(CHECKED_TRUE)) {
             return result;
         }
-        //check intervales
         boolean check;
 
         for (Table table : sqlSchema.getTables()) {
@@ -70,11 +62,13 @@ public class PreCondetion {
                 if (!checkFromTo(attribute)) {
                     return msgError;
                 }
-                if (attribute.getReferences().isEmpty()) {
+                if (attribute.getReferences().isEmpty() && attribute.isUnique() || attribute.isPrimary()) {
                     String type = attribute.getDataType();
                     switch (type) {
                         case "INT":
                         case "INTEGER":
+                        case "DOUBLE":
+                        case "FLOAT":
                             check = checkInt(attribute, nbrRowsToGenerate);
                             if (!check) {
                                 return msgError;
@@ -99,127 +93,21 @@ public class PreCondetion {
         }
         return CHECKED_TRUE;
     }
-     */
-    public boolean checkSqlSchema() throws ParseException, SQLException {
-        if (!ShemaUtil.isAttrCirculairesEquals(sqlSchema)) {
-            msgError = StringUtil.getMsgErrorCirculairesAttNotEquals();
-            return false;
-        }
-        //check ForingAndKPrimery todo:: rendre la method return true or false
-        String result = checkForingAndKPrimery();
-        if (!result.equals(CHECKED_TRUE)) {
-            return false;
-        }
-        //check intervales
-        boolean check;
 
-        for (Table table : sqlSchema.getTables()) {
-            int nbrRowsToGenerate = table.getHowMuch();
-            for (Attribute attribute : table.getAttributes()) {
-
-                if (!checkFromTo(attribute)) {
-                    return false;
-                }
-                if (attribute.getReferences().isEmpty()) {
-                    String type = attribute.getDataType();
-                    switch (type) {
-                        case "INT":
-                        case "INTEGER":
-                            check = checkInt(attribute, nbrRowsToGenerate);
-                            if (!check) {
-                                return false;
-                            }
-                            break;
-                        case "DATE":
-                            check = checkDate(attribute, nbrRowsToGenerate);
-                            if (!check) {
-                                return false;
-                            }
-                            break;
-                        case "TEXT":
-                            check = checkString(attribute, nbrRowsToGenerate);
-                            if (!check) {
-                                return false;
-                            }
-                            break;
-                    }
-                }
-
-            }
-        }
-        return true;
-    }
-
-    /**
-     * return true if a schema is circular else false
-     *
-     * @throws SQLException
-     * @return boolean
-     */
-    public boolean isCircular() throws SQLException {
-        boolean result = false;
-        for (Table table : sqlSchema.getTables()) {
-            result = isCirculedInTable(table);
-        }
-        return result;
-    }
-
-    List<String> listTable = new ArrayList();
-
-    /**
-     * todo :return true if a schema is circular else false used from
-     * isCircular()
-     *
-     * @param table
-     * @return boolean
-     */
-    private boolean isCirculedInTable(Table table) {
-        boolean result = false;
-        /*if (!listTable.contains(table.getTableName())) {
-            listTable.add(table.getTableName());
-            System.err.println(" ->" + listTable.toString());
-            if (!table.getAttributes().get(0).getReference().equals(null)) {
-                Attribute a = table.getAttributes().get(0);
-                Attribute b = a.getReference();
-                Attribute c = b.getReference();
-            }
-        } else {
-            System.err.println(" ----------------END" + table.getTableName());
-            result = true;
-        }*/
-        return result;
-    }
-
-    /**
-     * return the String message error if the table T2 in A is primary key or
-     * unique is reference to table T1 in B and T1 have less row then T1 else
-     * return the final variable CHECKED_TRUE
-     *
-     * @return String
-     */
-    private String checkForingAndKPrimery() {
-        String result = CHECKED_TRUE;
-
+    private String checkUniqueReferenceUnique() {
         for (Table table : sqlSchema.getTables()) {
             for (Attribute attribute : table.getAttributes()) {
-                try {
-                    int nbrHowMushP = attribute.getDataFaker().getHowMuch();
-                    int nbrHowMushF = attribute.getReferences()
-                            .stream().map(a -> a.getDataFaker().getHowMuch()).min(Integer::compare).get();
-                    //System.out.println(nbrHowMushF + ">" + nbrHowMushP);
-                    if (nbrHowMushF > nbrHowMushP) {
-                        return StringUtil.getMsgErrorKeyReferences();
-                    } else {
-                        result = CHECKED_TRUE;
+                if (attribute.isPrimary() || attribute.isUnique() && !attribute.getReferences().isEmpty()) {
+                    for (Attribute a : attribute.getReferences()) {
+                        if (a.getDataFaker().getHowMuch() != attribute.getDataFaker().getHowMuch()) {
+                            return new StringUtil().getMsgErrorKeyReferences();
+
+                        }
                     }
-                } catch (Exception e) {
-                    //System.out.println("NullPointerException");
                 }
             }
-
         }
-
-        return result;
+        return CHECKED_TRUE;
     }
 
     /**
@@ -229,16 +117,6 @@ public class PreCondetion {
      * @param foreignKey
      * @return boolean
      */
-    private boolean isReferenceToPK(ForeignKey foreignKey) {
-        boolean result = false;
-        for (Attribute attribute : foreignKey.getPkTuple()) {
-            if (attribute.isPrimary() || attribute.isUnique()) {
-                return true;
-            }
-        }
-        return result;
-    }
-
     /**
      * return true if it is possible to generate unique values TODO ): Bug :
      * check this only if the son is unique or primary key
@@ -254,7 +132,7 @@ public class PreCondetion {
         if (nbrRowsToGenerate <= (to - from)) {
             result = true;
         } else {
-            msgError = StringUtil.messageErrorFromTo(nbrRowsToGenerate, String.valueOf(from), String.valueOf(to));
+            msgError = new StringUtil().messageErrorFromTo(nbrRowsToGenerate, String.valueOf(from), String.valueOf(to));
             result = false;
         }
         return result;
@@ -276,7 +154,7 @@ public class PreCondetion {
         if (numberOfDay >= nbrRowsToGenerate) {
             result = true;
         } else {
-            msgError = StringUtil.messageErrorFromTo(nbrRowsToGenerate, from, to);
+            msgError = new StringUtil().messageErrorFromTo(nbrRowsToGenerate, from, to);
             result = false;
         }
         return result;
@@ -324,7 +202,7 @@ public class PreCondetion {
         if (nbrCombinision >= nbrRowsToGenerate) {
             result = true;
         } else {
-            msgError = StringUtil.messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
+            msgError = new StringUtil().messageErrorStringCombinition(nbrRowsToGenerate, nbrCombinision);
             result = false;
         }
         return result;

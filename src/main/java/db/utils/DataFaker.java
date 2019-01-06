@@ -42,6 +42,10 @@ public abstract class DataFaker implements Serializable {
         return faker.random().nextInt(Integer.parseInt(from), Integer.parseInt(to));
     }
 
+    protected double betweenReal() {
+        return Math.random() * Double.parseDouble(to) + Double.parseDouble(from);
+    }
+
     public abstract String generateValue();
 
     private void generateUniqueValues(List<String> collectPreDate, int limit) {

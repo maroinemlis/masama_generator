@@ -28,7 +28,7 @@ public class LuncherApp extends Application {
         //new TestClass_asma().main();
         //new TestClass_abdNour().main();
         this.primaryStage = primaryStage;
-        //startMainInterface();
+        startMainInterface();
     }
 
     public void startMainInterface() throws Exception {

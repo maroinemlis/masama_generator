@@ -91,7 +91,6 @@ public class Attribute implements Serializable {
             case "DOUBLE":
             case "FLOAT":
             case "REAL":
-
                 dataFaker = new RealDataFaker(this);
                 break;
             case "BOOLEAN":

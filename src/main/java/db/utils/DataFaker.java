@@ -38,8 +38,22 @@ public abstract class DataFaker implements Serializable {
         this.regex = "[a-zA-Z]";
     }
 
+    private void generateNulls() {
+        for (int i = 0; i < nullsNumber; i++) {
+            attribute.getInstances().add("NULL");
+        }
+    }
+
     protected int between() {
         return faker.random().nextInt(Integer.parseInt(from), Integer.parseInt(to));
+    }
+
+    protected int between(int a, int b) {
+        return faker.random().nextInt(a, b);
+    }
+
+    protected double betweenReal(double a, double b) {
+        return Math.random() * b + a;
     }
 
     protected double betweenReal() {
@@ -48,8 +62,8 @@ public abstract class DataFaker implements Serializable {
 
     public abstract String generateValue();
 
-    private void generateUniqueValues() {
-        int rest = howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
+    protected void generateUniqueValues() {
+        int rest = getRest();
         for (int i = 0; i < rest; i++) {
             String value = null;
             do {
@@ -60,7 +74,7 @@ public abstract class DataFaker implements Serializable {
     }
 
     private void generateValues() {
-        int rest = howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
+        int rest = getRest();
         for (int i = 0; i < rest; i++) {
             attribute.getInstances().add(generateValue());
         }
@@ -71,6 +85,7 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void values() {
+        generateNulls();
         if (attribute.isUnique() || attribute.isPrimary()) {
             generateUniqueValues();
         } else {

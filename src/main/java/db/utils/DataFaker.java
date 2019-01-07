@@ -31,7 +31,7 @@ public abstract class DataFaker implements Serializable {
     public DataFaker(Attribute att) {
         this.attribute = att;
         this.from = "1";
-        this.to = "100";
+        this.to = "6";
         this.generatorType = "'system";
         this.specificType = "'system";
         this.nullsNumber = (nullsRate * howMuch / 100);
@@ -72,7 +72,7 @@ public abstract class DataFaker implements Serializable {
 
     public void values() {
         if (attribute.isUnique() || attribute.isPrimary()) {
-            generateUniqueValues();
+            System.err.println("Yes");
         } else {
             generateValues();
         }

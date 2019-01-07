@@ -24,7 +24,7 @@ public class TestClass_amirouche {
         //todo: whene took the pre data check the unique contrainte
         //todo: one table to Tow table the value of to table must have the same
         SQLConnection cnx = new SQLConnection(
-                "/home/amirouche/NetBeansProjects/masama_generator/SQL/circuler.sql", "SQLite", false);
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/3_tables.sql", "SQLite", false);
         int nbrRow = 5;
         sqlSchema = new SQLSchema(true, cnx);
         for (Table table : sqlSchema.getTables()) {
@@ -42,9 +42,6 @@ public class TestClass_amirouche {
         if (isNoContradiction) {
             System.out.println("we can generate");
             sqlSchema.startToGenerateInstances();
-            for (Table table : sqlSchema.getTables()) {
-                table.show();
-            }
         } else {
             System.out.println(preCondetion.getMsgError());
         }

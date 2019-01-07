@@ -66,6 +66,7 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void values() {
+        System.out.println("att " + attribute.getName());
         List<String> collectPreDate = Stream.concat(
                 attribute.getPreInstances().stream().limit(howMuch),
                 Stream.generate(() -> "NULL").limit(nullsNumber)

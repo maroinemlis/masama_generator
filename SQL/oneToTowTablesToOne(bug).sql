@@ -16,23 +16,10 @@ CREATE TABLE B
 );
 CREATE TABLE C
 (    
-	C1 int PRIMARY KEY   --,
-	--FOREIGN KEY (C1) REFERENCES D (D1)	   
+	C1 int PRIMARY KEY   ,
+	FOREIGN KEY (C1) REFERENCES D (D1)	   
 );
 CREATE TABLE D
-(    
+(
 	D1 int PRIMARY KEY
 );
---insert into A values(1,2);
---insert into A values(2,2);
---insert into A values(3,2);
-
---insert into B values(1,2);
---insert into B values(2,2);
---insert into B values(3,2);
-
---insert into C values(1,2);
---insert into C values(2,2);
---insert into C values(3,2);
-
---select * from C;

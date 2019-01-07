@@ -174,7 +174,7 @@ public final class Table implements Serializable {
             }
         } catch (Exception ex) {
             isErrorInTable = true;
-            System.out.println("db.bean.Table.fillForeignKeys()");
+            System.out.println("Erreure : db.bean.Table.fillForeignKeys()");
             String msg = ex.getMessage();
 
             if (msg == null) {

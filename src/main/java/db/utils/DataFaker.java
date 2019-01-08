@@ -71,11 +71,14 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void values() {
-        if (attribute.isUnique() || attribute.isPrimary()) {
-            System.err.println("Yes");
-        } else {
-            generateValues();
-        }
+        System.out.println("att " + attribute.getName());
+        List<String> collectPreDate = Stream.concat(
+                attribute.getPreInstances().stream().limit(howMuch),
+                Stream.generate(() -> "NULL").limit(nullsNumber)
+        ).collect(Collectors.toList());
+        int limit = howMuch - nullsNumber - attribute.getPreInstances().size();
+        limit = (limit > 0) ? limit : 0;
+
     }
 
     public void setConfiguration(String from, String to, String generatorType, String specificType) {
@@ -124,8 +127,8 @@ public abstract class DataFaker implements Serializable {
     public void setNullsRate(int nullsRate) {
         this.nullsNumber = ((nullsRate * howMuch) / 100);
     }
-    
-    public void setFromToNullsRate(String from, String to, int nullsRate){
+
+    public void setFromToNullsRate(String from, String to, int nullsRate) {
         this.from = from;
         this.to = to;
         this.nullsNumber = ((nullsRate * howMuch) / 100);

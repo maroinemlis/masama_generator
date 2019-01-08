@@ -91,4 +91,11 @@ public final class ShemaUtil {
                 <= 1;
     }
 
+    public static void generateSameValueToReferences(Attribute attribute) {
+        List<String> list = attribute.getReferences().get(0).getInstances();
+        for (Attribute reference : attribute.getReferences()) {
+            reference.setInstances(list);
+        }
+    }
+
 }

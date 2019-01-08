@@ -4,7 +4,6 @@ import db.utils.BlobDataFaker;
 import db.utils.BooleanDataFaker;
 import db.utils.DataFaker;
 import db.utils.DateDataFaker;
-import db.utils.DoubleDataFaker;
 import db.utils.IntegerDataFaker;
 import db.utils.RealDataFaker;
 import db.utils.ShemaUtil;
@@ -182,7 +181,8 @@ public class Attribute implements Serializable {
                 return;
             }
         }
-        if (references.isEmpty()) {
+        if (this.references.size() > 1) {
+            ShemaUtil.generateSameValueToReferences(this);
             return;
         }
         int rest = dataFaker.getHowMuch() - instances.size();

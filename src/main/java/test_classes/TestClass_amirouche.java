@@ -27,6 +27,7 @@ public class TestClass_amirouche {
                 "/home/amirouche/NetBeansProjects/masama_generator/SQL/oneToTowTablesToOne(bug).sql", "SQLite", false);
         int nbrRow = 5;
         sqlSchema = new SQLSchema(true, cnx);
+
         for (Table table : sqlSchema.getTables()) {
             table.setHowMuch(nbrRow);
         }

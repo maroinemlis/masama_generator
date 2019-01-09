@@ -6,6 +6,7 @@
 package db.utils;
 
 import db.bean.Attribute;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +26,16 @@ public class IntegerDataFaker extends DataFaker {
 
     @Override
     public List<String> generateValue(List<String> preDate, int size) {
-        return DataGenerator.generateUniqueInt(preDate, Integer.valueOf(from), Integer.valueOf(to), size);
+        //todo (14) :return DataGenerator.generateUniqueInt(preDate, Integer.valueOf(from), Integer.valueOf(to), size);
+        List<String> result = new ArrayList<>();
+        result.addAll(preDate);
+        while (result.size() < size) {
+            String d = generateValue();
+            if (!result.contains(d)) {
+                result.add(d);
+            }
+        }
+        return result;
     }
 
 }

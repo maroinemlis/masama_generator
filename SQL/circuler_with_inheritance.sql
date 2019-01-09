@@ -1,31 +1,19 @@
-drop table if exists A;
-drop table if exists B;
-drop table if exists D;
-drop table if exists B;
+drop table if exists L;
+drop table if exists M;
+drop table if exists N;
 
-CREATE TABLE A
+CREATE TABLE L
 (    
-	A1 int PRIMARY KEY,
-    FOREIGN KEY (A1) REFERENCES B (B1)
+	L1 int PRIMARY KEY,
+    FOREIGN KEY (L1) REFERENCES M (M1)
 );
-CREATE TABLE B
+CREATE TABLE M
 (    
-	B1 int PRIMARY KEY,
-    FOREIGN KEY (B1) REFERENCES C (C1)	
+	M1 int PRIMARY KEY,
+    FOREIGN KEY (M1) REFERENCES L (L1)	
 );
-CREATE TABLE C
+CREATE TABLE N
 (    
-	C1 int PRIMARY KEY,
-    FOREIGN KEY (C1) REFERENCES A (A1)	
-);
-CREATE TABLE D
-(    
-	D1 int PRIMARY KEY,
-    FOREIGN KEY (D1) REFERENCES A (A1)	
-);
-
-CREATE TABLE E
-(    
-	E1 int PRIMARY KEY,
-    FOREIGN KEY (E1) REFERENCES D (D1)	
+	N1 int PRIMARY KEY,
+    FOREIGN KEY (N1) REFERENCES L (L1)	
 );

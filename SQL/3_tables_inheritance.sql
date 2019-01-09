@@ -17,11 +17,11 @@ CREATE TABLE B
 CREATE TABLE C
 (    	
 	C1 INT PRIMARY KEY	,
-	B2 boolean ,
-	B2 BLOB  
+	C2 boolean ,
+	C3 BLOB  
 );
 
-insert into C values(3,"fx3485FA3D");
+insert into C values(3,0,"fx3485FA3D");
 insert into B values(3,3);
 insert into A values(3,"2017-09-05");
 

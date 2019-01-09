@@ -122,4 +122,8 @@ public abstract class DataFaker implements Serializable {
     public void setNullsRate(int nullsRate) {
         this.nullsNumber = ((nullsRate * howMuch) / 100);
     }
+    
+    public void setFromToNullsRate(String from, String to, int nullsRate){
+        this.from = from; this.to = to; this.nullsNumber = ((nullsRate * howMuch) / 100);
+    }
 }

@@ -6,6 +6,7 @@
 package db.utils;
 
 import db.bean.Attribute;
+import java.util.List;
 
 /**
  *
@@ -20,6 +21,11 @@ public class IntegerDataFaker extends DataFaker {
     @Override
     public String generateValue() {
         return between() + "";
+    }
+
+    @Override
+    public List<String> generateValue(List<String> preDate, int size) {
+        return DataGenerator.generateUniqueInt(preDate, Integer.valueOf(from), Integer.valueOf(to), size);
     }
 
 }

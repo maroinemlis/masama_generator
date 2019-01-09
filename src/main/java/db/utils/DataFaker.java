@@ -43,16 +43,21 @@ public abstract class DataFaker implements Serializable {
 
     public abstract String generateValue();
 
+    public abstract List<String> generateValue(List<String> collectPreDate, int size);
+
     private void generateUniqueValues(List<String> collectPreDate, int limit) {
+        /*
+        todo : give to user to choos if he want random values or distact values
+        this code in case we wont a random values
         List<String> collect = Stream.concat(
                 collectPreDate.stream(),
                 Stream.generate(() -> generateValue()).distinct().limit(limit)
         ).collect(Collectors.toList());
-        attribute.setInstances(collect);
+        attribute.setInstances(collect);*/
+        attribute.setInstances(generateValue(collectPreDate, howMuch));
     }
 
     private void generateValues(List<String> collectPreDate, int limit) {
-
         List<String> collect = Stream.concat(
                 collectPreDate.stream(),
                 Stream.generate(() -> generateValue()).limit(limit)
@@ -61,7 +66,6 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void values() {
-        System.out.println("att " + attribute.getName());
         List<String> collectPreDate = Stream.concat(
                 attribute.getPreInstances().stream().limit(howMuch),
                 Stream.generate(() -> "NULL").limit(nullsNumber)
@@ -122,4 +126,11 @@ public abstract class DataFaker implements Serializable {
     public void setNullsRate(int nullsRate) {
         this.nullsNumber = ((nullsRate * howMuch) / 100);
     }
+
+    public void setFromToNullsRate(String from, String to, int nullsRate) {
+        this.from = from;
+        this.to = to;
+        this.nullsNumber = ((nullsRate * howMuch) / 100);
+    }
+
 }

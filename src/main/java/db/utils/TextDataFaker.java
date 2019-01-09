@@ -7,6 +7,7 @@ package db.utils;
 
 import db.bean.Attribute;
 import static db.utils.Shared.faker;
+import java.util.List;
 
 /**
  *
@@ -32,5 +33,10 @@ public class TextDataFaker extends DataFaker {
             }
         }
         return "'" + str + "'";
+    }
+
+    @Override
+    public List<String> generateValue(List<String> collectPreDate, int size) {
+        return null;
     }
 }

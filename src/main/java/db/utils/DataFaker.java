@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package db.utils;
 
 import db.bean.Attribute;
@@ -48,33 +43,36 @@ public abstract class DataFaker implements Serializable {
 
     public abstract String generateValue();
 
-    private void generateUniqueValues() {
-        int rest = howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
-        for (int i = 0; i < rest; i++) {
-            String value = null;
-            do {
-                value = generateValue();
-            } while (attribute.getInstances().contains(value));
-            attribute.getInstances().add(generateValue());
-        }
+    private void generateUniqueValues(List<String> collectPreDate, int limit) {
+        List<String> collect = Stream.concat(
+                collectPreDate.stream(),
+                Stream.generate(() -> generateValue()).distinct().limit(limit)
+        ).collect(Collectors.toList());
+        attribute.setInstances(collect);
     }
 
-    private void generateValues() {
-        int rest = howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
-        for (int i = 0; i < rest; i++) {
-            attribute.getInstances().add(generateValue());
-        }
-    }
+    private void generateValues(List<String> collectPreDate, int limit) {
 
-    public int getRest() {
-        return howMuch - attribute.getInstances().size() + attribute.getPreInstances().size();
+        List<String> collect = Stream.concat(
+                collectPreDate.stream(),
+                Stream.generate(() -> generateValue()).limit(limit)
+        ).collect(Collectors.toList());
+        attribute.setInstances(collect);
     }
 
     public void values() {
+        System.out.println("att " + attribute.getName());
+        List<String> collectPreDate = Stream.concat(
+                attribute.getPreInstances().stream().limit(howMuch),
+                Stream.generate(() -> "NULL").limit(nullsNumber)
+        ).collect(Collectors.toList());
+        int limit = howMuch - nullsNumber - attribute.getPreInstances().size();
+        limit = (limit > 0) ? limit : 0;
+
         if (attribute.isUnique() || attribute.isPrimary()) {
-            generateUniqueValues();
+            generateUniqueValues(collectPreDate, limit);
         } else {
-            generateValues();
+            generateValues(collectPreDate, limit);
         }
     }
 
@@ -122,12 +120,6 @@ public abstract class DataFaker implements Serializable {
     }
 
     public void setNullsRate(int nullsRate) {
-        this.nullsNumber = ((nullsRate * howMuch) / 100);
-    }
-    
-    public void setFromToNullsRate(String from, String to, int nullsRate){
-        this.from = from;
-        this.to = to;
         this.nullsNumber = ((nullsRate * howMuch) / 100);
     }
 }

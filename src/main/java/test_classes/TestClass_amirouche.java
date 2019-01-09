@@ -9,7 +9,6 @@ import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
 import db.validation.PreCondetion;
-import java.util.List;
 
 /**
  *
@@ -22,10 +21,14 @@ public class TestClass_amirouche {
     public void main() throws Exception {
         //todo: db.utils.ShemaUtil.whichIsCircular() || resolve problem of get(0)
         //todo: whene took the pre data check the unique contrainte
+        //resolved: one table to Tow table the value of to table must have the same
+        //todo : one table to Tow table and one of this table refere to auther table "oneToTowTablesToOne.sql"
         SQLConnection cnx = new SQLConnection(
-                "/home/amirouche/NetBeansProjects/masama_generator/SQL/oneToTowTables.sql", "SQLite", false);
+                "/home/amirouche/NetBeansProjects/masama_generator/SQL/3_tables.sql", "SQLite", false);
+
         int nbrRow = 5;
         sqlSchema = new SQLSchema(true, cnx);
+
         for (Table table : sqlSchema.getTables()) {
             table.setHowMuch(nbrRow);
         }
@@ -41,9 +44,6 @@ public class TestClass_amirouche {
         if (isNoContradiction) {
             System.out.println("we can generate");
             sqlSchema.startToGenerateInstances();
-            for (Table table : sqlSchema.getTables()) {
-                table.show();
-            }
         } else {
             System.out.println(preCondetion.getMsgError());
         }

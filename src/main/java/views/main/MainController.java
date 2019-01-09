@@ -131,7 +131,6 @@ public class MainController implements Initializable {
                     t.updateTableViewInserts();
                 }
             }
-
         } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur dans les contrainte");

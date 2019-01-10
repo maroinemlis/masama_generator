@@ -36,9 +36,9 @@ public class BooleanDataFaker extends DataFaker {
         result.addAll(collectPreDate);
         while (result.size() < size) {
             String d = generateValue();
-            if (!result.contains(d)) {
-                result.add(d);
-            }
+            //if (!result.contains(d)) {
+            result.add(d);
+            //}
         }
         return result;
     }

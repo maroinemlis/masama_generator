@@ -31,7 +31,7 @@ public class BlobDataFaker extends DataFaker {
 
     @Override
     public List<String> generateValue(List<String> collectPreDate, int size) {
-        System.out.println("db.utils.BlobDataFaker.generateValue()");
+        //System.out.println("db.utils.BlobDataFaker.generateValue()");
         List<String> result = new ArrayList<>();
         result.addAll(collectPreDate);
         while (result.size() < size) {

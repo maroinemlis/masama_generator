@@ -4,7 +4,7 @@ drop table if exists InfoC;
 drop table if exists InfoD;
 
 CREATE TABLE InfoA
-(    
+(
 	idA INT PRIMARY KEY,
 	aInt float ,
 	aInt2 double ,
@@ -26,7 +26,3 @@ CREATE TABLE InfoC
 	cInt int ,
 	FOREIGN KEY (idC) REFERENCES InfoB (idB)
 );
-
-
-
-

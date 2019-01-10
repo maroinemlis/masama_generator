@@ -37,30 +37,29 @@ public class TestClass_amirouche {
         //todo(14): all time generate the same values 1 2 3 4 ...
         //      -db.utils.IntegerDataFaker.generateValue()
         //bugs************************************;
-        System.out.println(10 % 4);
+        /*System.out.println(10 % 4);
         //List l = Arrays.asList("4", "3");
         List<String> l = new ArrayList<>();
         l = DataGenerator.generateUniqueIntTest(l, 10, 15, 5);
         System.out.println("list = " + l);
-        System.out.println("Amirouche Test");
-        /*SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/masama_generator/SQL/"
-                + "theCompleteTest.sql", "SQLite", false);
-        //+ "towTupleForeignKeyNotInverse.sql", "SQLite", false);
+        System.out.println("Amirouche Test");*/
+        SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/masama_generator/SQL/"
+                //+ "theCompleteTest.sql", "SQLite", false);
+                + "table_withe_data.sql", "SQLite", false);
 
         int nbrRow = 5;
-        sqlSchema = new SQLSchema(true, cnx);
-
+        sqlSchema = new SQLSchema(false, cnx);
         for (Table table : sqlSchema.getTables()) {
             table.setHowMuch(nbrRow);
             for (Attribute attribute : table.getAttributes()) {
                 //attribute.getDataFaker().setTo(to);
             }
         }
-         */
+
         //test here :réfléchi au problème de la génération aléatoire quand on veut des valeurs distinctes
         //schema.getTables().get(0).getAttributes().get(3).getDataFaker().setFrom("1");
         //schema.getTables().get(0).getAttributes().get(3).getDataFaker().setTo("7");
-        //testPrecondetion();
+        testPrecondetion();
     }
 
     private void testPrecondetion() throws Exception {

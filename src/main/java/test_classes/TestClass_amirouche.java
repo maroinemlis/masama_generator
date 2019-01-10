@@ -4,7 +4,11 @@ import db.bean.Attribute;
 import db.bean.SQLSchema;
 import db.bean.Table;
 import db.connection.SQLConnection;
+import db.utils.DataGenerator;
 import db.validation.PreCondetion;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -15,7 +19,7 @@ public class TestClass_amirouche {
     SQLSchema sqlSchema;
 
     public void main() throws Exception {
-
+        //bugs************************************
         //todo: db.utils.ShemaUtil.whichIsCircular() || resolve problem of get(0)
         //todo: whene took the pre data check the unique contrainte
         //resolved: one table to Tow table the value of to table must have the same
@@ -32,8 +36,14 @@ public class TestClass_amirouche {
         //todo : l'app quand il y a une valeur REAL ,BLOB,Boolean elle ne peut pas afficher (avec le type double elle affiche bien)
         //todo(14): all time generate the same values 1 2 3 4 ...
         //      -db.utils.IntegerDataFaker.generateValue()
+        //bugs************************************;
+        System.out.println(10 % 4);
+        //List l = Arrays.asList("4", "3");
+        List<String> l = new ArrayList<>();
+        l = DataGenerator.generateUniqueIntTest(l, 10, 15, 5);
+        System.out.println("list = " + l);
         System.out.println("Amirouche Test");
-        SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/masama_generator/SQL/"
+        /*SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/masama_generator/SQL/"
                 + "theCompleteTest.sql", "SQLite", false);
         //+ "towTupleForeignKeyNotInverse.sql", "SQLite", false);
 
@@ -46,14 +56,11 @@ public class TestClass_amirouche {
                 //attribute.getDataFaker().setTo(to);
             }
         }
-
+         */
         //test here :réfléchi au problème de la génération aléatoire quand on veut des valeurs distinctes
-        /*List l = Arrays.asList("4", "3");
-        l = DataGenerator.generateUniqueInt(l, 1, 100, 5);
-        System.out.println("list = " + l);*/
         //schema.getTables().get(0).getAttributes().get(3).getDataFaker().setFrom("1");
         //schema.getTables().get(0).getAttributes().get(3).getDataFaker().setTo("7");
-        testPrecondetion();
+        //testPrecondetion();
     }
 
     private void testPrecondetion() throws Exception {

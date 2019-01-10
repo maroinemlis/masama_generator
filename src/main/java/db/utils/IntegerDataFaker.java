@@ -26,8 +26,8 @@ public class IntegerDataFaker extends DataFaker {
 
     @Override
     public List<String> generateValue(List<String> preDate, int size) {
-        //todo (14) :return DataGenerator.generateUniqueInt(preDate, Integer.valueOf(from), Integer.valueOf(to), size);
-        List<String> result = new ArrayList<>();
+        return DataGenerator.generateUniqueIntTest(preDate, Integer.valueOf(from), Integer.valueOf(to), size);
+        /*List<String> result = new ArrayList<>();
         result.addAll(preDate);
         while (result.size() < size) {
             String d = generateValue();
@@ -35,7 +35,7 @@ public class IntegerDataFaker extends DataFaker {
                 result.add(d);
             }
         }
-        return result;
+        return result;*/
     }
 
 }

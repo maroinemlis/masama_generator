@@ -44,8 +44,8 @@ public class TestClass_amirouche {
         System.out.println("list = " + l);
         System.out.println("Amirouche Test");*/
         SQLConnection cnx = new SQLConnection("/home/amirouche/NetBeansProjects/masama_generator/SQL/"
-                //+ "theCompleteTest.sql", "SQLite", false);
-                + "table_withe_data.sql", "SQLite", false);
+                + "theCompleteTest.sql", "SQLite", false);
+        //+ "table_withe_data.sql", "SQLite", false);
 
         int nbrRow = 5;
         sqlSchema = new SQLSchema(false, cnx);

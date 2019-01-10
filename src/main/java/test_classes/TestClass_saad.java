@@ -5,6 +5,10 @@
  */
 package test_classes;
 
+import db.utils.DataGenerator;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author amirouche
@@ -12,7 +16,10 @@ package test_classes;
 public class TestClass_saad {
 
     public void main() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<String> l = new ArrayList<>();
+        l = DataGenerator.generateUniqueIntTest(l, 1, 10, 9);
+        System.out.println("list = " + l);
+        System.out.println("SAAD test");
     }
     
 }

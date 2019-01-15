@@ -28,14 +28,10 @@ public class TestClass_amirouche {
         //              -improved the interface
         //todo :improved the interface and fix the hes bugs
         //todo :refactor the code of the mainControler
-        //todo :réfléchi au problème de la génération aléatoire quand on veut des valeurs distinctes
-        //todo (rapport):  - analyse théorique de la complexité
-        //todo : give to user to choos if he want random values or distact values
-        //todo : change the code here :-db.utils.DataFaker.generateUniqueValues()
+        //resolver :réfléchi au problème de la génération aléatoire quand on veut des valeurs distinctes
         //todo : pré condetion check if boolean is unique then 2 value max
         //todo : l'app quand il y a une valeur REAL ,BLOB,Boolean elle ne peut pas afficher (avec le type double elle affiche bien)
-        //todo(14): all time generate the same values 1 2 3 4 ...
-        //      -db.utils.IntegerDataFaker.generateValue()
+        //todo : take in interface the case of pre data
         //bugs************************************;
         /*System.out.println(10 % 4);
         //List l = Arrays.asList("4", "3");

@@ -193,6 +193,7 @@ public final class Table implements Serializable {
     public void startToGenerateInstances() {
         attributes.forEach(a -> {
             if (a.getReferences().isEmpty()) {
+                System.out.println("-----------" + a.getName());
                 a.startToGenerateRootValues();
             }
         });

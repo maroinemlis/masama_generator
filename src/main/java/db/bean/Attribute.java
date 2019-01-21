@@ -154,35 +154,55 @@ public class Attribute implements Serializable {
      */
     public void startToGenerateRootValues() {
         dataFaker.values();
-        startToGenerateWhoReferenceMe();
+        for (Attribute reference : this.getReferencesMe()) {
+            startToGenerateWhoReferenceMe();
+        }
     }
 
     public void startToGenerateWhoReferenceMe() {
         referencesMe.forEach(ref -> {
-            int diffrence = ref.dataFaker.getHowMuch() - ref.instances.size();
-            if (diffrence > 0) {
-                ref.instances.addAll(instances.stream().limit(diffrence).collect(Collectors.toList()));
+            if (!ShemaUtil.isCirculer(ref)) {
+                int diffrence = ref.dataFaker.getHowMuch() - ref.getInstances().size();
+                if (diffrence > 0) {
+                    ref.getInstances().addAll(instances.stream().limit(diffrence).collect(Collectors.toList()));
+                }
             }
+            if (!ref.getInstances().isEmpty()) {
+                System.out.println("att Empty == " + this.getName() + "  " + instances);
+                this.instances = ref.getInstances();
+            } else {
+                System.out.println("att Empty == " + this.getName() + "  " + instances);
+                ShemaUtil.generateAllCirculer(ref, instances);
+            }
+
         });
         referencesMe.forEach(ref -> {
-            ref.startToGenerateWhoReferenceMe();
+            if (!ShemaUtil.isCirculer(ref)) {
+                ref.startToGenerateWhoReferenceMe();
+            }
         });
 
     }
 
     void fixInstancesHowMuch() {
+
         if (ShemaUtil.isCirculerAndEmpty(this)) {
             dataFaker.values();
+            //System.out.println("attribute " + this.getName());
+            referencesMe.forEach(ref -> {
+                if (!ref.getInstances().isEmpty()) {
+                    ref.setInstances(instances);
+                }
+            });
             return;
         } else {
             if (ShemaUtil.isCirculer(this)) {
                 generateInstanceRecurcive(this);
+                instances = instances.stream()
+                        .limit(dataFaker.getHowMuch())
+                        .collect(Collectors.toList());
                 return;
             }
-        }
-        if (this.references.size() > 1) {
-            ShemaUtil.generateSameValueToReferences(this);
-            return;
         }
         int rest = dataFaker.getHowMuch() - instances.size();
         if (rest > 0) {
@@ -192,11 +212,20 @@ public class Attribute implements Serializable {
             }
             rest = dataFaker.getHowMuch() - instances.size();
             instances.addAll(instances.stream().limit(rest).collect(Collectors.toList()));
+        } else {
+            instances = instances.stream()
+                    .limit(dataFaker.getHowMuch())
+                    .collect(Collectors.toList());
+        }
+        //todo : to top
+        if (this.references.size() > 1) {
+            ShemaUtil.generateSameValueToReferences(this);
+            return;
         }
     }
 
     private void generateInstanceRecurcive(Attribute attribute) {
-        //todo resolve problem of get(0)
+        System.out.println("attribute " + attribute.getName());
         instances.addAll(attribute.getReferences().get(0).instances);
         if (instances.isEmpty()) {
             generateInstanceRecurcive(attribute.getReferences().get(0));

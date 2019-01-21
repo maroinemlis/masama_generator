@@ -34,6 +34,7 @@ public class TableView implements Serializable {
     private JFXTreeTableView<InstancesModel> insertsView = null;
     ObservableList<InstancesModel> observablesInserts = FXCollections.observableArrayList();
     ObservableList<AttributeModel> observablesAttributes = FXCollections.observableArrayList();
+    int howMuchWeDisplayed = 0;
 
     public List<List<StringProperty>> getLines() {
         return observablesInserts.stream().map(t -> t.getInstances()).collect(Collectors.toList());
@@ -58,10 +59,10 @@ public class TableView implements Serializable {
         return insertsView;
     }
 
-    public void updateTableViewInserts() {
-        observablesInserts.clear();
-        int rowNumber = table.getAttributes().get(0).getInstances().size();
-        for (int j = 0; j < rowNumber; j++) {
+    public void addLine(int n) {
+        int j;
+        for (j = howMuchWeDisplayed; j < table.getAttributes().get(0).getInstances().size() && j < howMuchWeDisplayed + n; j++) {
+
             ArrayList<StringProperty> listDonnees = new ArrayList();
             for (Attribute a : table.getAttributes()) {
                 listDonnees.add(new SimpleStringProperty(a.getInstances().get(j)));
@@ -69,7 +70,19 @@ public class TableView implements Serializable {
             InstancesModel line = new InstancesModel(listDonnees);
             observablesInserts.add(line);
         }
+        howMuchWeDisplayed = howMuchWeDisplayed + n;
         insertsView.refresh();
+    }
+
+    public void updateTableViewInserts() {
+        observablesInserts.clear();
+        howMuchWeDisplayed = 0;
+        addLine(10);
+        insertsView.setOnScroll((event) -> {
+            if (event.getTextDeltaY() < 0) {
+                addLine(10);
+            }
+        });
     }
 
     public JFXTreeTableView<InstancesModel> createTableViewInserts() {

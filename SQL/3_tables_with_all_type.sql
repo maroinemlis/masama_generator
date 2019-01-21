@@ -4,7 +4,7 @@ drop table if exists InfoC;
 drop table if exists InfoD;
 
 CREATE TABLE InfoA
-(    
+(
 	idA INT PRIMARY KEY,
 	aInt float ,
 	aInt2 double ,
@@ -26,9 +26,3 @@ CREATE TABLE InfoC
 	cInt int ,
 	FOREIGN KEY (idC) REFERENCES InfoB (idB)
 );
-
-insert into InfoA values(2,2,4,"Amir",4,1,'d');
-insert into InfoB values(2,2,10);
-select * from InfoA;
-select * from InfoB;
-

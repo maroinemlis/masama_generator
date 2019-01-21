@@ -9,7 +9,9 @@ import db.bean.Attribute;
 import static db.utils.Shared.faker;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -34,6 +36,19 @@ public class DateDataFaker extends DataFaker {
             return null;
         }
         return "'" + dateFormat.format(date) + "'";
+    }
+
+    @Override
+    public List<String> generateValue(List<String> collectPreDate, int size) {
+        List<String> result = new ArrayList<>();
+        result.addAll(collectPreDate);
+        while (result.size() < size) {
+            String d = generateValue();
+            if (!result.contains(d)) {
+                result.add(d);
+            }
+        }
+        return result;
     }
 
 }

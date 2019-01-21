@@ -7,6 +7,8 @@ package db.utils;
 
 import db.bean.Attribute;
 import static db.utils.Shared.faker;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -30,6 +32,19 @@ public class DoubleDataFaker extends DataFaker {
     public String generateValue() {
         double randomValue = from + (to - from) * r.nextDouble();
         return randomValue + "";
+    }
+
+    @Override
+    public List<String> generateValue(List<String> collectPreDate, int size) {
+        List<String> result = new ArrayList<>();
+        result.addAll(collectPreDate);
+        while (result.size() < size) {
+            String d = generateValue();
+            if (!result.contains(d)) {
+                result.add(d);
+            }
+        }
+        return result;
     }
 
 }

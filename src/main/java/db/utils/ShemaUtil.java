@@ -19,6 +19,8 @@ public final class ShemaUtil {
 
     private static List<Attribute> listAttributes = new ArrayList<>();
 
+    private static List<Attribute> listAttributes2 = new ArrayList<>();
+
     public static boolean isCirculerAndEmpty(Attribute attribute) {
         boolean result = false;
         if (listAttributes.contains(attribute)) {
@@ -33,7 +35,9 @@ public final class ShemaUtil {
                 result = result || isCirculerAndEmpty(attribute.getReferences().get(0));
             }
         }
+        //System.out.println("boo: " + result);
         listAttributes.clear();
+
         return result;
     }
 
@@ -90,5 +94,43 @@ public final class ShemaUtil {
                 .count()
                 <= 1;
     }
+    static List<String> list;
 
+    public static void generateSameValueToReferences(Attribute attribute) {
+        list = attribute.getReferences().get(0).getInstances();
+        attribute.setInstances(list);
+        for (Attribute reference : attribute.getReferences()) {
+            if (!reference.getReferences().isEmpty()) {
+                generateForParents(reference);
+            } else {
+                reference.setInstances(list);
+            }
+        }
+
+    }
+
+    private static void generateForParents(Attribute reference) {
+        if (reference.getReferences().isEmpty()) {
+            reference.setInstances(list);
+        } else {
+            for (Attribute reference1 : reference.getReferences()) {
+                generateForParents(reference1);
+                reference.setInstances(list);
+            }
+        }
+    }
+
+    public static void generateAllCirculer(Attribute attribute, List<String> instances) {
+        attribute.setInstances(instances);
+        if (listAttributes2.contains(attribute)) {
+            listAttributes2.clear();
+        } else {
+            listAttributes2.add(attribute);
+            for (Attribute reference : attribute.getReferences()) {
+                generateAllCirculer(reference, instances);
+            }
+
+        }
+        listAttributes2.clear();
+    }
 }

@@ -7,6 +7,8 @@ package db.utils;
 
 import db.bean.Attribute;
 import static db.utils.Shared.faker;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -25,6 +27,20 @@ public class BlobDataFaker extends DataFaker {
     @Override
     public String generateValue() {
         return faker.regexify("[a-f0-9]{" + between() + "}");
+    }
+
+    @Override
+    public List<String> generateValue(List<String> collectPreDate, int size) {
+        //System.out.println("db.utils.BlobDataFaker.generateValue()");
+        List<String> result = new ArrayList<>();
+        result.addAll(collectPreDate);
+        while (result.size() < size) {
+            String d = generateValue();
+            if (!result.contains(d)) {
+                result.add(d);
+            }
+        }
+        return result;
     }
 
 }

@@ -6,6 +6,8 @@
 package db.utils;
 
 import db.bean.Attribute;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -40,4 +42,18 @@ public class RealDataFaker extends DataFaker {
     public String generateValue() {
         return betweenReal() + "";
     }
+
+    @Override
+    public List<String> generateValue(List<String> collectPreDate, int size) {
+        List<String> result = new ArrayList<>();
+        result.addAll(collectPreDate);
+        while (result.size() < size) {
+            String d = generateValue();
+            if (!result.contains(d)) {
+                result.add(d);
+            }
+        }
+        return result;
+    }
+
 }

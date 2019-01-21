@@ -174,7 +174,7 @@ public final class Table implements Serializable {
             }
         } catch (Exception ex) {
             isErrorInTable = true;
-            System.out.println("db.bean.Table.fillForeignKeys()");
+            System.out.println("Erreure : db.bean.Table.fillForeignKeys()");
             String msg = ex.getMessage();
 
             if (msg == null) {
@@ -193,6 +193,7 @@ public final class Table implements Serializable {
     public void startToGenerateInstances() {
         attributes.forEach(a -> {
             if (a.getReferences().isEmpty()) {
+                System.out.println("-----------" + a.getName());
                 a.startToGenerateRootValues();
             }
         });

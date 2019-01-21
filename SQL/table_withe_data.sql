@@ -22,5 +22,5 @@ insert into InfoB values(2,2);
 insert into InfoB values(3,2);
 insert into InfoB values(4,4);
 
-
+select idA1 from InfoA;
 

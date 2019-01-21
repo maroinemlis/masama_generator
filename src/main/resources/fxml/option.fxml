@@ -22,7 +22,7 @@
                         <Label layoutX="99.0" layoutY="77.0" text="Nombre de ligne" />
                         <Label layoutX="99.0" layoutY="137.0" text="Pourcentage des valeurs nulls" />
                         <JFXTextField fx:id="nbLigne" layoutX="308.0" layoutY="66.0" />
-                        <JFXTextField fx:id="pNull" layoutX="308.0" layoutY="124.0" />
+                        <JFXTextField fx:id="pNull" layoutX="308.0" layoutY="125.0" />
                      </children>
                   </Pane>
                </content>

@@ -6,6 +6,8 @@
 package db.utils;
 
 import db.bean.Attribute;
+import db.bean.SQLSchema;
+import db.bean.Table;
 import java.util.List;
 
 /**
@@ -53,4 +55,46 @@ public final class StringUtil {
                 + " dans la colonne : " + attrebute.getName() + " " + attrebute.getDataType();
     }
 
+    public static String getInserts(SQLSchema schema) {
+        String insert = "";
+        for (Table t : schema.getTables()) {
+            insert = "INSERT INTO " + t.getTableName() + " VALUES (";
+            for (Attribute attribute : t.getAttributes()) {
+                for (String instance : attribute.getInstances()) {
+                    insert += ", " + insert;
+                }
+            }
+            insert += ")";
+        }
+        return insert;
+    }
+
+    public static String getInsert(SQLSchema schema) {
+        String result = "";
+        for (Table table : schema.getTables()) {
+            List<Attribute> attributes = table.getAttributes();
+            int rowNumber = attributes.get(0).getInstances().size();
+            for (int j = 0; j < rowNumber - 1; j++) {
+                String insert = "INSERT INTO " + table.getTableName() + " VALUES (";
+                int i = 0;
+                Attribute a = null;
+                for (; i < attributes.size() - 1; i++) {
+                    a = attributes.get(i);
+                    if (a.getDataType().equals("TEXsT") || a.getDataType().equals("BLOB")) {
+                        insert += "'" + a.getInstances().get(j) + "', ";
+                    } else {
+                        insert += a.getInstances().get(j) + ", ";
+                    }
+                }
+                a = attributes.get(i);
+                if (a.getDataType().equals("TEXTss") || a.getDataType().equals("BLOB")) {
+                    insert += "'" + a.getInstances().get(j) + "');";
+                } else {
+                    insert += a.getInstances().get(j) + ");";
+                }
+                result += insert;
+            }
+        }
+        return result;
+    }
 }

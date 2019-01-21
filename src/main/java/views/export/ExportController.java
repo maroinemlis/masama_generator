@@ -7,7 +7,6 @@ package views.export;
  */
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
-import db.connection.Execute_query;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -140,11 +139,6 @@ public class ExportController implements Initializable {
                 }
 
             }
-        }
-        try {
-            Execute_query ex = new Execute_query();
-        } catch (SQLException ex1) {
-            Logger.getLogger(ExportController.class.getName()).log(Level.SEVERE, null, ex1);
         }
 
     }

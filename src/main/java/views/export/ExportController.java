@@ -7,6 +7,8 @@ package views.export;
  */
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
+import db.connection.Execute_query;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,8 +20,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -96,7 +101,8 @@ public class ExportController implements Initializable {
         this.path = path;
     }
 
-    private void exportOnSql() throws FileNotFoundException, IOException {
+    private void exportOnSql() throws FileNotFoundException, IOException, Exception {
+        String destination = "bin.txt";
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le répertoire d'enregistrement");
         fileChooser.setInitialDirectory(new File("."));
@@ -105,15 +111,40 @@ public class ExportController implements Initializable {
         Files.copy(path, output);
         for (TableView t : tables) {
             List<List<StringProperty>> lines = t.getLines();
+            int n = 1;
             for (List<StringProperty> line : lines) {
-                String insert = "INSERT INTO " + t.get().getTableName() + " VALUES (";
-                int i = 0;
-                for (; i < line.size() - 1; i++) {
-                    insert += line.get(i).get() + ", ";
+                if (n == 1) {
+                    n++;
+                    String insert = "\nINSERT INTO " + t.get().getTableName() + " VALUES (";
+
+                    int i = 0;
+                    for (; i < line.size() - 1; i++) {
+                        insert += line.get(i).get() + ", ";
+                    }
+                    insert += line.get(i).get() + ");";
+                    //Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+                    Files.write(Paths.get(destination), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+                } else {
+                    String insert = "INSERT INTO " + t.get().getTableName() + " VALUES (";
+                    int i = 0;
+                    for (; i < line.size() - 1; i++) {
+                        insert += line.get(i).get() + ", ";
+                    }
+                    insert += line.get(i).get() + ");";
+                    //Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
+                    Files.write(Paths.get(destination), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
                 }
-                insert += line.get(i).get() + ");";
-                Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+
             }
+        }
+        try {
+            Execute_query ex = new Execute_query();
+        } catch (SQLException ex1) {
+            Logger.getLogger(ExportController.class.getName()).log(Level.SEVERE, null, ex1);
         }
 
     }

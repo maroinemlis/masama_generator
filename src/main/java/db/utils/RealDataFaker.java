@@ -19,6 +19,25 @@ public class RealDataFaker extends DataFaker {
         super(att);
     }
 
+    /*
+    @Override
+    protected void generateUniqueValues() {
+        int rest = getRest();
+        double from = Double.parseDouble(this.from);
+        double to = Double.parseDouble(this.to);
+        double gap = (to - from) / howMuch;
+        double j = from;
+        for (int i = 0; i < rest; i++) {
+            String value = "" + j;
+            attribute.getInstances().add(value);
+            double a = 0;
+            do {
+                a = betweenReal(0, gap);
+            } while (a != 0);
+            j += a;
+        }
+    }
+     */
     @Override
     public String generateValue() {
         return betweenReal() + "";

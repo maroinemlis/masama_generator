@@ -109,6 +109,7 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             case "INTEGER":
             case "DOUBLE":
             case "FLOAT":
+            case "REAL":
                 this.from = new JFXTextField(fromString);
                 this.to = new JFXTextField(toString);
                 break;
@@ -170,6 +171,7 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             case "INTEGER":
             case "DOUBLE":
             case "FLOAT":
+            case "REAL":
                 fromString = ((JFXTextField) from).getText();
                 toString = ((JFXTextField) to).getText();
                 break;

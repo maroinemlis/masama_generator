@@ -28,6 +28,7 @@ public class AttributeView {
     public AttributeView(Attribute attribute) {
         this.attribute = attribute;
         switch (attribute.getDataType()) {
+
             case "TEXT":
                 fromControl = new JFXSlider();
                 toControl = new JFXSlider();

@@ -45,6 +45,10 @@ public final class SQLConnection {
         return new String(encoded, encoding);
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     /**
      * execute the SQL file
      *

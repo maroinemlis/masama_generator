@@ -25,7 +25,7 @@ import views.alertMeg.AlertExeption;
  */
 public final class SQLConnection {
 
-    private String url = "";
+    public String url = "";
     private String user = "";
     private String password = "";
     private Connection connection;
@@ -174,4 +174,30 @@ public final class SQLConnection {
         return result;
     }
 
+    public void displaySelect(String query, Integer valPourc) throws ClassNotFoundException, SQLException {
+        ResultSet rs = null;
+        Connection conn = this.connection;
+
+        conn.setAutoCommit(false);
+        for (int i = 0; i < valPourc; i++) {
+            Statement stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+        }
+        conn.commit();
+        //System.out.println(rs);
+        //while (rs.next()) {
+        //  System.out.println("aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbb" + rs.getString("title"));
+        //}
+    }
+
+    public void displayUpdate(String query, Integer valPourc) throws ClassNotFoundException, SQLException {
+        Connection conn = this.connection;
+        conn.setAutoCommit(false);
+        for (int i = 0; i < valPourc; i++) {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(query);
+
+        }
+        conn.commit();
+    }
 }

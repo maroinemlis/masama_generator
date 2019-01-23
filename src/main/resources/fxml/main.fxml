@@ -53,6 +53,11 @@
                         <FontAwesomeIconView fill="#edb721" glyphName="COG" size="30" stroke="#edb721" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
+                <JFXButton alignment="CENTER" contentDisplay="TOP" onAction="#onReport" prefHeight="80.0" prefWidth="100.0" styleClass="menu-button" text="Rapport">
+                    <graphic>
+                        <FontAwesomeIconView fill="#edb721" glyphName="UPLOAD" size="30" stroke="#edb721" strokeWidth="0.0" />
+                    </graphic>
+                </JFXButton>
             <Text fx:id="chargement_en_cours" strokeType="OUTSIDE" strokeWidth="0.0" text="Chargement en cours ..." visible="false" wrappingWidth="187.0048828125">
                <font>
                   <Font size="18.0" />

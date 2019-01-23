@@ -38,6 +38,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import views.export.ExportController;
 import views.option.OptionController;
+import views.report.ReportController;
 
 /**
  * FXML Controller class
@@ -166,6 +167,20 @@ public class MainController implements Initializable {
     }
 
     @FXML
+    private void onReport(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/report.fxml"));
+        Parent root1 = (Parent) loader.load();
+        ReportController controller = loader.<ReportController>getController();
+        controller.initData(cnx);
+        Stage primaryStage = new Stage();
+        Scene scene = new Scene(root1);
+        scene.getStylesheets().add("styles/main.css");
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Rapport");
+        primaryStage.show();
+    }
+
+    @FXML
     private void onConnection(ActionEvent event) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("fxml/connection.fxml"));
         Parent root = (Parent) fxmlLoader.load();
@@ -179,7 +194,7 @@ public class MainController implements Initializable {
         alert.setOnCloseRequest((e) -> {
             try {
                 if (!controller.isServer()) {
-                    new SQLConnection(controller.getFileString(), "SQLite", controller.isBinary());
+                    cnx = new SQLConnection(controller.getFileString(), "SQLite", controller.isBinary());
                 }
                 schema = new SQLSchema();
                 tables = schema.getTablesAsTablesView();

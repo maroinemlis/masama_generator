@@ -5,6 +5,7 @@
  */
 package controllers.connection;
 
+import alert.Alerts;
 import beans.SQLSchema;
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXComboBox;
@@ -52,15 +53,9 @@ public class ConnectionController implements Initializable {
     private AnchorPane auth;
     @FXML
     private JFXTextField url;
-
-    private String fileString;
-    private static Path filePath;
     @FXML
     private JFXTextField path;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         driver.getItems().addAll("SQLite", "mySQL", "Oracle", "SQLServer", "Derby");
@@ -82,57 +77,30 @@ public class ConnectionController implements Initializable {
     private void onChose(ActionEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
         if (r2.isSelected()) {
-            fileChooser.setTitle("Choisir un fichier sql binaire");
-
+            fileChooser.setTitle("Choisir un fichier SQL binaire");
         } else if (r3.isSelected()) {
-            fileChooser.setTitle("Choisir un script sql");
+            fileChooser.setTitle("Choisir un script SQL");
         }
         File fileUrl = fileChooser.showOpenDialog(primaryStage);
-        this.fileString = fileUrl.getAbsolutePath();
-        filePath = fileUrl.toPath();
-        path.setText(fileString);
+        path.setText(fileUrl.getAbsolutePath());
     }
 
     @FXML
-    private void onConnect(ActionEvent event) throws Exception {
-        SQLConnection.getInstance().connect(fileString, "SQLite", isBinary());
-        SQLSchema.getInstance().constructSchema();
+    private void onConnect(ActionEvent event) {
+        try {
+            if (r1.isSelected()) {
+                SQLConnection.getInstance().connect(path.getText(), user.getText(), password.getText(), getCnxType());
+            } else {
+                SQLConnection.getInstance().connect(path.getText(), getCnxType(), r2.isSelected());
+            }
+            SQLSchema.getInstance().constructSchema();
+
+        } catch (Exception e) {
+            Alerts.error(e);
+        }
     }
 
-    public String getFileString() {
-        return fileString;
-    }
-
-    public Path getFilePath() {
-        return filePath;
-    }
-
-    public String getCnxType() {
+    private String getCnxType() {
         return driver.getSelectionModel().getSelectedItem();
     }
-
-    public boolean getIsFile() {
-        return !r1.isSelected();
-    }
-
-    public boolean isBinary() {
-        return r2.isSelected();
-    }
-
-    public boolean isServer() {
-        return r1.isSelected();
-    }
-
-    public String getURL() {
-        return url.getText();
-    }
-
-    public String getUser() {
-        return user.getText();
-    }
-
-    public String getPassword() {
-        return password.getText();
-    }
-
 }

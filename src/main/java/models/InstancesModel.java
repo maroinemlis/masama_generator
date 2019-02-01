@@ -1,4 +1,4 @@
-package db.models;
+package models;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import java.util.List;

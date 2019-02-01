@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db.connection;
+package connection;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -15,7 +15,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import views.alertMeg.AlertExeption;
 
 /**
  * An object represent an SQL Connection, it serves to get the meta data infos
@@ -60,12 +59,8 @@ public final class SQLConnection {
             for (String query : queries) {
                 stm.executeUpdate(query);
             }
-        } catch (IOException e) {
-        } catch (SQLException ex) {
-            System.out.println("db.connection.SQLConnection.executeSQLFile()");
-            AlertExeption alertExeption = new AlertExeption(ex.getMessage());
-            alertExeption.showStandarAlert();
-
+        } catch (IOException | SQLException e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -188,10 +183,7 @@ public final class SQLConnection {
             rs = stmt.executeQuery(query);
         }
         conn.commit();
-        //System.out.println(rs);
-        //while (rs.next()) {
-        //  System.out.println("aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbb" + rs.getString("title"));
-        //}
+
     }
 
     public void displayUpdate(String query, Integer valPourc) throws ClassNotFoundException, SQLException {

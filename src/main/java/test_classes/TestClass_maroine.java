@@ -5,9 +5,8 @@
  */
 package test_classes;
 
-import db.bean.SQLSchema;
-import db.connection.SQLConnection;
-import static db.validation.PreCondetion.CHECKED_TRUE;
+import bean.SQLSchema;
+import connection.SQLConnection;
 
 /**
  *
@@ -18,21 +17,16 @@ public class TestClass_maroine {
     SQLSchema sqlSchema;
 
     public void main() throws Exception {
-
         SQLConnection cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql", "SQLite", false);
-        sqlSchema = new SQLSchema();
-
-        sqlSchema.getTables().get(0).setHowMuch(3);
-        System.out.println("end");
-
-        long startTime = System.nanoTime();
+        sqlSchema = SQLSchema.getInstance();
+        sqlSchema.constructSchema();
+        //sqlSchema.getTables().forEach(t -> t.setHowMuch(10));
+        sqlSchema.getTables().get(0).setHowMuch(5);
+        sqlSchema.getTables().get(1).setHowMuch(12);
 
         sqlSchema.startToGenerateInstances();
 
-        long elapsedTime = System.nanoTime() - startTime;
-
-        System.out.println("Total execution time to create 1000K objects in Java in millis: "
-                + elapsedTime / 1000000);
+        sqlSchema.getTables().forEach(t -> t.show());
 
     }
 

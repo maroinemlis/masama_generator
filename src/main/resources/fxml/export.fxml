@@ -9,43 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="375.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="views.export.ExportController">
-   <children>
-      <Label layoutX="46.0" layoutY="54.0" text="Type d'export">
-         <font>
-            <Font size="14.0" />
-         </font>
-         <padding>
-            <Insets bottom="20.0" />
-         </padding>
-      </Label>
-      <JFXRadioButton fx:id="json" layoutX="46.0" layoutY="110.0" text="Script Json">
-         <padding>
-            <Insets bottom="20.0" />
-         </padding>
-         <toggleGroup>
-            <ToggleGroup fx:id="exportSave" />
-         </toggleGroup>
-      </JFXRadioButton>
-      <JFXRadioButton layoutX="46.0" layoutY="170.0" text="Script XML" toggleGroup="$exportSave" fx:id="xml">
-         <padding>
-            <Insets bottom="20.0" />
-         </padding>
-      </JFXRadioButton>
-      <JFXRadioButton fx:id="sql" layoutX="47.0" layoutY="230.0" text="Script SQL" toggleGroup="$exportSave">
-         <padding>
-            <Insets bottom="20.0" />
-         </padding>
-      </JFXRadioButton>
-      <JFXButton fx:id="cancel" layoutX="53.0" layoutY="287.0" onAction="#onCancel" prefHeight="35.0" prefWidth="73.0" ripplerFill="#d04020" text="Cancel">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </JFXButton>
-      <JFXButton fx:id="enregistrer" layoutX="169.0" layoutY="287.0" onAction="#onSave" prefHeight="35.0" prefWidth="104.0" ripplerFill="#2bab53" text="Enregistrer">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </JFXButton>
-   </children>
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="375.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171"
+            fx:controller="controllers.tableview.TableViewController">
+
 </AnchorPane>

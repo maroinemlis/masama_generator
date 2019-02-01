@@ -1,17 +1,15 @@
-package db.bean;
+package bean;
 
-import db.utils.BlobDataFaker;
-import db.utils.BooleanDataFaker;
-import db.utils.DataFaker;
-import db.utils.DateDataFaker;
-import db.utils.IntegerDataFaker;
-import db.utils.RealDataFaker;
-import db.utils.ShemaUtil;
-import db.utils.TextDataFaker;
+import faker.BlobDataFaker;
+import faker.BooleanDataFaker;
+import faker.DataFaker;
+import faker.DateDataFaker;
+import faker.IntegerDataFaker;
+import faker.RealDataFaker;
+import faker.TextDataFaker;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * An object represent a column of SQL table
@@ -26,50 +24,61 @@ public class Attribute implements Serializable {
     private boolean isUnique;
     private boolean isNullable;
     private List<String> instances = new ArrayList<>();
-    private List<String> preInstances = new ArrayList<>();
-    private boolean isTakePreData = false;
+
     private DataFaker dataFaker;
     private List<Attribute> referencesMe = new ArrayList<>();
-    public List<Attribute> references = new ArrayList<>();
+    private List<Attribute> references = new ArrayList<>();
+    private Table table;
+    private boolean isCircular = false;
+    private boolean isGenerated = false;
+
+    @Override
+    public boolean equals(Object o) {
+        return ((Attribute) o).name.equals(name);
+    }
+
+    public boolean isGenerated() {
+        return isGenerated;
+    }
+
+    public void isGenerated(boolean isGenerated) {
+        this.isGenerated = isGenerated;
+    }
+
+    public boolean isCircular() {
+        return isCircular;
+    }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public void testIfCircular(List<Attribute> accumulator, Attribute _this) {
+
+        for (Attribute a : references) {
+            if (accumulator.contains(a)) {
+                return;
+            }
+            if (a == _this) {
+                _this.isCircular = true;
+                return;
+            } else {
+                accumulator.add(a);
+                a.testIfCircular(accumulator, _this);
+            }
+        }
+    }
 
     public List<Attribute> getReferences() {
         return references;
     }
 
-    public boolean getIsIsTakePreData() {
-        return isTakePreData;
-    }
-
-    public void setIsIsTakePreData(boolean isTakePreData) {
-        this.isTakePreData = isTakePreData;
-    }
-
-    public void setPreInstances(List<String> preInstances) {
-        this.preInstances = preInstances;
-    }
-
-    public List<String> getPreInstances() {
-        return preInstances;
-    }
-
-    /**
-     * get the list of attributes that make references to the current attribute
-     * of the table
-     *
-     * @return List<Attribute>
-     */
     public List<Attribute> getReferencesMe() {
         return referencesMe;
     }
 
-    /**
-     * Constructor for class Attribute
-     *
-     * @param attributeName The name of the attribute
-     * @param dataType The type of the attribute
-     * @param nullable Specify if the attribute is nullable
-     */
-    public Attribute(String attributeName, String dataType, String nullable) {
+    public Attribute(Table table, String attributeName, String dataType, String nullable) {
+        this.table = table;
         this.name = attributeName;
         this.dataType = dataType;
         this.isPrimary = false;
@@ -138,97 +147,53 @@ public class Attribute implements Serializable {
         this.dataType = dataType;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return name.equals(((Attribute) o).name);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.name.hashCode();
-    }
-
-    /**
-     * generate the attributes that do not have references
-     *
-     */
     public void startToGenerateRootValues() {
         dataFaker.values();
-        for (Attribute reference : this.getReferencesMe()) {
-            startToGenerateWhoReferenceMe();
+        isGenerated = true;
+    }
+
+    public void startToGenerateWhoReference() {
+        for (Attribute a : references) {
+            if (!a.isGenerated) {
+                a.instances.addAll(instances);
+                a.isGenerated = true;
+                a.startToGenerateWhoReference();
+                a.startToGenerateWhoReferenceMe();
+
+            }
         }
     }
 
     public void startToGenerateWhoReferenceMe() {
-        referencesMe.forEach(ref -> {
-            if (!ShemaUtil.isCirculer(ref)) {
-                int diffrence = ref.dataFaker.getHowMuch() - ref.getInstances().size();
-                if (diffrence > 0) {
-                    ref.getInstances().addAll(instances.stream().limit(diffrence).collect(Collectors.toList()));
-                }
+        for (Attribute a : referencesMe) {
+            if (!a.isGenerated) {
+                a.instances.addAll(instances);
+                a.isGenerated = true;
+                a.startToGenerateWhoReferenceMe();
+                a.startToGenerateWhoReference();
             }
-            if (!ref.getInstances().isEmpty()) {
-                System.out.println("att Empty == " + this.getName() + "  " + instances);
-                this.instances = ref.getInstances();
-            } else {
-                System.out.println("att Empty == " + this.getName() + "  " + instances);
-                ShemaUtil.generateAllCirculer(ref, instances);
-            }
-
-        });
-        referencesMe.forEach(ref -> {
-            if (!ShemaUtil.isCirculer(ref)) {
-                ref.startToGenerateWhoReferenceMe();
-            }
-        });
-
-    }
-
-    void fixInstancesHowMuch() {
-
-        if (ShemaUtil.isCirculerAndEmpty(this)) {
-            dataFaker.values();
-            //System.out.println("attribute " + this.getName());
-            referencesMe.forEach(ref -> {
-                if (!ref.getInstances().isEmpty()) {
-                    ref.setInstances(instances);
-                }
-            });
-            return;
-        } else {
-            if (ShemaUtil.isCirculer(this)) {
-                generateInstanceRecurcive(this);
-                instances = instances.stream()
-                        .limit(dataFaker.getHowMuch())
-                        .collect(Collectors.toList());
-                return;
-            }
-        }
-        int rest = dataFaker.getHowMuch() - instances.size();
-        if (rest > 0) {
-            int restDiv = rest / instances.size();
-            for (int i = 0; i < restDiv; i++) {
-                instances.addAll(instances.stream().limit(instances.size()).collect(Collectors.toList()));
-            }
-            rest = dataFaker.getHowMuch() - instances.size();
-            instances.addAll(instances.stream().limit(rest).collect(Collectors.toList()));
-        } else {
-            instances = instances.stream()
-                    .limit(dataFaker.getHowMuch())
-                    .collect(Collectors.toList());
-        }
-        //todo : to top
-        if (this.references.size() > 1) {
-            ShemaUtil.generateSameValueToReferences(this);
-            return;
         }
     }
 
-    private void generateInstanceRecurcive(Attribute attribute) {
-        System.out.println("attribute " + attribute.getName());
-        instances.addAll(attribute.getReferences().get(0).instances);
-        if (instances.isEmpty()) {
-            generateInstanceRecurcive(attribute.getReferences().get(0));
+    public void fixInstances() {
+        if (table.getHowMuch() == instances.size()) {
+            return;
+        }
+        if (isPrimary || isUnique) {
+            instances = instances.subList(0, table.getHowMuch());
+        } else {
+            List<String> newInstances = new ArrayList<>();
+            int rest = table.getHowMuch();
+            if (rest > 0) {
+                int restDiv = rest / instances.size();
+                for (int i = 0; i < restDiv; i++) {
+                    newInstances.addAll(instances);
+                    rest = rest - instances.size();
+                }
+                newInstances.addAll(instances.subList(0, rest));
+                instances = newInstances;
+            }
+
         }
     }
 

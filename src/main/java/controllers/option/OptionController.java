@@ -1,37 +1,29 @@
-package views.option;
+package controllers.option;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import bean.SQLSchema;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
-import db.utils.DateDataFaker;
-import db.utils.IntegerDataFaker;
-import db.utils.TextDataFaker;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import views.main.MainController;
 
 /**
  * FXML Controller class
@@ -69,10 +61,10 @@ public class OptionController implements Initializable {
         saveConfig();
         Stage stage = (Stage) nbLigne.getScene().getWindow();
         stage.close();
-        
+
     }
-    
-    public void saveConfig(){
+
+    public void saveConfig() {
         JSONObject obj = new JSONObject();
 
         obj.put("nbLigne", nbLigne.getText());
@@ -90,29 +82,27 @@ public class OptionController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(MainController.schema!=null){
-            MainController.schema.getTables().forEach(t -> t.setHowMuch(Integer.parseInt((String)obj.get("nbLigne"))));
-            MainController.schema.getTables().forEach(t -> 
-                    t.getAttributes().forEach(at ->{
-                        switch (at.getDataType()) {
-                            case "TEXT":
-                                at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("longMin")), toString().valueOf(obj.get("longMax")), Integer.parseInt((String)obj.get("pNull")));
-                                break;
-                            case "DATE":
-                                at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("dateMin")), toString().valueOf(obj.get("dateMax")), Integer.parseInt((String)obj.get("pNull")));
-                                break;
-                            case "INT":
-                            case "INTEGER":
-                            case "DOUBLE":
-                            case "FLOAT":
-                                at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("vMin")), toString().valueOf(obj.get("vMax")), Integer.parseInt((String)obj.get("pNull")));
-                                break;
-                        }
-                    }));
+        SQLSchema.getInstance().getTables().forEach(t -> t.setHowMuch(Integer.parseInt((String) obj.get("nbLigne"))));
+        SQLSchema.getInstance().getTables().forEach(t
+                -> t.getAttributes().forEach(at -> {
+                    switch (at.getDataType()) {
+                        case "TEXT":
+                            at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("longMin")), toString().valueOf(obj.get("longMax")), Integer.parseInt((String) obj.get("pNull")));
+                            break;
+                        case "DATE":
+                            at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("dateMin")), toString().valueOf(obj.get("dateMax")), Integer.parseInt((String) obj.get("pNull")));
+                            break;
+                        case "INT":
+                        case "INTEGER":
+                        case "DOUBLE":
+                        case "FLOAT":
+                            at.getDataFaker().setFromToNullsRate(toString().valueOf(obj.get("vMin")), toString().valueOf(obj.get("vMax")), Integer.parseInt((String) obj.get("pNull")));
+                            break;
+                    }
+                }));
     }
-    }
-    
-    public void readConfig(){
+
+    public void readConfig() {
         JSONParser parser = new JSONParser();
         try {
 
@@ -144,25 +134,27 @@ public class OptionController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     // force the field to be numeric only
-    public void justNumber(JFXTextField textField){
+    public void justNumber(JFXTextField textField) {
         textField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, 
-                String newValue) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                    String newValue) {
                 if (!newValue.matches("\\d*")) {
                     textField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         readConfig();
-        justNumber(nbLigne); justNumber(pNull);
-        justNumber(vMax); justNumber(vMin);
+        justNumber(nbLigne);
+        justNumber(pNull);
+        justNumber(vMax);
+        justNumber(vMin);
     }
 
 }

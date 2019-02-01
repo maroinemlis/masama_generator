@@ -1,17 +1,16 @@
-package views.export;
+package controllers.export;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import bean.SQLSchema;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
@@ -19,11 +18,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,9 +28,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
-import static views.main.LuncherApp.primaryStage;
-import static views.main.MainController.schema;
-import views.main.TableView;
+import static controllers.main.LuncherApp.primaryStage;
+import controllers.tableview.TableView;
 
 /**
  * FXML Controller class
@@ -74,17 +69,15 @@ public class ExportController implements Initializable {
 
     @FXML
     void onSave(ActionEvent event) throws Exception {
-
         String selected;
         if (sql.isSelected()) {
             exportOnSql();
         } else if (json.isSelected()) {
-            //exportOnJson();
+            exportOnJson();
         } else {
             exportOnXml();
         }
         onCancel(event);
-
     }
 
     /**
@@ -101,7 +94,6 @@ public class ExportController implements Initializable {
     }
 
     private void exportOnSql() throws FileNotFoundException, IOException, Exception {
-        String destination = "bin.txt";
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le répertoire d'enregistrement");
         fileChooser.setInitialDirectory(new File("."));
@@ -115,15 +107,12 @@ public class ExportController implements Initializable {
                 if (n == 1) {
                     n++;
                     String insert = "\nINSERT INTO " + t.get().getTableName() + " VALUES (";
-
                     int i = 0;
                     for (; i < line.size() - 1; i++) {
                         insert += line.get(i).get() + ", ";
                     }
                     insert += line.get(i).get() + ");";
-                    //Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-
-                    Files.write(Paths.get(destination), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                    Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
                 } else {
                     String insert = "INSERT INTO " + t.get().getTableName() + " VALUES (";
@@ -132,10 +121,7 @@ public class ExportController implements Initializable {
                         insert += line.get(i).get() + ", ";
                     }
                     insert += line.get(i).get() + ");";
-                    //Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-
-                    Files.write(Paths.get(destination), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-
+                    Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 }
 
             }
@@ -144,7 +130,6 @@ public class ExportController implements Initializable {
     }
 
     private void exportOnXml() throws Exception {
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le répertoire d'enregistrement");
         fileChooser.setInitialDirectory(new File("."));
@@ -156,7 +141,7 @@ public class ExportController implements Initializable {
                 int i = 0;
                 String columnName = "";
                 for (; i < line.size(); i++) {
-                    columnName = schema.getTable(t.get().getTableName()).getAttributes().get(i).getName();
+                    columnName = SQLSchema.getInstance().getTable(t.get().getTableName()).getAttributes().get(i).getName();
                     insert += "<" + columnName + "> ";
                     insert += line.get(i).get().replace("'", "");
                     insert += " </" + columnName + ">" + System.lineSeparator();
@@ -173,8 +158,8 @@ public class ExportController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le répertoire d'enregistrement");
         fileChooser.setInitialDirectory(new File("."));
+        File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
         JSONObject obj = new JSONObject();
-        // File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
         for (TableView t : tables) {
             List<List<StringProperty>> lines = t.getLines();
             for (List<StringProperty> line : lines) {
@@ -187,14 +172,8 @@ public class ExportController implements Initializable {
                 }
                 obj.put("", "}");
 
-                // Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                Files.write(Paths.get(showSaveDialog.getAbsolutePath()), obj.toJSONString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
-        }
-
-        try (FileWriter file = new FileWriter("C:\\Users\\abidi asma\\Desktop\\ProjetLongUPEC\\Projet\\masama_generator\\export.json")) {
-            file.write(obj.toJSONString());
-//            System.out.println("Successfully Copied JSON Object to File...");
-//            System.out.println("\nJSON Object: " + obj);
         }
 
     }

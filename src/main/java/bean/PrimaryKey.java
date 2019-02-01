@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db.bean;
+package bean;
 
-import db.utils.StringUtil;
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,9 +14,9 @@ import java.util.List;
  *
  * @author Maroine
  */
-public class PrimaryKey extends Constraint implements Serializable {
+public class PrimaryKey implements Serializable {
 
-    private List<Attribute> tuple = new LinkedList();
+    private List<Attribute> tuple = new ArrayList<>();
 
     /**
      * Get the tuple Primary key
@@ -44,7 +43,4 @@ public class PrimaryKey extends Constraint implements Serializable {
      *
      * @return String
      */
-    public String toString() {
-        return "PRIMARY KEY" + StringUtil.tupelToString(tuple);
-    }
 }

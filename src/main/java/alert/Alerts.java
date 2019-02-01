@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package views.main;
+package alert;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -14,11 +14,10 @@ import javafx.scene.control.Alert.AlertType;
  */
 public class Alerts {
 
-    public static void error() {
+    public static void error(Throwable e) {
         Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Erreur d'une action");
-        alert.setHeaderText("...");
-        alert.setContentText("Erreur d'une action...");
+        alert.setTitle("Error Dialog");
+        alert.setContentText(e.toString());
         alert.showAndWait();
     }
 }

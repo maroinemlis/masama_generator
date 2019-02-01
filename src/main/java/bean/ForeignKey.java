@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db.bean;
+package bean;
 
 import java.util.List;
-import static db.utils.StringUtil.tupelToString;
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * An object represent a foreign key constraint for a table. constraint foreign
@@ -18,9 +17,9 @@ import java.util.LinkedList;
  */
 public class ForeignKey implements Serializable {
 
-    private List<Attribute> fkTuple = new LinkedList<>();
+    private List<Attribute> fkTuple = new ArrayList<>();
     private Table references;
-    private List<Attribute> pkTuple = new LinkedList<>();
+    private List<Attribute> pkTuple = new ArrayList<>();
     private int foreignKeyNumber;
 
     /**
@@ -85,8 +84,4 @@ public class ForeignKey implements Serializable {
         return references;
     }
 
-    @Override
-    public String toString() {
-        return "FOREIGN KEY" + tupelToString(fkTuple) + " REFERENCES " + references.getTableName() + "" + tupelToString(pkTuple);
-    }
 }

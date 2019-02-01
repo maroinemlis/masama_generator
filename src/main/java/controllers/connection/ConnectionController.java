@@ -3,85 +3,149 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package views.connection;
+package controllers.connection;
 
-import com.jfoenix.controls.JFXButton;
+import bean.SQLSchema;
+import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextField;
+import connection.SQLConnection;
+import controllers.helper.HelperControllers;
+import static controllers.main.LuncherApp.primaryStage;
+import controllers.main.MainController;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 
 /**
+ * FXML Controller class
  *
- * @author acer
+ * @author Maroine
  */
-public class ConnexionController implements Initializable {
+public class ConnectionController implements Initializable {
 
     @FXML
-    private VBox typeCnx;
+    private ToggleGroup cnxType;
     @FXML
-    private Label labelCnx;
+    private JFXComboBox<String> driver;
+    @FXML
+    private JFXTextField user;
+    @FXML
+    private JFXTextField password;
     @FXML
     private JFXRadioButton r1;
-    @FXML
-    private ToggleGroup group;
     @FXML
     private JFXRadioButton r2;
     @FXML
     private JFXRadioButton r3;
     @FXML
-    private VBox container;
+    private HBox file;
     @FXML
-    private JFXButton cnx;
+    private AnchorPane auth;
+    @FXML
+    private JFXTextField url;
 
+    private SingleSelectionModel<String> driverString;
+    private String fileString;
+    private static Path filePath;
     @FXML
-    private void onConnect(ActionEvent event) {
+    private JFXTextField path;
+    private JFXAlert alert;
+
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        driver.getItems().addAll("SQLite", "mySQL", "Oracle", "SQLServer", "Derby");
+        cnxType.selectedToggleProperty().addListener(((observable, oldValue, new_toggle) -> {
+            if (r1.isSelected()) {
+                auth.setVisible(true);
+                file.setVisible(false);
+            } else if (r2.isSelected()) {
+                auth.setVisible(false);
+                file.setVisible(true);
+            } else {
+                auth.setVisible(false);
+                file.setVisible(true);
+
+            }
+        }));
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        Parent roott = null;
-        try {
-            roott = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/authentification.fxml"));
-        } catch (IOException ex) {
-            Logger.getLogger(ConnexionController.class.getName()).log(Level.SEVERE, null, ex);
+    @FXML
+    private void onChose(ActionEvent event) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        if (r2.isSelected()) {
+            fileChooser.setTitle("Choisir un fichier sql binaire");
+
+        } else if (r3.isSelected()) {
+            fileChooser.setTitle("Choisir un script sql");
         }
-        container.getChildren().clear();
-        container.getChildren().add(roott);
-        group.selectedToggleProperty().addListener(((observable, oldValue, new_toggle) -> {
-            Parent root = null;
-            try {
-                if (r1.isSelected()) {
-                    root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/authentification.fxml"));
+        File fileUrl = fileChooser.showOpenDialog(primaryStage);
+        this.fileString = fileUrl.getAbsolutePath();
+        filePath = fileUrl.toPath();
+        path.setText(fileString);
+    }
 
-                } else if (r2.isSelected()) {
-                    root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/fichierDB.fxml"));
+    @FXML
+    private void onConnect(ActionEvent event) throws Exception {
+        new SQLConnection(fileString, "SQLite", isBinary());
+        SQLSchema.getInstance().constructSchema();
+        MainController component = HelperControllers.<MainController>getController(this, "fxml/main.fxml");
+        component.tables = SQLSchema.getInstance().getTablesAsTablesView();
+        component.currentTable = component.tables.get(0);
+        component.createTablesView();
+    }
 
-                } else if (r3.isSelected()) {
-                    root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/fichierSQL.fxml"));
+    public String getFileString() {
+        return fileString;
+    }
 
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(ConnexionController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            container.getChildren().clear();
-            container.getChildren().add(root);
-        }));
+    public Path getFilePath() {
+        return filePath;
+    }
 
+    public String getCnxType() {
+        return driver.getSelectionModel().getSelectedItem();
+    }
+
+    public boolean getIsFile() {
+        return !r1.isSelected();
+    }
+
+    public boolean isBinary() {
+        return r2.isSelected();
     }
 
     public boolean isServer() {
         return r1.isSelected();
     }
 
+    public String getURL() {
+        return url.getText();
+    }
+
+    public String getUser() {
+        return user.getText();
+    }
+
+    public String getPassword() {
+        return password.getText();
+    }
+
+    public void setAlert(JFXAlert alert) {
+        this.alert = alert;
+    }
 }

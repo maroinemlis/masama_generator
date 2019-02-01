@@ -3,16 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package views.main;
+package controllers.tableview;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
-import db.bean.Attribute;
-import db.bean.Table;
-import db.models.AttributeModel;
-import db.models.InstancesModel;
+import bean.Attribute;
+import bean.Table;
+import com.jfoenix.controls.JFXListView;
+import controllers.main.LuncherApp;
+import models.AttributeModel;
+import models.InstancesModel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +27,16 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class TableView implements Serializable {
 
     private Table table;
     private JFXTreeTableView<AttributeModel> tableView = null;
     private JFXTreeTableView<InstancesModel> insertsView = null;
-    ObservableList<InstancesModel> observablesInserts = FXCollections.observableArrayList();
-    ObservableList<AttributeModel> observablesAttributes = FXCollections.observableArrayList();
-    int howMuchWeDisplayed = 0;
+    private ObservableList<InstancesModel> observablesInserts = FXCollections.observableArrayList();
+    private ObservableList<AttributeModel> observablesAttributes = FXCollections.observableArrayList();
+    private int howMuchWeDisplayed = 0;
 
     public List<List<StringProperty>> getLines() {
         return observablesInserts.stream().map(t -> t.getInstances()).collect(Collectors.toList());
@@ -118,7 +120,7 @@ public class TableView implements Serializable {
         JFXTreeTableColumn<AttributeModel, ?> specificType = new JFXTreeTableColumn<>("Spécificité");
         JFXTreeTableColumn<AttributeModel, ?> from = new JFXTreeTableColumn<>("Valeur min");
         JFXTreeTableColumn<AttributeModel, ?> to = new JFXTreeTableColumn<>("Valeur max");
-        //JFXTreeTableColumn<AttributeModel, ?> references = new JFXTreeTableColumn<>("Référence");
+        JFXTreeTableColumn<AttributeModel, JFXListView> references = new JFXTreeTableColumn<>("Référence(s)");
         checked.setCellValueFactory(new TreeItemPropertyValueFactory("checked"));
         name.setCellValueFactory(new TreeItemPropertyValueFactory("name"));
         type.setCellValueFactory(new TreeItemPropertyValueFactory("dataType"));
@@ -129,9 +131,9 @@ public class TableView implements Serializable {
         specificType.setCellValueFactory(new TreeItemPropertyValueFactory("specificType"));
         from.setCellValueFactory(new TreeItemPropertyValueFactory("from"));
         to.setCellValueFactory(new TreeItemPropertyValueFactory("to"));
-        //references.setCellValueFactory(new TreeItemPropertyValueFactory("reference"));
+        references.setCellValueFactory(new TreeItemPropertyValueFactory("references"));
 
-        treeTableView.getColumns().addAll(checked, name, type, pk, unique, nullable, generatorType, specificType, from, to/*, references*/);
+        treeTableView.getColumns().addAll(checked, name, type, pk, unique, nullable, generatorType, specificType, from, to, references);
         List<AttributeModel> collect = table.getAttributes().stream().
                 map(att -> new AttributeModel(att, table)).
                 collect(Collectors.toList());

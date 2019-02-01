@@ -11,63 +11,63 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.option.OptionController">
-   <children>
-      <TabPane layoutY="1.0" prefHeight="352.0" prefWidth="602.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="Conf. Table">
-               <content>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <Label layoutX="99.0" layoutY="77.0" text="Nombre de ligne" />
-                        <Label layoutX="99.0" layoutY="137.0" text="Pourcentage des valeurs nulls" />
-                        <JFXTextField fx:id="nbLigne" layoutX="308.0" layoutY="66.0" />
-                        <JFXTextField fx:id="pNull" layoutX="308.0" layoutY="125.0" />
-                     </children>
-                  </Pane>
-               </content>
-            </Tab>
-          <Tab text="Conf. Nombre">
-               <content>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <Label layoutX="107.0" layoutY="73.0" text="Valeur minimale" />
-                        <Label layoutX="106.0" layoutY="137.0" text="Valeur maximale" />
-                        <JFXTextField fx:id="vMin" layoutX="265.0" layoutY="62.0" />
-                        <JFXTextField fx:id="vMax" layoutX="265.0" layoutY="124.0" />
-                     </children>
-                  </Pane>
-               </content>
-            </Tab>
-            <Tab text="Conf. Texte">
-               <content>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <JFXSlider fx:id="longMin" layoutX="268.0" layoutY="64.0" max="1000.0" prefHeight="14.0" prefWidth="224.0" />
-                        <Label layoutX="113.0" layoutY="62.0" text="Longueur minimale" />
-                        <Label layoutX="112.0" layoutY="134.0" text="Longueur maximale" />
-                        <Label layoutX="111.0" layoutY="200.0" text="Expression réguliére" />
-                        <JFXSlider fx:id="longMax" layoutX="268.0" layoutY="136.0" max="1000.0" prefHeight="14.0" prefWidth="224.0" />
-                        <JFXTextField fx:id="expR" layoutX="269.0" layoutY="196.0" prefHeight="25.0" prefWidth="221.0" />
-                     </children>
-                  </Pane>
-               </content>
-            </Tab>
-            <Tab text="Conf. Date">
-               <content>
-                  <Pane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <Label layoutX="85.0" layoutY="76.0" text="Date minimale" />
-                        <Label layoutX="85.0" layoutY="141.0" text="Date maximale" />
-                        <JFXDatePicker fx:id="dateMin" layoutX="248.0" layoutY="60.0" />
-                        <JFXDatePicker fx:id="dateMax" layoutX="248.0" layoutY="122.0" />
-                     </children>
-                  </Pane>
-               </content>
-            </Tab>
-        </tabs>
-      </TabPane>
-      <Button layoutX="16.0" layoutY="359.0" mnemonicParsing="false" onAction="#onConfig" prefHeight="31.0" prefWidth="570.0" text="Enregistrer Configuration" />
-      <Separator layoutX="-1.0" layoutY="345.0" prefHeight="10.0" prefWidth="602.0" />
-   </children>
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.option.OptionController">
+    <children>
+        <TabPane layoutY="1.0" prefHeight="352.0" prefWidth="602.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Conf. Table">
+                    <content>
+                        <Pane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <Label layoutX="99.0" layoutY="77.0" text="Nombre de ligne" />
+                                <Label layoutX="99.0" layoutY="137.0" text="Pourcentage des valeurs nulls" />
+                                <JFXTextField fx:id="nbLigne" layoutX="308.0" layoutY="66.0" />
+                                <JFXTextField fx:id="pNull" layoutX="308.0" layoutY="125.0" />
+                            </children>
+                        </Pane>
+                    </content>
+                </Tab>
+                <Tab text="Conf. Nombre">
+                    <content>
+                        <Pane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <Label layoutX="107.0" layoutY="73.0" text="Valeur minimale" />
+                                <Label layoutX="106.0" layoutY="137.0" text="Valeur maximale" />
+                                <JFXTextField fx:id="vMin" layoutX="265.0" layoutY="62.0" />
+                                <JFXTextField fx:id="vMax" layoutX="265.0" layoutY="124.0" />
+                            </children>
+                        </Pane>
+                    </content>
+                </Tab>
+                <Tab text="Conf. Texte">
+                    <content>
+                        <Pane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <JFXSlider fx:id="longMin" layoutX="268.0" layoutY="64.0" max="1000.0" prefHeight="14.0" prefWidth="224.0" />
+                                <Label layoutX="113.0" layoutY="62.0" text="Longueur minimale" />
+                                <Label layoutX="112.0" layoutY="134.0" text="Longueur maximale" />
+                                <Label layoutX="111.0" layoutY="200.0" text="Expression réguliére" />
+                                <JFXSlider fx:id="longMax" layoutX="268.0" layoutY="136.0" max="1000.0" prefHeight="14.0" prefWidth="224.0" />
+                                <JFXTextField fx:id="expR" layoutX="269.0" layoutY="196.0" prefHeight="25.0" prefWidth="221.0" />
+                            </children>
+                        </Pane>
+                    </content>
+                </Tab>
+                <Tab text="Conf. Date">
+                    <content>
+                        <Pane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <Label layoutX="85.0" layoutY="76.0" text="Date minimale" />
+                                <Label layoutX="85.0" layoutY="141.0" text="Date maximale" />
+                                <JFXDatePicker fx:id="dateMin" layoutX="248.0" layoutY="60.0" />
+                                <JFXDatePicker fx:id="dateMax" layoutX="248.0" layoutY="122.0" />
+                            </children>
+                        </Pane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+        <Button layoutX="16.0" layoutY="359.0" mnemonicParsing="false" onAction="#onConfig" prefHeight="31.0" prefWidth="570.0" text="Enregistrer Configuration" />
+        <Separator layoutX="-1.0" layoutY="345.0" prefHeight="10.0" prefWidth="602.0" />
+    </children>
 </AnchorPane>

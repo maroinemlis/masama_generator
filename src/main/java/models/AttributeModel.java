@@ -1,4 +1,4 @@
-package db.models;
+package models;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
@@ -6,10 +6,13 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import db.bean.Attribute;
-import db.bean.Table;
-import db.utils.Types;
+import bean.Attribute;
+import bean.Table;
+import com.jfoenix.controls.JFXListView;
+import faker.Types;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.scene.control.Control;
 
 /**
@@ -24,6 +27,8 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     private JFXCheckBox isNullable = null;
     private JFXComboBox generatorTypes = null;
     private JFXComboBox specificType = null;
+    private JFXComboBox<String> references = null;
+
     private Control from;
     private Control to;
     private JFXCheckBox checked;
@@ -77,6 +82,11 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
             isNullable.setSelected(true);
         }
         if (!attribute.getReferences().isEmpty()) {
+            references = new JFXComboBox<>();
+            List<String> collect = attribute.getReferences().stream().map(a -> a.getTable().getTableName() + "(" + a.getName() + ")").collect(Collectors.toList());
+            references.getItems().addAll(collect);
+        }
+        if (!attribute.getReferences().isEmpty() && !attribute.isCircular()) {
             return;
         }
         switch (attribute.getDataType()) {
@@ -155,6 +165,10 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 
     public Control getTo() {
         return to;
+    }
+
+    public JFXComboBox<String> getReferences() {
+        return references;
     }
 
     public void update() {

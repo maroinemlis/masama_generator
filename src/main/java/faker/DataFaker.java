@@ -1,7 +1,7 @@
 package faker;
 
 import com.github.javafaker.Faker;
-import bean.Attribute;
+import beans.Attribute;
 import static utils.Shared.faker;
 import java.io.Serializable;
 import java.util.List;

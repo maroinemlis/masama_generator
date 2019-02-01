@@ -5,15 +5,13 @@
  */
 package controllers.connection;
 
-import bean.SQLSchema;
+import beans.SQLSchema;
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import connection.SQLConnection;
-import controllers.helper.HelperControllers;
 import static controllers.main.LuncherApp.primaryStage;
-import controllers.main.MainController;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +20,6 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -56,12 +53,10 @@ public class ConnectionController implements Initializable {
     @FXML
     private JFXTextField url;
 
-    private SingleSelectionModel<String> driverString;
     private String fileString;
     private static Path filePath;
     @FXML
     private JFXTextField path;
-    private JFXAlert alert;
 
     /**
      * Initializes the controller class.
@@ -79,7 +74,6 @@ public class ConnectionController implements Initializable {
             } else {
                 auth.setVisible(false);
                 file.setVisible(true);
-
             }
         }));
     }
@@ -101,12 +95,8 @@ public class ConnectionController implements Initializable {
 
     @FXML
     private void onConnect(ActionEvent event) throws Exception {
-        new SQLConnection(fileString, "SQLite", isBinary());
+        SQLConnection.getInstance().connect(fileString, "SQLite", isBinary());
         SQLSchema.getInstance().constructSchema();
-        MainController component = HelperControllers.<MainController>getController(this, "fxml/main.fxml");
-        component.tables = SQLSchema.getInstance().getTablesAsTablesView();
-        component.currentTable = component.tables.get(0);
-        component.createTablesView();
     }
 
     public String getFileString() {
@@ -145,7 +135,4 @@ public class ConnectionController implements Initializable {
         return password.getText();
     }
 
-    public void setAlert(JFXAlert alert) {
-        this.alert = alert;
-    }
 }

@@ -5,7 +5,7 @@ import alert.Alerts;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
-import bean.SQLSchema;
+import beans.SQLSchema;
 import connection.SQLConnection;
 import static utils.FileUtil.readFileObject;
 import java.io.File;
@@ -24,15 +24,12 @@ import static controllers.main.LuncherApp.primaryStage;
 import static utils.FileUtil.writeObjectInFile;
 import java.io.IOException;
 import java.nio.file.Path;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 import controllers.helper.HelperControllers;
-import controllers.report.ReportController;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.scene.control.Tab;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -46,6 +43,8 @@ public class MainController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    @FXML
+    private Tab SchemaTab;
     @FXML
     private VBox rapportVBox;
     @FXML
@@ -99,8 +98,8 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            HelperControllers.addNodeToContainer(this, "fxml/connection.fxml", connectionVBox);
-            HelperControllers.addNodeToContainer(this, "fxml/report.fxml", rapportVBox);
+            HelperControllers.addNodeToContainer("connection.fxml", connectionVBox);
+            HelperControllers.addNodeToContainer("report.fxml", rapportVBox);
         } catch (Exception ex) {
             Alerts.error(ex);
         }
@@ -124,6 +123,15 @@ public class MainController implements Initializable {
                 howMuch.setText(currentTable.get().getHowMuch() + "");
                 nullsRate.setValue(currentTable.get().getNullsRate());
                 refrechInserts();
+            }
+        });
+
+        SchemaTab.setOnSelectionChanged(e -> {
+            if (SQLConnection.getInstance().isNewConnection()) {
+                tables = SQLSchema.getInstance().getTablesAsTablesView();
+                currentTable = tables.get(0);
+                createTablesView();
+                SQLConnection.getInstance().isNewConnection(false);
             }
         });
     }
@@ -155,7 +163,9 @@ public class MainController implements Initializable {
     @FXML
     private void onExport(ActionEvent event) {
         try {
-            HelperControllers.showControlller(this, "fxml/export.fxml", "Exporter");
+            HelperControllers.showControlller("export.fxml", "Exporter");
+            HelperControllers.showControlller("connection.fxml", "Connexion");
+
         } catch (IOException ex) {
             Alerts.error(ex);
         }
@@ -164,7 +174,7 @@ public class MainController implements Initializable {
     @FXML
     private void onConnection(ActionEvent event) {
         try {
-            HelperControllers.showControlller(this, "fxml/connection.fxml", "Connexion");
+            HelperControllers.showControlller("connection.fxml", "Connexion");
         } catch (Exception ex) {
             Alerts.error(ex);
         }
@@ -187,7 +197,7 @@ public class MainController implements Initializable {
     @FXML
     private void onOption(ActionEvent event) {
         try {
-            HelperControllers.showControlller(this, "fxml/option.fxml", "Configuration");
+            HelperControllers.showControlller("option.fxml", "Configuration");
         } catch (IOException ex) {
             Alerts.error(ex);
         }

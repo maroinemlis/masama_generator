@@ -5,7 +5,7 @@ package controllers.option;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import bean.SQLSchema;
+import beans.SQLSchema;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXSlider;

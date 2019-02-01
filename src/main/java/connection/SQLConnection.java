@@ -28,8 +28,25 @@ public final class SQLConnection {
     private String user = "";
     private String password = "";
     private Connection connection;
-    private static DatabaseMetaData bdMetaDate;
     private Statement stm;
+    private boolean isNewConnection = false;
+    private static DatabaseMetaData bdMetaDate;
+    private static SQLConnection singlotonSQLConnection = null;
+
+    public static SQLConnection getInstance() {
+        if (singlotonSQLConnection == null) {
+            singlotonSQLConnection = new SQLConnection();
+        }
+        return singlotonSQLConnection;
+    }
+
+    public boolean isNewConnection() {
+        return isNewConnection;
+    }
+
+    public void isNewConnection(boolean isNewConnection) {
+        this.isNewConnection = isNewConnection;
+    }
 
     /**
      * read file of sql shema
@@ -44,25 +61,16 @@ public final class SQLConnection {
         return new String(encoded, encoding);
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
     /**
      * execute the SQL file
      *
      * @param file
      */
-    public void executeSQLFile(String file) {
-        try {
-            String[] queries = readFile(file, StandardCharsets.UTF_8).split(";");
-            for (String query : queries) {
-                stm.executeUpdate(query);
-            }
-        } catch (IOException | SQLException e) {
-            System.out.println(e.getMessage());
+    public void executeSQLFile(String file) throws Exception {
+        String[] queries = readFile(file, StandardCharsets.UTF_8).split(";");
+        for (String query : queries) {
+            stm.executeUpdate(query);
         }
-
     }
 
     /**
@@ -79,6 +87,7 @@ public final class SQLConnection {
      * @throw exception
      */
     public void connect() throws Exception {
+        isNewConnection = true;
         connection = DriverManager.getConnection(url, user, password);
         bdMetaDate = connection.getMetaData();
         stm = connection.createStatement();
@@ -128,7 +137,7 @@ public final class SQLConnection {
      * @param password
      * @param sqlType
      */
-    public SQLConnection(String url, String user, String password, String sqlType) throws Exception {
+    public void connect(String url, String user, String password, String sqlType) throws Exception {
         setConnexionType(sqlType);
         this.user = user;
         this.password = password;
@@ -142,7 +151,7 @@ public final class SQLConnection {
      * @param sqlType
      * @param isBinaryFile
      */
-    public SQLConnection(String fileUrl, String sqlType, boolean isBinaryFile) throws Exception {
+    public void connect(String fileUrl, String sqlType, boolean isBinaryFile) throws Exception {
         if (isBinaryFile) {
             this.url = "//" + fileUrl;
         }

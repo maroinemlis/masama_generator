@@ -5,7 +5,7 @@ package controllers.export;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import bean.SQLSchema;
+import beans.SQLSchema;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import java.io.File;
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
@@ -56,9 +55,6 @@ public class ExportController implements Initializable {
     @FXML
     private JFXButton enregistrer;
 
-    Path path;
-    private List<TableView> tables;
-
     @FXML
     void onCancel(ActionEvent event) {
 
@@ -88,18 +84,14 @@ public class ExportController implements Initializable {
         // TODO
     }
 
-    public void initData(List<TableView> tables, Path path) {
-        this.tables = tables;
-        this.path = path;
-    }
-
     private void exportOnSql() throws FileNotFoundException, IOException, Exception {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le répertoire d'enregistrement");
         fileChooser.setInitialDirectory(new File("."));
         File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
         OutputStream output = new FileOutputStream(showSaveDialog.getAbsolutePath());
-        Files.copy(path, output);
+        Files.copy(showSaveDialog.toPath(), output);
+        List<TableView> tables = SQLSchema.getInstance().getTablesAsTablesView();
         for (TableView t : tables) {
             List<List<StringProperty>> lines = t.getLines();
             int n = 1;
@@ -134,6 +126,7 @@ public class ExportController implements Initializable {
         fileChooser.setTitle("Choisir le répertoire d'enregistrement");
         fileChooser.setInitialDirectory(new File("."));
         File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
+        List<TableView> tables = SQLSchema.getInstance().getTablesAsTablesView();
         for (TableView t : tables) {
             List<List<StringProperty>> lines = t.getLines();
             for (List<StringProperty> line : lines) {
@@ -160,6 +153,7 @@ public class ExportController implements Initializable {
         fileChooser.setInitialDirectory(new File("."));
         File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
         JSONObject obj = new JSONObject();
+        List<TableView> tables = SQLSchema.getInstance().getTablesAsTablesView();
         for (TableView t : tables) {
             List<List<StringProperty>> lines = t.getLines();
             for (List<StringProperty> line : lines) {

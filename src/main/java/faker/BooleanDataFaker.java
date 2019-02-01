@@ -5,7 +5,7 @@
  */
 package faker;
 
-import bean.Attribute;
+import beans.Attribute;
 
 /**
  *

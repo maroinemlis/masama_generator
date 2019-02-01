@@ -5,7 +5,7 @@
  */
 package faker;
 
-import bean.Attribute;
+import beans.Attribute;
 import static utils.Shared.faker;
 
 /**

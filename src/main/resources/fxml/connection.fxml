@@ -41,11 +41,11 @@
             </padding>
         </JFXRadioButton>
         <Label layoutX="36.0" layoutY="280" text="SQL SGBD" />
-        <JFXComboBox fx:id="driver" layoutX="158.0" layoutY="280" prefHeight="25.0" prefWidth="218.0"/>
+        <JFXComboBox fx:id="driver" layoutX="158.0" layoutY="280" prefHeight="25.0" prefWidth="218.0" />
         <HBox fx:id="file" layoutX="36.0" layoutY="330.0">
             <children>
                 <JFXTextField fx:id="path" disable="true" editable="false" prefHeight="27.0" prefWidth="627.0" text="C:/file.sql" />
-                <JFXButton ellipsisString="" onAction="#onChose" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10em;" text=" ">
+                <JFXButton ellipsisString="" onAction="#onChose" prefHeight="30.0" prefWidth="30.0" text=" ">
                     <graphic>
                         <FontAwesomeIconView fill="#6cacd7" glyphName="FILE" size="20" stroke="WHITE" strokeWidth="0.0" wrappingWidth="12.0" />
                     </graphic>

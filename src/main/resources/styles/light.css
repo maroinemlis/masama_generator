@@ -1,76 +1,341 @@
-*{
-    -fx-primary:rgb(244,244,244);
-    -fx-secondary:#499e65;
+* {
+    -fx-primary : #424242;
+    -fx-secondary : #64B5F6;
+    -fx-primarytext : #B2B2B2;
+    -fx-secondarytext : white;
+    -fx-blue: #1976D2;
+    -fx-red: #FF0000;
+    -fx-color-1:#1976D2;
 }
-.jfx-check-box {
-    -jfx-checked-color: -fx-secondary;
+.root {
+    -fx-background-color: -fx-primary;
+}
+.pane {
+    -fx-background-color: -fx-primary;
+}
+.split-pane{
+    -fx-background-color: -fx-primary;
+}
+.anchor-pane{
+    -fx-background-color: -fx-primary;
 }
 
-.jfx-toggle-button{
-    -jfx-checked-color: -fx-secondary;
+.glyph-icon
+{
+    -fx-fill: -fx-secondary;
 }
 
 .button{
+    -fx-text-fill: -fx-primarytext;
     -fx-background-color: -fx-primary;
-    -fx-font-size: 10pt;
-    -fx-background-radius:0px;
-}
-.jfx-button:hover{
-    -jfx-button-type: RAISED;
-}
-.normal-button{
-    -fx-background-color: -fx-secondary;
-    -fx-font-size: 10pt;
-    -fx-background-radius:0px;
-}
-.normal-button:hover{
-}
-.tree-table-view{
-    -fx-font-size: 12px;
+    -fx-font-size: 12pt;
 }
 
-.tree-table-row-cell {
-    -fx-cell-size: 30px;
+.button:hover, .button:focused{
+    -fx-background-color: derive(-fx-primary, 20%);
+    -fx-text-fill: -fx-primary;
 }
+
+.text-field
+{
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size : 12pt;
+    -jfx-focus-color: -fx-secondary;
+    -fx-text-fill: derive(-fx-secondary, 20%);
+}
+
+/*TablPane styling*/
+.jfx-tab-pane .headers-region > .tab > .jfx-rippler {
+    -jfx-rippler-fill: -fx-primary;
+}
+.jfx-tab-pane .headers-region .tab-selected-line {
+    -fx-background-color: -fx-secondary;
+}
+.tab-header-background{
+    -fx-background-color: -fx-primary;
+}
+.tab-label{
+    -fx-text-fill: -fx-secondary;
+    -fx-font-size: 12pt;
+}
+.jfx-tab-pane .tab-selected-line { -fx-background-color: -fx-secondary;  }
+
+/*end TablPane styling*/
+
+/*Menu bar Styling*/
+.menu-bar{
+    -fx-font-size: 12px;
+    -fx-base : -fx-primary;
+    -fx-background-color: -fx-primary;
+}
+
+.context-menu
+{
+    -fx-background-color:  derive(-fx-primary, 20%);
+}
+
+/*Hamburger Styling*/
+.jfx-hamburger-icon{
+    -fx-spacing: 7;
+}
+
+.jfx-hamburger-icon StackPane
+{
+    -fx-background-color: -fx-secondary;
+    -fx-background-radius: 5px;
+}
+
+/*Toolbar buttons*/
+.toolbar-button
+{
+    -fx-border-color: transparent;
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-background-radius: 0px;
+    -fx-border-radius: 0px;
+}
+.toolbar-button:hover
+{
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-primary;
+}
+
+.toolbar-button:hover .glyph-icon, .toolbar-button:hover .glyph-icon
+{
+    -fx-fill: -fx-primary;
+}
+
+.submission-container{
+    -fx-background-color: derive(-fx-primary, 10%);
+}
+
+
+/*Chart Styling*/
+.data0.chart-pie{
+    -fx-pie-color: -fx-secondary;
+    -fx-border-color: derive(-fx-secondary, -30%);
+}
+.data1.chart-pie{
+    -fx-pie-color: derive(-fx-primary, 30%);
+    -fx-border-color: derive(-fx-primary, 30%);
+}
+.chart-pie-label
+{
+    -fx-fill : derive(-fx-secondary, -5%);
+}
+
+/*About window*/
+.about-text{
+    -fx-fill: -fx-secondary;
+}
+
+.about-button{
+    -fx-border-color: transparent;
+}
+
+/*Custom window background*/
+.custom-pane{
+    -fx-background-color: derive(-fx-primary, 5%);
+}
+
+
+/*JFXDialog styling*/
+.jfx-layout-heading
+{
+    -fx-background-color: -fx-color-1;
+}
+.jfx-layout-heading .label
+{
+    -fx-text-fill: white;
+    -fx-font-size: 12pt;
+}
+.jfx-layout-body, .jfx-layout-actions{
+    -fx-background-color: -fx-primary;
+}
+.jfx-layout-body .label
+{
+    -fx-text-fill: white;
+    -fx-padding: 20px 0 0 0;
+}
+
+
+/*Dashboard label*/
+.not-available
+{
+    -fx-background-radius: 5px;
+    -fx-fill: derive(blue, 80%);
+    -fx-cursor: hand;
+}
+
+/*Checkbox*/
+
+.checkbox-main{
+    -fx-text-fill: -fx-secondary;
+    -jfx-checked-color: -fx-primary;
+    -fx-font-size: 12pt;
+}
+
+
+.label{
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size: 12pt;
+}
+
+/*TableView Default*/
+.tree-table-view{
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-font-size: 12px;
+    -fx-border-color: derive(-fx-secondary, -60%);
+}
+.table-view:focused, .tree-table-view:focused{
+    -fx-background-color: derive(-fx-primary, 20%);
+}
+
 .tree-table-view .column-header-background{
     -fx-background-color: derive(-fx-primary, 10%);
     -fx-border-color: derive(-fx-primary, 10%);
 }
 .tree-table-view .column-header-background .label{
     -fx-background-color: transparent;
+    -fx-text-fill: -fx-secondarytext;
+    -fx-font-size: 12px;
 }
 .tree-table-view .column-header {
     -fx-background-color: transparent;
+    -fx-border-color: derive(-fx-primary, 10%);
+
 }
 .tree-table-view .tree-table-cell{
+    -fx-text-fill: -fx-secondarytext;
     -fx-alignment: CENTER;
 }
 .tree-table-row-cell:focused, .tree-table-cell:focused{
     -fx-text-fill: -fx-primary;
 }
 .tree-table-row-cell:hover, .tree-table-cell:hover{
-    -fx-background-color: derive(gray, 80%);
+    -fx-background-color: derive(-fx-primary, 20%);
 }
 .tree-table-row-cell{
     -fx-background-color: -fx-primary;
     -fx-border-color: transparent;
     -fx-table-cell-border-color: transparent;
+
 }
 .tree-table-column{
     -fx-alignment: CENTER;
 }
 .tree-table-row-cell:selected {
+    -fx-background-color:derive(-fx-primary, 20%);
     -fx-text-fill: -fx-primary;
 }
-.jfx-combo-box {
-    -jfx-focus-color:-fx-secondary;
+
+.table-view > .virtual-flow > .scroll-bar:vertical,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track,
+.table-view > .virtual-flow > .scroll-bar:vertical > .track-background,
+.table-view > .virtual-flow > .scroll-bar:horizontal,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track,
+.table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
+    -fx-background-color: transparent;
 }
-.jfx-text-field
-{
+.table-view > .virtual-flow > .scroll-bar > .increment-button,
+.table-view > .virtual-flow > .scroll-bar > .decrement-button {
+    -fx-text-fill: -fx-secondarytext;
+}
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb{
+    -fx-background-color: derive(-fx-primary, 60%);
     -fx-border-color: transparent;
-    -jfx-focus-color: -fx-secondary;
+    -fx-background-radius: 5em;
+}
+.table-view .filler{
+    -fx-fill: -fx-primary;
+    -fx-background-color: -fx-primary;
+}
+.table-context
+{
+    -fx-base: -fx-primary;
 }
 
-.button1{
-    -fx-background-color: gray;
+
+/*JFXDialog styling*/
+.jfx-layout-heading
+{
+    -fx-background-color: -fx-color-1;
 }
+.jfx-layout-heading .label
+{
+    -fx-text-fill: -fx-secondarytext;
+    -fx-font-size: 12pt;
+}
+.jfx-layout-body, .jfx-layout-actions{
+    -fx-background-color: -fx-primary;
+}
+.jfx-layout-body .label
+{
+    -fx-text-fill: -fx-secondarytext;
+    -fx-padding: 20px 0 0 0;
+}
+
+
+/* radio button + check */
+.jfx-radio-button{
+    -fx-font-size:13px;
+    -fx-text-fill: -fx-primarytext;
+    -jfx-selected-color: -fx-secondary;
+}
+
+.jfx-check-box:selected .box {
+    -jfx-selected-color: -fx-secondary;
+}
+.jfx-slider {
+    -jfx-default-thumb: -fx-secondary;
+}
+
+.jfx-toggle-button,
+.jfx-toggle-button:armed,
+.jfx-toggle-button:hover,
+.jfx-toggle-button:focused,
+.jfx-toggle-button:selected,
+.jfx-toggle-button:focused:selected {
+    -jfx-toggle-color: -fx-secondary;
+    -jfx-toggle-line-color: derive(-jfx-toggle-color, 65%);
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size: 12pt;
+}
+
+/* end radio button + check */
+
+.jfx-combo-box {
+    -jfx-focus-color: -fx-secondary;
+    -jfx-unfocus-color: -fx-primarytext;
+    -fx-prompt-text-fill: -fx-primarytext;
+}
+
+.jfx-combo-box > .input-line {
+    -fx-background-color: -jfx-unfocus-color;
+}
+
+.jfx-combo-box > .input-focused-line {
+    -fx-background-color: -jfx-focus-color;
+}
+
+.jfx-combo-box,
+.jfx-combo-box:focused,
+.jfx-combo-box:editable,
+.jfx-combo-box:editable:focused {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-primarytext;
+}
+
+.jfx-combo-box > .arrow-button,
+.jfx-combo-box:editable > .arrow-button,
+.jfx-combo-box:editable:focused > .arrow-button {
+    -fx-text-fill: -fx-primarytext;
+    -fx-background-color: -fx-primary;
+}
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-primarytext;
+}
+
+/* end combox */

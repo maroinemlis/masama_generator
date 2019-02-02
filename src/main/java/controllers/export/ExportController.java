@@ -85,13 +85,13 @@ public class ExportController implements Initializable {
         for (Table table : tables) {
             for (int j = 0; j < table.getHowMuch(); j++) {
                 int i = 0;
-                StringBuilder insert = new StringBuilder("INSERT INTO" + table.getTableName() + "VALUES(");
+                StringBuilder insert = new StringBuilder("INSERT INTO " + table.getTableName() + " VALUES(");
                 for (i = 0; i < table.getAttributes().size() - 1; i++) {
                     insert.append(table.getAttributes().get(i).getInstances().get(j));
                     insert.append(", ");
                 }
                 insert.append(table.getAttributes().get(i).getInstances().get(j));
-                insert.append(");");
+                insert.append(");\n");
                 Files.write(path, insert.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
         }

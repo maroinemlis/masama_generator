@@ -5,9 +5,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import controllers.helper.HelperControllers;
-import test_classes.TestClass_amirouche;
-import java.nio.file.Paths;
-import javafx.scene.layout.Pane;
 
 /**
  *

@@ -23,12 +23,8 @@ import javafx.stage.FileChooser;
 import static controllers.main.LuncherApp.primaryStage;
 import static utils.FileUtil.writeObjectInFile;
 import java.io.IOException;
-import java.nio.file.Path;
-import javafx.scene.layout.HBox;
 import controllers.helper.HelperControllers;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
-import javafx.scene.layout.Pane;
 
 /**
  * FXML Controller class
@@ -178,6 +174,7 @@ public class MainController implements Initializable {
             fileChooser.setInitialDirectory(new File("."));
             File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
             writeObjectInFile(showSaveDialog.getAbsolutePath(), SQLSchema.getInstance());
+            Alerts.done("Projet enregistré");
         } catch (Exception e) {
             Alerts.error(e.getMessage());
         }

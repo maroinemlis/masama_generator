@@ -5,7 +5,6 @@
  */
 package controllers.report;
 
-import connection.SQLConnection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 

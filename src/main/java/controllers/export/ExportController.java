@@ -5,11 +5,11 @@ package controllers.export;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import alert.Alerts;
 import beans.SQLSchema;
 import beans.Table;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
-import connection.SQLConnection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -55,22 +55,28 @@ public class ExportController implements Initializable {
 
     @FXML
     void onSave(ActionEvent event) throws Exception {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir le répertoire d'enregistrement");
-        fileChooser.setInitialDirectory(new File("."));
-        File showSaveDialog = fileChooser.showSaveDialog(save.getScene().getWindow());
-        this.path = showSaveDialog.toPath();
-        if (sql.isSelected()) {
-            this.path = Paths.get(path.toAbsolutePath().toString() + ".sql");
-            exportOnSql();
-        } else if (json.isSelected()) {
-            this.path = Paths.get(path.toAbsolutePath().toString() + ".json");
-            exportOnJson();
-        } else {
-            this.path = Paths.get(path.toAbsolutePath().toString() + ".xml");
-            exportOnXml();
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Choisir le répertoire d'enregistrement");
+            fileChooser.setInitialDirectory(new File("."));
+            File showSaveDialog = fileChooser.showSaveDialog(save.getScene().getWindow());
+            this.path = showSaveDialog.toPath();
+            if (sql.isSelected()) {
+                this.path = Paths.get(path.toAbsolutePath().toString() + ".sql");
+                exportOnSql();
+            } else if (json.isSelected()) {
+                this.path = Paths.get(path.toAbsolutePath().toString() + ".json");
+                exportOnJson();
+            } else {
+                this.path = Paths.get(path.toAbsolutePath().toString() + ".xml");
+                exportOnXml();
+            }
+            close();
+            Alerts.done("Exportation réussite");
+        } catch (Exception e) {
+            Alerts.error("Erreur au niveau d'enregistrement");
         }
-        close();
+
     }
 
     /**

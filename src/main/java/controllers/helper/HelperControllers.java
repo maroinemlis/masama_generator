@@ -5,21 +5,10 @@
  */
 package controllers.helper;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXSnackbar;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -61,18 +50,7 @@ public class HelperControllers {
     }
 
     public static void showControlllerOnAlert(String file, String title) throws IOException {
-        JFXSnackbar bar = new JFXSnackbar((Pane) HelperControllers.root);
-        BorderPane p = new BorderPane();
-        Button b = new Button("Fermer");
-        p.setTop(b);
-        p.setStyle("-fx-background-color: derive(-fx-primary, 20%)");
-        p.setCenter(getNodeController(file));
-        bar.getChildren().add(p);
-        bar.show(title, "", (event) -> {
-        });
-        b.setOnAction((event) -> {
-            bar.close();
-        });
+        SnackBarAlert.getInstance().newSnackBarAlert(getNodeController(file), title);
     }
     public static Parent root;
 

@@ -33,6 +33,7 @@
     -fx-text-fill: -fx-primarytext;
     -fx-background-color: -fx-primary;
     -fx-font-size: 12pt;
+    -fx-cursor: hand;
 }
 
 .button:hover, .button:focused{
@@ -61,6 +62,10 @@
 .tab-label{
     -fx-text-fill: -fx-secondary;
     -fx-font-size: 12pt;
+    -fx-cursor: hand;
+}
+.tab-label:hover{
+    -fx-text-fill: derive(-fx-secondary, 80%);
 }
 .jfx-tab-pane .tab-selected-line { -fx-background-color: -fx-secondary;  }
 
@@ -138,12 +143,6 @@
 }
 
 /*Checkbox*/
-
-.checkbox-main{
-    -fx-text-fill: -fx-secondary;
-    -jfx-checked-color: -fx-primary;
-    -fx-font-size: 12pt;
-}
 
 
 .label{
@@ -233,6 +232,7 @@
     -fx-font-size:11pt;
     -fx-text-fill: -fx-primarytext;
     -jfx-selected-color: -fx-secondary;
+    -fx-cursor: hand;
 }
 
 .jfx-check-box:selected .box {
@@ -240,6 +240,7 @@
 }
 .jfx-slider {
     -jfx-default-thumb: -fx-secondary;
+    -fx-cursor: hand;
 }
 
 .jfx-toggle-button,
@@ -292,9 +293,7 @@
 }
 
 
-.date-picker > .text-field ,.date-picker{
-    -fx-background-color:transparent;
-}
+
 
 .split-pane:horizontal > .split-pane-divider {
     -fx-background-color: derive(-fx-primary,20%);
@@ -329,3 +328,4 @@
 .titled-pane > .title:hover{
     -fx-background-color: derive(-fx-primary, 30%);
 }
+

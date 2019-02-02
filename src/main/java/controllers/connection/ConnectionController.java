@@ -9,11 +9,8 @@ import alert.Alerts;
 import beans.SQLSchema;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXSnackbar;
-import com.jfoenix.controls.JFXSnackbar.SnackbarEvent;
 import com.jfoenix.controls.JFXTextField;
 import connection.SQLConnection;
-import controllers.helper.HelperControllers;
 import static controllers.main.LuncherApp.primaryStage;
 import java.io.File;
 import java.net.URL;
@@ -34,8 +31,6 @@ import javafx.stage.FileChooser;
  */
 public class ConnectionController implements Initializable {
 
-    @FXML
-    private Pane root;
     @FXML
     private ToggleGroup cnxType;
     @FXML

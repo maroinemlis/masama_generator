@@ -130,9 +130,13 @@ public class SQLSchema implements Serializable {
     }
 
     public void startToGenerateInstances() throws Exception {
+        if (SQLSchema.getInstance().getTables().isEmpty()) {
+            throw new Exception("Connexion non établie");
+        }
         if (PreCondition.getInstance().checkSQLSchema()) {
             throw new Exception(PreCondition.getInstance().getErrorMessage());
         }
+
         long start = System.currentTimeMillis();
         resetGeneration();
         generateCaseOf(sortedRootAttributes);

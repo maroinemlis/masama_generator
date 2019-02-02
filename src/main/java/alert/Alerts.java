@@ -8,7 +8,6 @@ package alert;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbar.SnackbarEvent;
 import controllers.helper.HelperControllers;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 /**
@@ -19,8 +18,7 @@ public class Alerts {
 
     public static void error(String message) {
         JFXSnackbar bar = new JFXSnackbar((Pane) HelperControllers.root);
-        bar.show(message, message, (event) -> {
-        });
+        bar.enqueue(new SnackbarEvent(message));
     }
 
     public static void done(String message) {

@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import controllers.helper.HelperControllers;
 import test_classes.TestClass_amirouche;
 import java.nio.file.Paths;
+import javafx.scene.layout.Pane;
 
 /**
  *
@@ -34,9 +35,10 @@ public class LuncherApp extends Application {
 
     public void startMainInterface() throws Exception {
         HelperControllers.setClassResources(this);
+
         Parent root = HelperControllers.getNodeController("main.fxml");
-        System.out.println(root);
         Scene scene = new Scene(root);
+        HelperControllers.setRootParent(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("MASAMA Generator v1");
         primaryStage.show();

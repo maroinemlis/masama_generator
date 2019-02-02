@@ -5,8 +5,11 @@
  */
 package alert;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import com.jfoenix.controls.JFXSnackbar;
+import com.jfoenix.controls.JFXSnackbar.SnackbarEvent;
+import controllers.helper.HelperControllers;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 
 /**
  *
@@ -14,10 +17,14 @@ import javafx.scene.control.Alert.AlertType;
  */
 public class Alerts {
 
-    public static void error(Exception e) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Error Dialog");
-        alert.setContentText(e.getMessage());
-        alert.showAndWait();
+    public static void error(String message) {
+        JFXSnackbar bar = new JFXSnackbar((Pane) HelperControllers.root);
+        bar.show(message, message, (event) -> {
+        });
+    }
+
+    public static void done(String message) {
+        JFXSnackbar bar = new JFXSnackbar((Pane) HelperControllers.root);
+        bar.enqueue(new SnackbarEvent(message));
     }
 }

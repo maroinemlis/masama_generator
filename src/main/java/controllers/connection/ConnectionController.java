@@ -9,8 +9,11 @@ import alert.Alerts;
 import beans.SQLSchema;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXSnackbar;
+import com.jfoenix.controls.JFXSnackbar.SnackbarEvent;
 import com.jfoenix.controls.JFXTextField;
 import connection.SQLConnection;
+import controllers.helper.HelperControllers;
 import static controllers.main.LuncherApp.primaryStage;
 import java.io.File;
 import java.net.URL;
@@ -21,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 /**
@@ -30,6 +34,8 @@ import javafx.stage.FileChooser;
  */
 public class ConnectionController implements Initializable {
 
+    @FXML
+    private Pane root;
     @FXML
     private ToggleGroup cnxType;
     @FXML
@@ -88,7 +94,7 @@ public class ConnectionController implements Initializable {
             File fileUrl = fileChooser.showOpenDialog(primaryStage);
             path.setText(fileUrl.getAbsolutePath());
         } catch (Exception e) {
-            Alerts.error(e);
+            Alerts.error(e.getMessage());
         }
 
     }
@@ -103,9 +109,9 @@ public class ConnectionController implements Initializable {
                 SQLConnection.getInstance().connect(path.getText(), getCnxType(), r2.isSelected());
             }
             SQLSchema.getInstance().constructSchema();
-
+            Alerts.done("Connexion réussie");
         } catch (Exception e) {
-            Alerts.error(e);
+            Alerts.error(e.getMessage());
         }
     }
 

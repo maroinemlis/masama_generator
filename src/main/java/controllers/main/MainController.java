@@ -28,6 +28,7 @@ import javafx.scene.layout.HBox;
 import controllers.helper.HelperControllers;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.Pane;
 
 /**
  * FXML Controller class
@@ -39,24 +40,19 @@ public class MainController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private TableView currentTable;
+    private List<TableView> tables;
+
     @FXML
     private Tab SchemaTab;
     @FXML
     private VBox rapportVBox;
     @FXML
     private VBox connectionVBox;
-
-    private SQLConnection cnx;
-    public TableView currentTable;
-    public List<TableView> tables;
-    Path path;
     @FXML
     private VBox insertsVBox;
     @FXML
     private Accordion tablesAccordion;
-
-    @FXML
-    private HBox drag;
     @FXML
     private JFXTextField tableName;
     @FXML
@@ -68,8 +64,6 @@ public class MainController implements Initializable {
     private JFXToggleButton activateUpdate;
     @FXML
     private JFXTextField generationTime;
-    @FXML
-    private VBox xxx;
 
     public void checkFields() {
         howMuch.textProperty().addListener((o, newValue, old) -> {
@@ -96,13 +90,11 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(xxx);
         try {
             HelperControllers.addNodeToContainer("connection.fxml", connectionVBox);
             HelperControllers.addNodeToContainer("report.fxml", rapportVBox);
         } catch (Exception ex) {
-            Alerts.error(ex);
+            Alerts.error(ex.getMessage());
         }
         activateUpdate.selectedProperty().addListener((observable) -> {
             boolean notChecked = !activateUpdate.isSelected();
@@ -146,7 +138,7 @@ public class MainController implements Initializable {
                 t.updateTableViewInserts();
             }
         } catch (Exception e) {
-            Alerts.error(e);
+            Alerts.error(e.getMessage());
         }
     }
 
@@ -165,7 +157,7 @@ public class MainController implements Initializable {
             HelperControllers.showControlllerOnAlert("export.fxml", "Exporter");
 
         } catch (IOException ex) {
-            Alerts.error(ex);
+            Alerts.error(ex.getMessage());
         }
     }
 
@@ -174,7 +166,7 @@ public class MainController implements Initializable {
         try {
             HelperControllers.showControlllerOnAlert("connection.fxml", "Connexion");
         } catch (Exception ex) {
-            Alerts.error(ex);
+            Alerts.error(ex.getMessage());
         }
     }
 
@@ -187,7 +179,7 @@ public class MainController implements Initializable {
             File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
             writeObjectInFile(showSaveDialog.getAbsolutePath(), SQLSchema.getInstance());
         } catch (Exception e) {
-            Alerts.error(e);
+            Alerts.error(e.getMessage());
         }
 
     }
@@ -197,7 +189,7 @@ public class MainController implements Initializable {
         try {
             HelperControllers.showControlllerOnAlert("option.fxml", "Configuration");
         } catch (IOException ex) {
-            Alerts.error(ex);
+            Alerts.error(ex.getMessage());
         }
     }
 
@@ -211,10 +203,10 @@ public class MainController implements Initializable {
             SQLSchema.setInstance((SQLSchema) readFileObject(showOpenDialog.getAbsolutePath()));
             tables = SQLSchema.getInstance().getTablesAsTablesView();
             tables.forEach(t -> t.updateTableViewInserts());
-            //currentTable = tables.get(0);
+            currentTable = tables.get(0);
             createTablesView();
         } catch (Exception e) {
-            Alerts.error(e);
+            Alerts.error(e.getMessage());
         }
     }
 

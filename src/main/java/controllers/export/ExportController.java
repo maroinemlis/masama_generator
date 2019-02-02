@@ -9,6 +9,7 @@ import beans.SQLSchema;
 import beans.Table;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
+import connection.SQLConnection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -100,10 +101,10 @@ public class ExportController implements Initializable {
     private void exportOnXml() throws Exception {
         List<Table> tables = SQLSchema.getInstance().getTables();
         for (Table table : tables) {
-            Files.write(path, ("<" + table.getTableName() + ">\n").getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             for (int j = 0; j < table.getHowMuch(); j++) {
                 int i = 0;
                 String insert = null;
+                Files.write(path, ("<" + table.getTableName() + ">\n").getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 for (i = 0; i < table.getAttributes().size(); i++) {
                     insert = "\t<" + table.getAttributes().get(i).getName() + "> ";
                     insert += table.getAttributes().get(i).getInstances().get(j);
@@ -118,18 +119,23 @@ public class ExportController implements Initializable {
     private void exportOnJson() throws Exception {
         List<Table> tables = SQLSchema.getInstance().getTables();
         Files.write(path, "{\n".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-        for (Table table : tables) {
-            String insert = "\t\"" + table.getTableName() + "\" : {\n";
+        int k;
+        for (k = 0; k < tables.size(); k++) {
+            Table table = tables.get(k);
+            String insert = "  \"" + table.getTableName() + "\": [\n";
             Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             for (int j = 0; j < table.getHowMuch(); j++) {
                 int i = 0;
+                insert = "\t{\n";
                 for (i = 0; i < table.getAttributes().size() - 1; i++) {
-                    insert = "\t\t\"" + table.getAttributes().get(i).getName() + "\" : ";
+                    insert += "\t  \"" + table.getAttributes().get(i).getName() + "\": ";
                     insert += table.getAttributes().get(i).getInstances().get(j).replace("'", "\"") + ",\n";
-                    Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 }
-                insert = "\t\t\"" + table.getAttributes().get(i).getName() + "\" : ";
-                insert += table.getAttributes().get(i).getInstances().get(j).replace("'", "\"") + "\n\t\t}\n}";
+                insert += "\t  \"" + table.getAttributes().get(i).getName() + "\": ";
+                insert += table.getAttributes().get(i).getInstances().get(j).replace("'", "\"") + "\n\t}\n  ]";
+                if (k != tables.size() - 1) {
+                    insert += ",";
+                }
                 Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
         }

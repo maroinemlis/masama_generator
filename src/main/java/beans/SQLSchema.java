@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import controllers.tableview.TableView;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pre_condition.PreCondition;
 
 public class SQLSchema implements Serializable {
 
@@ -128,7 +129,10 @@ public class SQLSchema implements Serializable {
         return tables.stream().map(t -> new TableView(t)).collect(Collectors.toList());
     }
 
-    public void startToGenerateInstances() {
+    public void startToGenerateInstances() throws Exception {
+        if (PreCondition.getInstance().checkSQLSchema()) {
+            throw new Exception(PreCondition.getInstance().getErrorMessage());
+        }
         long start = System.currentTimeMillis();
         resetGeneration();
         generateCaseOf(sortedRootAttributes);

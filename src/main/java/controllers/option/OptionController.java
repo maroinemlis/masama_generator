@@ -61,12 +61,10 @@ public class OptionController implements Initializable {
         saveConfig();
         Stage stage = (Stage) nbLigne.getScene().getWindow();
         stage.close();
-
     }
 
     public void saveConfig() {
         JSONObject obj = new JSONObject();
-
         obj.put("nbLigne", nbLigne.getText());
         obj.put("pNull", pNull.getText());
         obj.put("vMin", vMin.getText());
@@ -76,7 +74,7 @@ public class OptionController implements Initializable {
         obj.put("expR", expR.getText());
         obj.put("dateMin", dateMin.getValue().toString());
         obj.put("dateMax", dateMax.getValue().toString());
-        try (FileWriter file = new FileWriter("config.json")) {
+        try (FileWriter file = new FileWriter("masama_config.json")) {
             file.write(obj.toJSONString());
             file.flush();
         } catch (Exception e) {

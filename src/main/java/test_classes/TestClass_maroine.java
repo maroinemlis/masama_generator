@@ -17,7 +17,7 @@ public class TestClass_maroine {
     SQLSchema sqlSchema;
 
     public void main() throws Exception {
-        SQLConnection cnx = new SQLConnection("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql", "SQLite", false);
+        SQLConnection.getInstance().connect("C:\\Users\\tamac\\OneDrive\\Desktop\\test.sql", "SQLite", false);
         sqlSchema = SQLSchema.getInstance();
         sqlSchema.constructSchema();
         //sqlSchema.getTables().forEach(t -> t.setHowMuch(10));

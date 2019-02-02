@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 
 /**
  *
@@ -23,7 +24,6 @@ public class FileUtil {
         FileWriter file;
         try {
             file = new FileWriter(new File(nameFile));
-
             file.write(strToWrite);
             file.close();
         } catch (IOException ex) {
@@ -39,7 +39,6 @@ public class FileUtil {
 
     public static Object readFileObject(String mPathFile) throws Exception {
         Object result = null;
-
         FileInputStream fileInputStream = new FileInputStream(mPathFile);
         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
         return result = objectInputStream.readObject();

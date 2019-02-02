@@ -15,44 +15,30 @@ import static java.time.temporal.ChronoUnit.DAYS;
  *
  * @author amirouche
  */
-public class PreCondetion {
+public class PreCondition extends Exception {
 
-    private SQLSchema sqlSchema;
-    private String msgError;
+    private String errorMessage;
 
-    //todo : if thier  circuler the howMuch must equel
-    /**
-     * Constructor for class PreCondetion
-     *
-     * @param sqlSchema
-     */
-    public PreCondetion(SQLSchema sqlSchema) {
-        this.sqlSchema = sqlSchema;
+    private static PreCondition singlotonPreCondition = null;
+
+    public static PreCondition getInstance() {
+        if (singlotonPreCondition == null) {
+            singlotonPreCondition = new PreCondition();
+        }
+        return singlotonPreCondition;
     }
 
-    public String getMsgError() {
-        return msgError;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public boolean checkSqlSchema() throws ParseException, SQLException {
-        if (!isAttrCirculairesEquals()) {
-            msgError = "Les attributs circulair ne sont pas égaux";
-            return false;
-        }
-        if (!isForingAndKPrimeryChecked()) {
-            msgError = "Le nombre des valeur de l'attribut référencé est mois qui....";
-            return false;
-        }
-        if (!isIntervalesChecked()) {
-            msgError = "Il n'est pas possible de générer le nombre demandé";
-            return false;
-        }
-        return true;
+    public boolean checkSQLSchema() throws ParseException, SQLException {
+        return isAttrCirculairesEquals() && isForingAndKPrimeryChecked() && isIntervalesChecked();
     }
 
     private boolean isAttrCirculairesEquals() {
         List<Attribute> circularAttributs = new ArrayList<>();
-        for (Table table : sqlSchema.getTables()) {
+        for (Table table : SQLSchema.getInstance().getTables()) {
             for (Attribute attribute : table.getAttributes()) {
                 if (attribute.isCircular()) {
                     circularAttributs.add(attribute);
@@ -74,6 +60,7 @@ public class PreCondetion {
                 break;
             }
             if (attribute.getTable().getHowMuch() != reference.getTable().getHowMuch()) {
+                errorMessage = "Les attributs circulaires " + attribute + " et " + reference + " ont pas le même nombre de génération";
                 return false;
             }
             result = result && isHowMuchChecked(reference, _this);
@@ -82,11 +69,14 @@ public class PreCondetion {
     }
 
     private boolean isForingAndKPrimeryChecked() {
-        for (Table table : sqlSchema.getTables()) {
+        for (Table table : SQLSchema.getInstance().getTables()) {
             for (Attribute attribute : table.getAttributes()) {
                 for (Attribute reference : attribute.getReferences()) {
                     if ((attribute.isPrimary() || attribute.isUnique())
                             && attribute.getTable().getHowMuch() < reference.getTable().getHowMuch()) {
+                        errorMessage = "Le nombre de génération de " + reference + " ne peut pas étre plus que "
+                                + attribute + " car il s'agit d'un atrribut unique ou primary";
+
                         return false;
                     }
                 }
@@ -96,26 +86,33 @@ public class PreCondetion {
     }
 
     private boolean isIntervalesChecked() throws ParseException {
-        for (Table table : sqlSchema.getTables()) {
+        for (Table table : SQLSchema.getInstance().getTables()) {
             for (Attribute attribute : table.getAttributes()) {
                 if (attribute.isUnique() || attribute.isPrimary()) {
+                    boolean checked = true;
                     switch (attribute.getDataType()) {
                         case "INT":
                         case "INTEGER":
+                        case "NUMBER":
                             if (!checkInt(attribute)) {
-                                return false;
+                                checked = false;
                             }
                             break;
                         case "DATE":
                             if (!checkDate(attribute)) {
-                                return false;
+                                checked = false;
                             }
                             break;
                         case "TEXT":
                             if (!checkString(attribute)) {
-                                return false;
+                                checked = false;
                             }
                             break;
+                    }
+                    if (checked) {
+                        errorMessage = "L'interval des valeurs de " + attribute
+                                + " est insuffusant pour générer " + attribute.getTable().getHowMuch();
+                        return false;
                     }
                 }
             }
@@ -159,7 +156,7 @@ public class PreCondetion {
      * @param from ,to
      * @return Integer
      */
-    public long numberDaysBetween(String from, String to) throws ParseException {
+    private long numberDaysBetween(String from, String to) throws ParseException {
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
         return DAYS.between(fromDate, toDate);

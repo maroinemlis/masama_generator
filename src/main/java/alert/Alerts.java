@@ -10,14 +10,14 @@ import javafx.scene.control.Alert.AlertType;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class Alerts {
 
-    public static void error(Throwable e) {
+    public static void error(Exception e) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Error Dialog");
-        alert.setContentText(e.toString());
+        alert.setContentText(e.getMessage());
         alert.showAndWait();
     }
 }

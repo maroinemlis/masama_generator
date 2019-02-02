@@ -15,7 +15,7 @@
     -fx-font-size: 10pt;
     -fx-background-radius:0px;
 }
-.button:hover{
+.jfx-button:hover{
     -jfx-button-type: RAISED;
 }
 .normal-button{
@@ -69,4 +69,8 @@
 {
     -fx-border-color: transparent;
     -jfx-focus-color: -fx-secondary;
+}
+
+.button1{
+    -fx-background-color: gray;
 }

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An object represent a column of SQL table
  *
  * @author Maroine
  */
@@ -257,7 +256,7 @@ public class Attribute implements Serializable {
 
     @Override
     public String toString() {
-        return this.name; //To change body of generated methods, choose Tools | Templates.
+        return table.getTableName() + "(" + this.name + ")";
     }
 
 }

@@ -26,10 +26,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import javafx.scene.layout.HBox;
 import controllers.helper.HelperControllers;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -37,8 +35,6 @@ import javafx.stage.Stage;
  * @author amirouche
  */
 public class MainController implements Initializable {
-
-    ExecutorService myExecutor = Executors.newCachedThreadPool();
 
     /**
      * Initializes the controller class.
@@ -58,6 +54,7 @@ public class MainController implements Initializable {
     private VBox insertsVBox;
     @FXML
     private Accordion tablesAccordion;
+
     @FXML
     private HBox drag;
     @FXML
@@ -71,6 +68,8 @@ public class MainController implements Initializable {
     private JFXToggleButton activateUpdate;
     @FXML
     private JFXTextField generationTime;
+    @FXML
+    private VBox xxx;
 
     public void checkFields() {
         howMuch.textProperty().addListener((o, newValue, old) -> {
@@ -97,6 +96,8 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(xxx);
         try {
             HelperControllers.addNodeToContainer("connection.fxml", connectionVBox);
             HelperControllers.addNodeToContainer("report.fxml", rapportVBox);
@@ -138,17 +139,15 @@ public class MainController implements Initializable {
 
     @FXML
     private void onGenerate(ActionEvent event) {
-        myExecutor.execute(() -> {
-            try {
-                SQLSchema.getInstance().startToGenerateInstances();
-                generationTime.setText(SQLSchema.getInstance().getGenerationTime() + " ms");
-                for (TableView t : tables) {
-                    t.updateTableViewInserts();
-                }
-            } catch (Exception e) {
-                Alerts.error(e);
+        try {
+            SQLSchema.getInstance().startToGenerateInstances();
+            generationTime.setText(SQLSchema.getInstance().getGenerationTime() + " ms");
+            for (TableView t : tables) {
+                t.updateTableViewInserts();
             }
-        });
+        } catch (Exception e) {
+            Alerts.error(e);
+        }
     }
 
     private void refrechInserts() {
@@ -163,8 +162,7 @@ public class MainController implements Initializable {
     @FXML
     private void onExport(ActionEvent event) {
         try {
-            HelperControllers.showControlller("export.fxml", "Exporter");
-            HelperControllers.showControlller("connection.fxml", "Connexion");
+            HelperControllers.showControlllerOnAlert("export.fxml", "Exporter");
 
         } catch (IOException ex) {
             Alerts.error(ex);
@@ -174,7 +172,7 @@ public class MainController implements Initializable {
     @FXML
     private void onConnection(ActionEvent event) {
         try {
-            HelperControllers.showControlller("connection.fxml", "Connexion");
+            HelperControllers.showControlllerOnAlert("connection.fxml", "Connexion");
         } catch (Exception ex) {
             Alerts.error(ex);
         }
@@ -197,7 +195,7 @@ public class MainController implements Initializable {
     @FXML
     private void onOption(ActionEvent event) {
         try {
-            HelperControllers.showControlller("option.fxml", "Configuration");
+            HelperControllers.showControlllerOnAlert("option.fxml", "Configuration");
         } catch (IOException ex) {
             Alerts.error(ex);
         }
@@ -213,7 +211,7 @@ public class MainController implements Initializable {
             SQLSchema.setInstance((SQLSchema) readFileObject(showOpenDialog.getAbsolutePath()));
             tables = SQLSchema.getInstance().getTablesAsTablesView();
             tables.forEach(t -> t.updateTableViewInserts());
-            currentTable = tables.get(0);
+            //currentTable = tables.get(0);
             createTablesView();
         } catch (Exception e) {
             Alerts.error(e);

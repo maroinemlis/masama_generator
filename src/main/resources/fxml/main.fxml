@@ -81,9 +81,9 @@
                <content>
                     <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                         <items>
-                            <SplitPane dividerPositions="0.6298904538341158" prefHeight="160.0" prefWidth="200.0">
+                            <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0">
                                 <items>
-                                    <VBox prefHeight="274.0" prefWidth="741.0">
+                                    <VBox prefHeight="274.0" prefWidth="741.0" fx:id="xxx">
                                         <children>
                                             <Accordion fx:id="tablesAccordion" />
                                         </children>

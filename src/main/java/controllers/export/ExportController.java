@@ -6,29 +6,25 @@ package controllers.export;
  * and open the template in the editor.
  */
 import beans.SQLSchema;
+import beans.Table;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.json.simple.JSONObject;
-import static controllers.main.LuncherApp.primaryStage;
-import controllers.tableview.TableView;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * FXML Controller class
@@ -39,41 +35,41 @@ public class ExportController implements Initializable {
 
     @FXML
     private JFXRadioButton sql;
+    @FXML
+    private JFXRadioButton json;
+    @FXML
+    private JFXRadioButton xml;
 
     @FXML
     private ToggleGroup exportSave;
 
     @FXML
-    private JFXRadioButton json;
+    private JFXButton save;
+    private Path path;
 
-    @FXML
-    private JFXRadioButton xml;
-
-    @FXML
-    private JFXButton cancel;
-
-    @FXML
-    private JFXButton enregistrer;
-
-    @FXML
-    void onCancel(ActionEvent event) {
-
-        Stage stage = (Stage) cancel.getScene().getWindow();
+    void close() {
+        Stage stage = (Stage) save.getScene().getWindow();
         stage.close();
-
     }
 
     @FXML
     void onSave(ActionEvent event) throws Exception {
-        String selected;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir le répertoire d'enregistrement");
+        fileChooser.setInitialDirectory(new File("."));
+        File showSaveDialog = fileChooser.showSaveDialog(save.getScene().getWindow());
+        this.path = showSaveDialog.toPath();
         if (sql.isSelected()) {
+            this.path = Paths.get(path.toAbsolutePath().toString() + ".sql");
             exportOnSql();
         } else if (json.isSelected()) {
+            this.path = Paths.get(path.toAbsolutePath().toString() + ".json");
             exportOnJson();
         } else {
+            this.path = Paths.get(path.toAbsolutePath().toString() + ".xml");
             exportOnXml();
         }
-        onCancel(event);
+        close();
     }
 
     /**
@@ -85,90 +81,59 @@ public class ExportController implements Initializable {
     }
 
     private void exportOnSql() throws FileNotFoundException, IOException, Exception {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir le répertoire d'enregistrement");
-        fileChooser.setInitialDirectory(new File("."));
-        File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
-        OutputStream output = new FileOutputStream(showSaveDialog.getAbsolutePath());
-        Files.copy(showSaveDialog.toPath(), output);
-        List<TableView> tables = SQLSchema.getInstance().getTablesAsTablesView();
-        for (TableView t : tables) {
-            List<List<StringProperty>> lines = t.getLines();
-            int n = 1;
-            for (List<StringProperty> line : lines) {
-                if (n == 1) {
-                    n++;
-                    String insert = "\nINSERT INTO " + t.get().getTableName() + " VALUES (";
-                    int i = 0;
-                    for (; i < line.size() - 1; i++) {
-                        insert += line.get(i).get() + ", ";
-                    }
-                    insert += line.get(i).get() + ");";
-                    Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-
-                } else {
-                    String insert = "INSERT INTO " + t.get().getTableName() + " VALUES (";
-                    int i = 0;
-                    for (; i < line.size() - 1; i++) {
-                        insert += line.get(i).get() + ", ";
-                    }
-                    insert += line.get(i).get() + ");";
-                    Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert + System.lineSeparator()).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        List<Table> tables = SQLSchema.getInstance().getTables();
+        for (Table table : tables) {
+            for (int j = 0; j < table.getHowMuch(); j++) {
+                int i = 0;
+                StringBuilder insert = new StringBuilder("INSERT INTO" + table.getTableName() + "VALUES(");
+                for (i = 0; i < table.getAttributes().size() - 1; i++) {
+                    insert.append(table.getAttributes().get(i).getInstances().get(j));
+                    insert.append(", ");
                 }
-
+                insert.append(table.getAttributes().get(i).getInstances().get(j));
+                insert.append(");");
+                Files.write(path, insert.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
         }
-
     }
 
     private void exportOnXml() throws Exception {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir le répertoire d'enregistrement");
-        fileChooser.setInitialDirectory(new File("."));
-        File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
-        List<TableView> tables = SQLSchema.getInstance().getTablesAsTablesView();
-        for (TableView t : tables) {
-            List<List<StringProperty>> lines = t.getLines();
-            for (List<StringProperty> line : lines) {
-                String insert = "<" + t.get().getTableName() + "> " + System.lineSeparator();
+        List<Table> tables = SQLSchema.getInstance().getTables();
+        for (Table table : tables) {
+            Files.write(path, ("<" + table.getTableName() + ">\n").getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            for (int j = 0; j < table.getHowMuch(); j++) {
                 int i = 0;
-                String columnName = "";
-                for (; i < line.size(); i++) {
-                    columnName = SQLSchema.getInstance().getTable(t.get().getTableName()).getAttributes().get(i).getName();
-                    insert += "<" + columnName + "> ";
-                    insert += line.get(i).get().replace("'", "");
-                    insert += " </" + columnName + ">" + System.lineSeparator();
+                String insert = null;
+                for (i = 0; i < table.getAttributes().size(); i++) {
+                    insert = "\t<" + table.getAttributes().get(i).getName() + "> ";
+                    insert += table.getAttributes().get(i).getInstances().get(j);
+                    insert += "<" + table.getAttributes().get(i).getName() + "/>\n";
+                    Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 }
-                insert += "</" + t.get().getTableName() + ">" + System.lineSeparator();
-                Files.write(Paths.get(showSaveDialog.getAbsolutePath()), (insert).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-
+                Files.write(path, ("<" + table.getTableName() + "/>\n").getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
         }
-
     }
 
-    private void exportOnJson() throws FileNotFoundException, IOException {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir le répertoire d'enregistrement");
-        fileChooser.setInitialDirectory(new File("."));
-        File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
-        JSONObject obj = new JSONObject();
-        List<TableView> tables = SQLSchema.getInstance().getTablesAsTablesView();
-        for (TableView t : tables) {
-            List<List<StringProperty>> lines = t.getLines();
-            for (List<StringProperty> line : lines) {
-
-                obj.put(t.get().getTableName(), t.get().getTableName());
-                obj.put("", "{");
+    private void exportOnJson() throws Exception {
+        List<Table> tables = SQLSchema.getInstance().getTables();
+        Files.write(path, "{\n".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        for (Table table : tables) {
+            String insert = "\t\"" + table.getTableName() + "\" : {\n";
+            Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            for (int j = 0; j < table.getHowMuch(); j++) {
                 int i = 0;
-                for (; i < line.size() - 1; i++) {
-                    obj.put(line.get(i).get(), line.get(i).get());
+                for (i = 0; i < table.getAttributes().size() - 1; i++) {
+                    insert = "\t\t\"" + table.getAttributes().get(i).getName() + "\" : ";
+                    insert += table.getAttributes().get(i).getInstances().get(j).replace("'", "\"") + ",\n";
+                    Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 }
-                obj.put("", "}");
-
-                Files.write(Paths.get(showSaveDialog.getAbsolutePath()), obj.toJSONString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                insert = "\t\t\"" + table.getAttributes().get(i).getName() + "\" : ";
+                insert += table.getAttributes().get(i).getInstances().get(j).replace("'", "\"") + "\n\t\t}\n}";
+                Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
         }
+        Files.write(path, "}".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
     }
 

@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package connection;
 
+import com.jfoenix.controls.JFXScrollPane;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +10,10 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * An object represent an SQL Connection, it serves to get the meta data infos
@@ -32,6 +31,17 @@ public final class SQLConnection {
     private boolean isNewConnection = false;
     private static DatabaseMetaData bdMetaDate;
     private static SQLConnection singlotonSQLConnection = null;
+    private Map<String, String[]> driverMapping;
+
+    public SQLConnection() {
+        driverMapping = new HashMap<>();
+        driverMapping.put("SQLite", new String[]{"org.sqlite.JDBC", "jdbc:sqlite:"});
+        driverMapping.put("Oracle", new String[]{"", ""});
+        driverMapping.put("Postgresql", new String[]{"org.postgresql.Driver", "jdbc:postgresql:"});
+        driverMapping.put("MySQL", new String[]{"com.mysql.jdbc.Driver", "jdbc:mysql:"});
+        driverMapping.put("SQLServer", new String[]{"com.microsoft.sqlserver.jdbc.SQLServerDriver", "jdbc:sqlserver:"});
+        driverMapping.put("Derby", new String[]{"org.apache.derby.jdbc.EmbeddedDriver", "jdbc:derby:"});
+    }
 
     public static SQLConnection getInstance() {
         if (singlotonSQLConnection == null) {
@@ -86,7 +96,7 @@ public final class SQLConnection {
      *
      * @throw exception
      */
-    public void connect() throws Exception {
+    private void connect() throws Exception {
         isNewConnection = true;
         connection = DriverManager.getConnection(url, user, password);
         bdMetaDate = connection.getMetaData();
@@ -100,35 +110,6 @@ public final class SQLConnection {
      *
      * @param sqlType
      */
-    public void setConnexionType(String sqlType) throws Exception {
-        switch (sqlType) {
-            case "SQLite":
-                Class.forName("org.sqlite.JDBC");
-                this.url = "jdbc:sqlite:" + url;
-                break;
-            case "Oracle":
-                Class.forName("org.sqlite.JDBC");
-                this.url = "jdbc:sqlite:" + url;
-                break;
-            case "Postgresql":
-                Class.forName("org.postgresql.Driver");
-                this.url = "jdbc:postgresql:" + url;
-                break;
-            case "mySQL":
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                this.url = "jdbc:mysql:" + url;
-                break;
-            case "SQLServer":
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                this.url = "jdbc:sqlserver:" + url;
-                break;
-            case "Derby":
-                Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-                this.url = "jdbc:derby:" + url;
-                break;
-        }
-    }
-
     /**
      * Constructor for class SQLConnection
      *
@@ -138,7 +119,9 @@ public final class SQLConnection {
      * @param sqlType
      */
     public void connect(String url, String user, String password, String sqlType) throws Exception {
-        setConnexionType(sqlType);
+        String[] driver = driverMapping.get(sqlType);
+        Class.forName(driver[0]);
+        this.url = driver[1] + "//" + url;
         this.user = user;
         this.password = password;
         connect();
@@ -152,13 +135,14 @@ public final class SQLConnection {
      * @param isBinaryFile
      */
     public void connect(String fileUrl, String sqlType, boolean isBinaryFile) throws Exception {
+        String[] driver = driverMapping.get(sqlType);
+        Class.forName(driver[0]);
+        url = driver[1];
         if (isBinaryFile) {
             this.url = "//" + fileUrl;
         }
-        setConnexionType(sqlType);
         connect();
         if (!isBinaryFile) {
-            this.url = "//localhost";
             executeSQLFile(fileUrl);
         }
     }

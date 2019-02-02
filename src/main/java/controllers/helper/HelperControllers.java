@@ -5,6 +5,7 @@
  */
 package controllers.helper;
 
+import com.jfoenix.controls.JFXDialog;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -43,12 +48,24 @@ public class HelperControllers {
         Scene scene = new Scene(getNodeController(file));
         stage.setScene(scene);
         stage.setTitle(title);
+        stage.setResizable(false);
         stage.show();
     }
 
     public static <C> void addNodeToContainer(String file, Pane container) throws IOException {
         Parent nodeController = getNodeController(file);
         container.getChildren().add(nodeController);
+    }
+
+    public static void showControlllerOnAlert(String file, String title) throws IOException {
+        Dialog dialog = new Dialog();
+        dialog.setTitle(title);
+        dialog.getDialogPane().setContent(getNodeController(file));
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        Node closeButton = dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        closeButton.managedProperty().bind(closeButton.visibleProperty());
+        closeButton.setVisible(false);
+        dialog.showAndWait();
     }
 
 }

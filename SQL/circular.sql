@@ -5,7 +5,8 @@ drop table if exists D;
 
 CREATE TABLE A
 (    
-	A1 int PRIMARY KEY,
+	A1 int unique,
+	texte text PRIMARY KEY,
     FOREIGN KEY (A1) REFERENCES B (B1)
 );
 CREATE TABLE B

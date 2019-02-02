@@ -19,6 +19,10 @@
 .anchor-pane{
     -fx-background-color: -fx-primary;
 }
+.dialog-pane > .content {
+    -fx-background-color: -fx-primary;
+}
+
 
 .glyph-icon
 {
@@ -85,28 +89,7 @@
     -fx-background-radius: 5px;
 }
 
-/*Toolbar buttons*/
-.toolbar-button
-{
-    -fx-border-color: transparent;
-    -fx-background-color: derive(-fx-primary, 10%);
-    -fx-background-radius: 0px;
-    -fx-border-radius: 0px;
-}
-.toolbar-button:hover
-{
-    -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-primary;
-}
 
-.toolbar-button:hover .glyph-icon, .toolbar-button:hover .glyph-icon
-{
-    -fx-fill: -fx-primary;
-}
-
-.submission-container{
-    -fx-background-color: derive(-fx-primary, 10%);
-}
 
 
 /*Chart Styling*/
@@ -123,19 +106,7 @@
     -fx-fill : derive(-fx-secondary, -5%);
 }
 
-/*About window*/
-.about-text{
-    -fx-fill: -fx-secondary;
-}
 
-.about-button{
-    -fx-border-color: transparent;
-}
-
-/*Custom window background*/
-.custom-pane{
-    -fx-background-color: derive(-fx-primary, 5%);
-}
 
 
 /*JFXDialog styling*/
@@ -181,16 +152,18 @@
     -fx-font-size: 12pt;
 }
 
-/*TableView Default*/
+
 .tree-table-view{
     -fx-background-color: derive(-fx-primary, 10%);
-    -fx-font-size: 12px;
+    -fx-font-size: 10pt;
     -fx-border-color: derive(-fx-secondary, -60%);
 }
 .table-view:focused, .tree-table-view:focused{
     -fx-background-color: derive(-fx-primary, 20%);
 }
-
+.tree-table-row-cell {
+    -fx-cell-size: 50px;
+}
 .tree-table-view .column-header-background{
     -fx-background-color: derive(-fx-primary, 10%);
     -fx-border-color: derive(-fx-primary, 10%);
@@ -198,7 +171,8 @@
 .tree-table-view .column-header-background .label{
     -fx-background-color: transparent;
     -fx-text-fill: -fx-secondarytext;
-    -fx-font-size: 12px;
+    -fx-font-size: 8pt;
+    -fx-font-weight: normal;
 }
 .tree-table-view .column-header {
     -fx-background-color: transparent;
@@ -217,9 +191,7 @@
 }
 .tree-table-row-cell{
     -fx-background-color: -fx-primary;
-    -fx-border-color: transparent;
-    -fx-table-cell-border-color: transparent;
-
+    -fx-table-cell-border-color: -fx-primary;
 }
 .tree-table-column{
     -fx-alignment: CENTER;
@@ -235,17 +207,17 @@
 .table-view > .virtual-flow > .scroll-bar:horizontal,
 .table-view > .virtual-flow > .scroll-bar:horizontal > .track,
 .table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
-    -fx-background-color: transparent;
+    -fx-background-color: -fx-primary;
 }
 .table-view > .virtual-flow > .scroll-bar > .increment-button,
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
-    -fx-text-fill: -fx-secondarytext;
+    -fx-text-fill: -fx-primary;
 }
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb{
-    -fx-background-color: derive(-fx-primary, 60%);
-    -fx-border-color: transparent;
-    -fx-background-radius: 5em;
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-primary;
+    -fx-background-radius: 1em;
 }
 .table-view .filler{
     -fx-fill: -fx-primary;
@@ -256,30 +228,9 @@
     -fx-base: -fx-primary;
 }
 
-
-/*JFXDialog styling*/
-.jfx-layout-heading
-{
-    -fx-background-color: -fx-color-1;
-}
-.jfx-layout-heading .label
-{
-    -fx-text-fill: -fx-secondarytext;
-    -fx-font-size: 12pt;
-}
-.jfx-layout-body, .jfx-layout-actions{
-    -fx-background-color: -fx-primary;
-}
-.jfx-layout-body .label
-{
-    -fx-text-fill: -fx-secondarytext;
-    -fx-padding: 20px 0 0 0;
-}
-
-
 /* radio button + check */
 .jfx-radio-button{
-    -fx-font-size:13px;
+    -fx-font-size:11pt;
     -fx-text-fill: -fx-primarytext;
     -jfx-selected-color: -fx-secondary;
 }
@@ -303,39 +254,78 @@
     -fx-font-size: 12pt;
 }
 
+.jfx-check-box {
+    -jfx-unchecked-color: white;
+    -jfx-checked-color: -fx-secondary;
+}
 /* end radio button + check */
 
 .jfx-combo-box {
     -jfx-focus-color: -fx-secondary;
-    -jfx-unfocus-color: -fx-primarytext;
-    -fx-prompt-text-fill: -fx-primarytext;
+    -jfx-unfocus-color: -fx-secondary;
 }
+.combo-box-base .text{
+    -fx-fill: -fx-primarytext;
+    -fx-font-size: 12pt;
 
-.jfx-combo-box > .input-line {
-    -fx-background-color: -jfx-unfocus-color;
 }
-
-.jfx-combo-box > .input-focused-line {
-    -fx-background-color: -jfx-focus-color;
-}
-
-.jfx-combo-box,
-.jfx-combo-box:focused,
-.jfx-combo-box:editable,
-.jfx-combo-box:editable:focused {
+.combo-box-popup .list-view .list-cell {
     -fx-background-color: -fx-primary;
     -fx-text-fill: -fx-primarytext;
+    -fx-font-size: 12pt;
+
 }
 
-.jfx-combo-box > .arrow-button,
-.jfx-combo-box:editable > .arrow-button,
-.jfx-combo-box:editable:focused > .arrow-button {
-    -fx-text-fill: -fx-primarytext;
-    -fx-background-color: -fx-primary;
+
+.combo-box-popup .list-view .list-cell:filled:hover {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: white;
+    -fx-font-size: 12pt;
 }
-.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
-    -fx-background-color: -fx-primary;
-    -fx-text-fill: -fx-primarytext;
-}
+
+
 
 /* end combox */
+
+.list-view{
+    -fx-background-color: derive(-fx-primary,20%);
+}
+
+
+.date-picker > .text-field ,.date-picker{
+    -fx-background-color:transparent;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: derive(-fx-primary,20%);
+
+}
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: derive(-fx-primary,20%);
+}
+
+
+/*Custom window titled-pane*/
+.tab-pane .tab, .tab-pane .tab:selected, .tab-pane .tab:focus
+{
+    -fx-background-color: -fx-primary;
+    -fx-border-color: transparent;
+
+}
+
+
+.titled-pane
+{
+    -fx-text-fill: -fx-secondary;
+}
+.titled-pane:focused, .titled-pane:hover
+{
+    -fx-text-fill: -fx-secondarytext;
+}
+.titled-pane > .title {
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-secondary;
+}
+.titled-pane > .title:hover{
+    -fx-background-color: derive(-fx-primary, 30%);
+}

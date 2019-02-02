@@ -95,6 +95,7 @@ public class ConnectionController implements Initializable {
 
     @FXML
     private void onConnect(ActionEvent event) {
+        SQLSchema.setInstance(null);
         try {
             if (r1.isSelected()) {
                 SQLConnection.getInstance().connect(url.getText(), user.getText(), password.getText(), getCnxType());

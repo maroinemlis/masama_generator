@@ -153,4 +153,7 @@ public class SQLSchema implements Serializable {
             }
         }
     }
+
+    public void clear() {
+    }
 }

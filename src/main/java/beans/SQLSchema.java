@@ -1,4 +1,4 @@
-package bean;
+package beans;
 
 import static connection.SQLConnection.getDatabaseMetaData;
 import java.io.Serializable;

@@ -1,8 +1,8 @@
 package test_classes;
 
-import bean.Attribute;
-import bean.SQLSchema;
-import bean.Table;
+import beans.Attribute;
+import beans.SQLSchema;
+import beans.Table;
 import connection.SQLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;

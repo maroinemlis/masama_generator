@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="439.0" prefWidth="521.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.connection.ConnectionController">
+<AnchorPane prefHeight="449.0" prefWidth="695.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.connection.ConnectionController">
     <children>
-        <Label layoutX="36.0" layoutY="44.0" text="Type de connection">
+        <Label layoutX="114.0" layoutY="44.0" text="Type de connection">
             <font>
                 <Font size="14.0" />
             </font>
@@ -42,18 +42,18 @@
         </JFXRadioButton>
         <HBox fx:id="file" layoutX="37.0" layoutY="330.0">
             <children>
-                <JFXTextField fx:id="path" disable="true" editable="false" prefHeight="25.0" prefWidth="369.0" text="C:/file.sql" />
-                <JFXButton onAction="#onChose" text=" ">
+                <JFXTextField fx:id="path" disable="true" editable="false" prefHeight="27.0" prefWidth="627.0" text="C:/file.sql" />
+                <JFXButton ellipsisString="" onAction="#onChose" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10em;" text=" ">
                     <graphic>
-                        <FontAwesomeIconView fill="#6cacd7" glyphName="FILE" size="20" stroke="WHITE" strokeWidth="0.0" />
+                        <FontAwesomeIconView fill="#6cacd7" glyphName="FILE" size="20" stroke="WHITE" strokeWidth="0.0" wrappingWidth="12.0" />
                     </graphic>
                 </JFXButton>
             </children>
         </HBox>
-        <JFXButton layoutX="39.0" layoutY="388.0" onAction="#onConnect" text="Connecter" />
-        <AnchorPane fx:id="auth" layoutX="248.0" layoutY="44.0" prefHeight="269.0" prefWidth="224.0">
+        <JFXButton buttonType="RAISED" layoutX="39.0" layoutY="388.0" onAction="#onConnect" text="Connecter" />
+        <AnchorPane fx:id="auth" layoutX="407.0" layoutY="44.0" prefHeight="269.0" prefWidth="365.0">
             <children>
-                <Label layoutX="49.0" text="Authentification">
+                <Label layoutX="133.0" text="Authentification">
                     <font>
                         <Font size="14.0" />
                     </font>
@@ -61,15 +61,15 @@
                         <Insets bottom="20.0" />
                     </padding>
                 </Label>
-                <JFXTextField fx:id="url" layoutX="79.0" layoutY="43.0" text="localhost:19528/test" />
-                <JFXTextField fx:id="user" layoutX="79.0" layoutY="103.0" text="user" />
+                <JFXTextField fx:id="url" layoutX="79.0" layoutY="43.0" prefHeight="27.0" prefWidth="254.0" text="localhost:19528/test" />
+                <JFXTextField fx:id="user" layoutX="79.0" layoutY="103.0" prefHeight="27.0" prefWidth="254.0" text="user" />
                 <Label layoutX="2.0" layoutY="60.0" text="URL" />
                 <Label layoutX="3.0" layoutY="120.0" text="Utilisateur" />
-                <JFXTextField fx:id="password" layoutX="81.0" layoutY="165.0" text="password" />
+                <JFXTextField fx:id="password" layoutX="81.0" layoutY="165.0" prefHeight="27.0" prefWidth="254.0" text="password" />
                 <Label layoutX="3.0" layoutY="178.0" text="Mot de passe" />
-              <JFXComboBox fx:id="driver" layoutX="81.0" layoutY="216.0" prefHeight="25.0" prefWidth="99.0" promptText="SQLite" />
             </children>
         </AnchorPane>
-        <Label layoutX="40.0" layoutY="270.0" text="SQL SGBD" />
+        <Label layoutX="39.0" layoutY="273.0" text="SQL SGBD" />
+        <JFXComboBox fx:id="driver" layoutX="158.0" layoutY="269.0" prefHeight="25.0" prefWidth="218.0" promptText="SQLite" />
     </children>
 </AnchorPane>

@@ -5,8 +5,8 @@
  */
 package faker;
 
-import bean.Attribute;
-import bean.SQLSchema;
+import beans.Attribute;
+import beans.SQLSchema;
 
 /**
  *

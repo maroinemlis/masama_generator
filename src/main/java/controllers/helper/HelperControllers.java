@@ -21,27 +21,33 @@ import javafx.stage.Stage;
  */
 public class HelperControllers {
 
-    public static Parent getNodeController(Object _this, String file) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(_this.getClass().getClassLoader().getResource(file));
+    private static Object _this;
+
+    public static void setClassResources(Object _this) {
+        HelperControllers._this = _this;
+    }
+
+    public static Parent getNodeController(String file) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(_this.getClass().getClassLoader().getResource("fxml/" + file));
         Parent name = (Parent) fxmlLoader.load();
         return name;
     }
 
-    public static <C> C getController(Object _this, String file) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(_this.getClass().getClassLoader().getResource(file));
+    public static <C> C getController(String file) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(_this.getClass().getClassLoader().getResource("fxml/" + file));
         return fxmlLoader.<C>getController();
     }
 
-    public static void showControlller(Object _this, String file, String title) throws IOException {
-        Stage primaryStage = new Stage();
-        Scene scene = new Scene(getNodeController(_this, file));
-        primaryStage.setScene(scene);
-        primaryStage.setTitle(title);
-        primaryStage.show();
+    public static void showControlller(String file, String title) throws IOException {
+        Stage stage = new Stage();
+        Scene scene = new Scene(getNodeController(file));
+        stage.setScene(scene);
+        stage.setTitle(title);
+        stage.show();
     }
 
-    public static <C> void addNodeToContainer(Object _this, String file, Pane container) throws IOException {
-        Parent nodeController = getNodeController(_this, file);
+    public static <C> void addNodeToContainer(String file, Pane container) throws IOException {
+        Parent nodeController = getNodeController(file);
         container.getChildren().add(nodeController);
     }
 

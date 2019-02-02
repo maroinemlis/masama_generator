@@ -1,4 +1,4 @@
-package bean;
+package beans;
 
 import faker.BlobDataFaker;
 import faker.BooleanDataFaker;

@@ -77,7 +77,7 @@
                   <VBox fx:id="connectionVBox" prefHeight="200.0" prefWidth="100.0" />
                </content>
             </Tab>
-            <Tab closable="false" text="Schéma et génération de données">
+            <Tab fx:id="SchemaTab" closable="false" text="Schéma et génération de données">
                <content>
                     <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                         <items>

@@ -1,8 +1,8 @@
 package pre_condition;
 
-import bean.Attribute;
-import bean.SQLSchema;
-import bean.Table;
+import beans.Attribute;
+import beans.SQLSchema;
+import beans.Table;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -147,7 +147,7 @@ public class PreCondetion {
     private boolean checkDate(Attribute attribute) throws ParseException {
         String from = attribute.getDataFaker().getFrom();
         String to = attribute.getDataFaker().getTo();
-        int numberOfDay = numberDaysBetween(from, to);
+        int numberOfDay = (int) numberDaysBetween(from, to);
         if (numberOfDay >= attribute.getTable().getHowMuch()) {
             return true;
         } else {

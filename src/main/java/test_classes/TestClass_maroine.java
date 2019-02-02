@@ -5,7 +5,7 @@
  */
 package test_classes;
 
-import bean.SQLSchema;
+import beans.SQLSchema;
 import connection.SQLConnection;
 
 /**

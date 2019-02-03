@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchId" prefHeight="612.0" prefWidth="1280.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.report.ReportController">
-    <children>
-        <Label layoutX="457.0" layoutY="14.0" text="Rapport d'estimation d'éxecution" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="457.0" AnchorPane.topAnchor="14.0">
-            <font>
-                <Font size="25.0" />
-            </font>
-        </Label>
-            <Label layoutX="68.0" layoutY="64.0" text="Nombre total des requétes :">
-                <font>
-                    <Font size="14.0" />
-                </font>
-            </Label>
-            <JFXTextField fx:id="nbrRequete" layoutX="296.0" layoutY="61.0" prefHeight="25.0" prefWidth="99.0" promptText="0" text="0" />
-            <JFXButton buttonType="RAISED" layoutX="68.0" layoutY="403.0" styleClass="button1" text="Ajouter un bloc de réquetes" />
-      <JFXTreeTableView layoutX="63.0" layoutY="106.0" prefHeight="280.0" prefWidth="696.0">
-         <columns>
-            <TreeTableColumn prefWidth="526.0" text="Bloc de réquetes" />
-            <TreeTableColumn prefWidth="172.0" text="Pourcentage d'exécution" />
-         </columns>
-      </JFXTreeTableView>
-    </children>
-</AnchorPane>
+<JFXTabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="1280.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.report.ReportController">
+    <tabs>
+        <Tab text="Ajouter un bloc des réquetes">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Label layoutX="30.0" layoutY="25.0" text="Saisir une requete" />
+                        <TextArea fx:id="query" layoutX="30.0" layoutY="71.0" prefHeight="319.0" prefWidth="550.0" />
+                        <JFXButton buttonType="RAISED" layoutX="30.0" layoutY="406.0" onAction="#onAddQuery" text="Ajouter dans le bloc" />
+                        <JFXButton buttonType="RAISED" layoutX="417.0" layoutY="414.0" onAction="#onDeleteQuery" text="Ajouter dans le bloc" />
+                        <JFXListView fx:id="blocList" layoutX="630.0" layoutY="71.0" prefHeight="217.0" prefWidth="595.0" />
+                        <Label layoutX="630.0" layoutY="30.0" text="Bloc des requetes" />
+                        <Label layoutX="630.0" layoutY="317.0" text="Pourcentage d'éxécution" />
+                        <JFXSlider fx:id="rate" layoutX="905.0" layoutY="323.0" prefHeight="14.0" prefWidth="318.0" />
+                        <JFXButton buttonType="RAISED" layoutX="846.0" layoutY="414.0" onAction="#onAddBloc" text="Valider le bloc" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="Liste des blocs">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <JFXTreeTableView fx:id="blocsTable" layoutX="33.0" layoutY="113.0" prefHeight="332.0" prefWidth="1122.0" />
+                        <Label layoutX="25.0" layoutY="30.0" text="Nombre total des réquetes" />
+                        <JFXTextField fx:id="queriesTotalNumber" layoutX="300.0" layoutY="20.0" />
+                        <Label layoutX="606.0" layoutY="30.0" text="Temps total d'éxécution" />
+                        <JFXTextField fx:id="totalTime" disable="true" layoutX="849.0" layoutY="20.0" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="Visualisation">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+        </Tab>
+    </tabs>
+</JFXTabPane>

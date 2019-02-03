@@ -1,7 +1,6 @@
-/**/
 * {
     -fx-primary : #424242;
-    -fx-secondary :#bc3878;
+    -fx-secondary :#3fa2c6;
     -fx-primarytext : #B2B2B2;
     -fx-secondarytext : white;
     -fx-blue: #1976D2;
@@ -43,7 +42,6 @@
 
 .text-field
 {
-    -fx-text-fill: -fx-primarytext;
     -fx-font-size : 12pt;
     -jfx-focus-color: -fx-secondary;
     -fx-text-fill: derive(-fx-secondary, 20%);
@@ -150,7 +148,7 @@
     -fx-background-color: derive(-fx-primary, 20%);
 }
 .tree-table-row-cell {
-    -fx-cell-size: 50px;
+    -fx-cell-size: 150px;
 }
 .tree-table-view .column-header-background{
     -fx-background-color: derive(-fx-primary, 10%);
@@ -325,4 +323,31 @@
 
 .button-close:hover{
     -fx-background-color: derive(red, 40%);
+}
+
+.text-area .content {
+    -fx-background-color: derive(-fx-primary, 5%);
+    -fx-background-radius: 0px;
+    -fx-font-size: 12pt;
+}
+.text-area {
+    -fx-text-fill: -fx-primarytext;
+    -fx-background-color: derive(-fx-secondary, 30%);
+    -fx-background-radius: 0px;
+
+    -fx-font-size: 12pt;
+}
+
+.list-cell {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size: 12pt;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: -fx-secondary;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: -fx-secondary;
 }

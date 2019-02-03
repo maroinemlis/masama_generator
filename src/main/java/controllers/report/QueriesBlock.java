@@ -5,9 +5,11 @@
  */
 package controllers.report;
 
+import beans.SQLSchema;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import connection.SQLConnection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -18,8 +20,8 @@ import java.util.ArrayList;
 public class QueriesBlock extends RecursiveTreeObject<QueriesBlock> {
 
     private ArrayList<String> queries = new ArrayList<String>();
-    private ArrayList<Long> times = new ArrayList<Long>();
     private int executionNumber;
+    private int currentExecutionNumber = 0;
     private JFXSlider rate;
     private int time = 0;
     private JFXListView list;
@@ -31,15 +33,18 @@ public class QueriesBlock extends RecursiveTreeObject<QueriesBlock> {
         this.rate.setValue(rate.getValue());
     }
 
-    public void execute(int i) throws SQLException {
+    public boolean execute() throws SQLException {
+        if (currentExecutionNumber == executionNumber) {
+            return false;
+        }
         long t1 = System.currentTimeMillis();
-        String[] queries = this.queries.get(i).split(";");
         for (String query : queries) {
+            SQLConnection.getInstance().execute(query);
         }
         long t2 = System.currentTimeMillis();
-        times.add(t2 - t1);
-        time += times.get(i);
-        executionNumber--;
+        time += t2 - t1;
+        currentExecutionNumber++;
+        return true;
     }
 
     public JFXListView getQueriesListColumn() {
@@ -52,6 +57,10 @@ public class QueriesBlock extends RecursiveTreeObject<QueriesBlock> {
 
     public double getTimeColumn() {
         return time;
+    }
+
+    public double getRate() {
+        return rate.getValue();
     }
 
 }

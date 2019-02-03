@@ -79,7 +79,7 @@ public final class SQLConnection {
     public void executeSQLFile(String file) throws Exception {
         String[] queries = readFile(file, StandardCharsets.UTF_8).split(";");
         for (String query : queries) {
-            stm.executeUpdate(query);
+            stm.execute(query);
         }
     }
 
@@ -188,5 +188,9 @@ public final class SQLConnection {
 
         }
         conn.commit();
+    }
+
+    public void execute(String query) throws SQLException {
+        stm.execute(query);
     }
 }

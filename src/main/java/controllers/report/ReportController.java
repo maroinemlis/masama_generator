@@ -11,16 +11,21 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.paint.Color;
 
 /**
  * FXML Controller class
@@ -41,12 +46,23 @@ public class ReportController implements Initializable {
     private JFXTextField totalTime;
 
     private ObservableList<QueriesBlock> observablesQueriesBlock = FXCollections.<QueriesBlock>observableArrayList();
+    ObservableList<PieChart.Data> pieChartData
+            = FXCollections.observableArrayList();
+
     @FXML
     private JFXTreeTableView<QueriesBlock> blocsTable;
+    @FXML
+    private PieChart pieChart;
+
+    void reset() {
+
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createTableView();
+        pieChart.setData(pieChartData);
+
     }
 
     @FXML

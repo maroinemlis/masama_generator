@@ -32,7 +32,6 @@ public class LuncherApp extends Application {
 
     public void startMainInterface() throws Exception {
         HelperControllers.setClassResources(this);
-
         Parent root = HelperControllers.getNodeController("main.fxml");
         Scene scene = new Scene(root);
         HelperControllers.setRootParent(root);

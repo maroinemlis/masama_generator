@@ -7,6 +7,8 @@ package controllers.helper;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSnackbar;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -39,7 +41,9 @@ public class SnackBarAlert {
         box = new VBox();
         box.setAlignment(Pos.BASELINE_RIGHT);
         closeButton = new JFXButton("Fermer");
-        // closeButton.setGraphic(new FontAwesomeIconView(FontAwesomeIcon.TIMES));
+        closeButton.getStyleClass().add("button-close");
+        FontAwesomeIconView f = new FontAwesomeIconView(FontAwesomeIcon.TIMES);
+        closeButton.setGraphic(f);
         box.getChildren().add(closeButton);
         p.setTop(box);
         p.setStyle("-fx-background-color: derive(-fx-primary, 20%)");
@@ -50,7 +54,7 @@ public class SnackBarAlert {
 
     }
 
-    public void newSnackBarAlert(Parent center, String title) throws IOException {
+    public void newSnackBarAlert(Parent center, String title) {
         if (title.equals(this.title)) {
             return;
         }

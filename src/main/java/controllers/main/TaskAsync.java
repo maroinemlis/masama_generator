@@ -6,7 +6,6 @@
 package controllers.main;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 /**
  *
@@ -14,13 +13,8 @@ import java.util.function.Consumer;
  */
 public class TaskAsync {
 
-    public TaskAsync(Consumer<Integer> c) {
-        CompletableFuture<Void> future = CompletableFuture.runAsync(new Runnable() {
-            @Override
-            public void run() {
-                c.accept(null);
-            }
-        });
+    public TaskAsync(Runnable c) {
+        CompletableFuture<Void> future = CompletableFuture.runAsync(c);
     }
 
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
@@ -16,8 +15,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="652.0" prefWidth="1280.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.main.MainController">
     <top>
@@ -53,12 +50,6 @@
                         <FontAwesomeIconView fill="#edb721" glyphName="COG" size="30" stroke="#edb721" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
-                <Text fx:id="chargement_en_cours" strokeType="OUTSIDE" strokeWidth="0.0" text="Chargement en cours ..." visible="false" wrappingWidth="187.0048828125">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Text>
-                <JFXProgressBar fx:id="progress_Bar" prefHeight="29.0" prefWidth="403.0" visible="false" />
             </children>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="5.0" top="5.0" />
@@ -68,51 +59,55 @@
             </opaqueInsets>
         </HBox>
     </top>
-   <center>
-      <JFXTabPane BorderPane.alignment="CENTER">
-         <tabs>
-            <Tab closable="false" text="Connexion et configuration">
-               <content>
-                  <VBox fx:id="connectionVBox" prefHeight="200.0" prefWidth="100.0" />
-               </content>
-            </Tab>
-            <Tab fx:id="SchemaTab" closable="false" text="Schéma et génération de données">
-               <content>
-                    <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
-                        <items>
-                            <SplitPane dividerPositions="0.5774647887323944" prefHeight="160.0" prefWidth="200.0">
-                                <items>
-                                    <VBox prefHeight="274.0" prefWidth="741.0" fx:id="xxx">
-                                        <children>
-                                            <Accordion fx:id="tablesAccordion" />
-                                        </children>
-                                    </VBox>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="274.0" prefWidth="284.0">
-                                 <children>
-                                    <Label layoutX="14.0" layoutY="129.0" text="Nombre de ligne" />
-                                    <Label layoutX="14.0" layoutY="184.0" text="Pourcentage des valeurs nulls" />
-                                    <JFXSlider fx:id="nullsRate" disable="true" layoutX="256.0" layoutY="190.0" prefHeight="14.0" prefWidth="233.0" value="10.0" />
-                                    <JFXTextField id="howMuch" fx:id="howMuch" disable="true" layoutX="255.0" layoutY="111.0" prefHeight="27.0" prefWidth="235.0" />
-                                    <JFXToggleButton fx:id="activateUpdate" layoutY="14.0" prefHeight="62.0" prefWidth="247.0" text="Activer la modification" toggleColor="#499e65" toggleLineColor="#499e65" />
-                                    <JFXTextField id="tableName" fx:id="tableName" disable="true" layoutX="254.0" layoutY="54.0" prefHeight="27.0" prefWidth="238.0" />
-                                    <Label layoutX="14.0" layoutY="72.0" text="Table sélectionnée" />
-                                    <Label layoutX="14.0" layoutY="232.0" text="Temps de génération" />
-                                    <JFXTextField fx:id="generationTime" disable="true" layoutX="199.0" layoutY="219.0" prefHeight="27.0" prefWidth="232.0" />
-                                 </children>
-                              </AnchorPane>
-                                </items>
-                            </SplitPane>
-                            <VBox fx:id="insertsVBox" alignment="TOP_CENTER" />
-                        </items>
-                    </SplitPane>
-               </content>
-            </Tab>
-            <Tab closable="false" text="Rapport sur le schéma">
-               <content>
-                  <VBox fx:id="rapportVBox" prefHeight="200.0" prefWidth="100.0" />
-               </content>
-            </Tab>
-         </tabs>
-      </JFXTabPane>
-   </center>
+    <center>
+        <JFXTabPane BorderPane.alignment="CENTER"  >
+            <tabs>
+                <Tab closable="false" text="Connexion et configuration">
+                    <content>
+                        <HBox fx:id="connectionVBox" prefHeight="200.0" prefWidth="100.0" />
+                    </content>
+                    <content>
+                        <SplitPane dividerPositions="0.4" prefHeight="200.0" prefWidth="200.0" mouseTransparent="false">
+                            <items>
+                                <AnchorPane fx:id="connectionBox" prefHeight="200.0" prefWidth="200.0" />
+                                <AnchorPane fx:id="optionVBox" prefHeight="200.0" prefWidth="200.0" />
+                            </items>
+                        </SplitPane>
+                    </content>
+                </Tab>
+                <Tab fx:id="SchemaTab" closable="false" text="Schéma et génération de données">
+                    <content>
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                            <items>
+                                <SplitPane dividerPositions="0.5774647887323944" prefHeight="160.0" prefWidth="200.0">
+                                    <items>
+                                        <Accordion fx:id="tablesAccordion" />
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="274.0" prefWidth="284.0">
+                                            <children>
+                                                <Label layoutX="14.0" layoutY="129.0" text="Nombre de ligne" />
+                                                <Label layoutX="14.0" layoutY="184.0" text="Pourcentage des valeurs nulls" />
+                                                <JFXSlider fx:id="nullsRate" disable="true" layoutX="256.0" layoutY="190.0" prefHeight="14.0" prefWidth="233.0" value="10.0" />
+                                                <JFXTextField id="howMuch" fx:id="howMuch" disable="true" layoutX="255.0" layoutY="111.0" prefHeight="27.0" prefWidth="235.0" />
+                                                <JFXToggleButton fx:id="activateUpdate" layoutY="14.0" prefHeight="62.0" prefWidth="247.0" text="Activer la modification" toggleColor="#499e65" toggleLineColor="#499e65" />
+                                                <JFXTextField id="tableName" fx:id="tableName" disable="true" layoutX="254.0" layoutY="54.0" prefHeight="27.0" prefWidth="238.0" />
+                                                <Label layoutX="14.0" layoutY="72.0" text="Table sélectionnée" />
+                                                <Label layoutX="14.0" layoutY="232.0" text="Temps de génération" />
+                                                <JFXTextField fx:id="generationTime" disable="true" layoutX="199.0" layoutY="219.0" prefHeight="27.0" prefWidth="232.0" />
+                                            </children>
+                                        </AnchorPane>
+                                    </items>
+                                </SplitPane>
+                                <VBox fx:id="insertsVBox" alignment="TOP_CENTER" />
+                            </items>
+                        </SplitPane>
+                    </content>
+                </Tab>
+                <Tab closable="false" text="Rapport sur le schéma">
+                    <content>
+                        <VBox fx:id="rapportVBox" prefHeight="200.0" prefWidth="100.0" />
+                    </content>
+                </Tab>
+            </tabs>
+        </JFXTabPane>
+    </center>
 </BorderPane>

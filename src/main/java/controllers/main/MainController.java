@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import beans.SQLSchema;
+import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.controls.JFXTabPane;
 import connection.SQLConnection;
 import static utils.FileUtil.readFileObject;
 import java.io.File;
@@ -24,7 +26,10 @@ import static controllers.main.LuncherApp.primaryStage;
 import static utils.FileUtil.writeObjectInFile;
 import java.io.IOException;
 import controllers.helper.HelperControllers;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 /**
  * FXML Controller class
@@ -42,24 +47,27 @@ public class MainController implements Initializable {
     @FXML
     private Tab SchemaTab;
     @FXML
-    private VBox rapportVBox;
-    @FXML
-    private VBox connectionVBox;
-    @FXML
-    private VBox insertsVBox;
-    @FXML
     private Accordion tablesAccordion;
     @FXML
-    private JFXTextField tableName;
+    private JFXSlider nullsRate;
     @FXML
     private JFXTextField howMuch;
     @FXML
-    private JFXSlider nullsRate;
-
-    @FXML
     private JFXToggleButton activateUpdate;
     @FXML
+    private JFXTextField tableName;
+    @FXML
     private JFXTextField generationTime;
+    @FXML
+    private VBox insertsVBox;
+    @FXML
+    private VBox rapportVBox;
+    @FXML
+    private HBox drag;
+    @FXML
+    private AnchorPane connectionBox;
+    @FXML
+    private AnchorPane optionVBox;
 
     public void checkFields() {
         howMuch.textProperty().addListener((o, newValue, old) -> {
@@ -87,7 +95,8 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            HelperControllers.addNodeToContainer("connection.fxml", connectionVBox);
+            HelperControllers.addNodeToContainer("connection.fxml", connectionBox);
+            HelperControllers.addNodeToContainer("option.fxml", optionVBox);
             HelperControllers.addNodeToContainer("report.fxml", rapportVBox);
         } catch (Exception ex) {
             Alerts.error(ex.getMessage());
@@ -151,7 +160,6 @@ public class MainController implements Initializable {
     private void onExport(ActionEvent event) {
         try {
             HelperControllers.showControlllerOnAlert("export.fxml", "Exporter");
-
         } catch (IOException ex) {
             Alerts.error(ex.getMessage());
         }
@@ -200,7 +208,6 @@ public class MainController implements Initializable {
             SQLSchema.setInstance((SQLSchema) readFileObject(showOpenDialog.getAbsolutePath()));
             tables = SQLSchema.getInstance().getTablesAsTablesView();
             tables.forEach(t -> t.updateTableViewInserts());
-            currentTable = tables.get(0);
             createTablesView();
         } catch (Exception e) {
             Alerts.error(e.getMessage());

@@ -148,7 +148,7 @@
     -fx-background-color: derive(-fx-primary, 20%);
 }
 .tree-table-row-cell {
-    -fx-cell-size: 150px;
+    -fx-cell-size: 50px;
 }
 .tree-table-view .column-header-background{
     -fx-background-color: derive(-fx-primary, 10%);

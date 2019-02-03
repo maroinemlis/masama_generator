@@ -75,7 +75,7 @@ public class ReportController implements Initializable {
         JFXTreeTableColumn<QueriesBlock, ?> timeColumn = new JFXTreeTableColumn<>("Temps d'éxécution");
         queriesListColumn.setPrefWidth(700);
         rateColumn.setPrefWidth(400);
-        rateColumn.setPrefWidth(100);
+        timeColumn.setPrefWidth(100);
 
         queriesListColumn.setCellValueFactory(
                 new TreeItemPropertyValueFactory("queriesListColumn"));

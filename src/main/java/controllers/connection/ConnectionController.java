@@ -62,14 +62,17 @@ public class ConnectionController implements Initializable {
         cnxType.selectedToggleProperty().addListener(((observable, oldValue, new_toggle) -> {
             if (r1.isSelected()) {
                 driver.getItems().setAll("MySQL", "Oracle", "SQLServer");
+                driver.getSelectionModel().select(0);
                 auth.setVisible(true);
                 file.setVisible(false);
             } else if (r2.isSelected()) {
                 driver.getItems().setAll("SQLite", "MySQL", "Oracle", "SQLServer", "Derby");
+                driver.getSelectionModel().select(0);
                 auth.setVisible(false);
                 file.setVisible(true);
             } else {
                 driver.getItems().setAll("SQLite", "Derby");
+                driver.getSelectionModel().select(0);
                 auth.setVisible(false);
                 file.setVisible(true);
             }
@@ -99,8 +102,11 @@ public class ConnectionController implements Initializable {
         try {
             if (r1.isSelected()) {
                 SQLConnection.getInstance().connect(url.getText(), user.getText(), password.getText(), getCnxType());
-            } else {
-                SQLConnection.getInstance().connect(path.getText(), getCnxType(), r2.isSelected());
+            }
+            if (r2.isSelected()) {
+                SQLConnection.getInstance().connect(path.getText(), getCnxType(), true);
+            } else if (r3.isSelected()) {
+                SQLConnection.getInstance().connect(path.getText(), getCnxType(), false);
             }
             SQLSchema.getInstance().constructSchema();
             Alerts.done("Connexion réussie");

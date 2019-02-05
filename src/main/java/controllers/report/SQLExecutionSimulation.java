@@ -8,9 +8,9 @@ package controllers.report;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import utils.Shared;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.PieChart.Data;
 
 /**
  *
@@ -18,18 +18,22 @@ import utils.Shared;
  */
 public class SQLExecutionSimulation {
 
-    private ArrayList<QueriesBlock> blocs = new ArrayList<>();
-    private int totalQueries;
+    private ArrayList<QueriesBloc> blocs = new ArrayList<>();
+    private int totalQueries = 0;
+    private long totalTime = 0;
 
-    public SQLExecutionSimulation(int totalQueries) {
+    public void set(int totalQueries) {
         this.totalQueries = totalQueries;
     }
 
-    public void addBloc(QueriesBlock bloc) {
+    public SQLExecutionSimulation() {
+    }
+
+    public void addBloc(QueriesBloc bloc) {
         blocs.add(bloc);
     }
 
-    public void removeBloc(QueriesBlock bloc) {
+    public void removeBloc(QueriesBloc bloc) {
         blocs.remove(bloc);
     }
 
@@ -42,5 +46,26 @@ public class SQLExecutionSimulation {
             }
         }
         Collections.shuffle(arr);
+        for (int i = 0; i < arr.size(); i++) {
+            totalTime += blocs.get(arr.get(i)).execute();
+        }
+    }
+
+    public void fillPieChart(PieChart pieChart) {
+        ObservableList<PieChart.Data> d = pieChart.getData();
+        int i = 0;
+        for (QueriesBloc bloc : blocs) {
+            d.add(new Data("Bloc " + i, bloc.getTime() * 100 / totalTime));
+        }
+
+    }
+
+    public void reset() {
+        blocs.forEach(b -> {
+            b.reset();
+        });
+        blocs.clear();
+        totalQueries = 0;
+        totalTime = 0;
     }
 }

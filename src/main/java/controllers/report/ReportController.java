@@ -5,27 +5,23 @@ package controllers.report;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
-import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.paint.Color;
 
 /**
  * FXML Controller class
@@ -45,24 +41,23 @@ public class ReportController implements Initializable {
     @FXML
     private JFXTextField totalTime;
 
-    private ObservableList<QueriesBlock> observablesQueriesBlock = FXCollections.<QueriesBlock>observableArrayList();
+    private ObservableList<QueriesBloc> observablesQueriesBlock = FXCollections.<QueriesBloc>observableArrayList();
     ObservableList<PieChart.Data> pieChartData
             = FXCollections.observableArrayList();
-
     @FXML
-    private JFXTreeTableView<QueriesBlock> blocsTable;
+    private JFXTreeTableView<QueriesBloc> blocsTable;
     @FXML
     private PieChart pieChart;
-
-    void reset() {
-
-    }
+    @FXML
+    private JFXComboBox<String> historySimulation;
+    private SimulationEvolution smulationEvolution = new SimulationEvolution();
+    private SQLExecutionSimulation executionSimulation = new SQLExecutionSimulation();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createTableView();
         pieChart.setData(pieChartData);
-
+        blocsTable.setRoot(new RecursiveTreeItem<>(observablesQueriesBlock, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
     }
 
     @FXML
@@ -72,23 +67,28 @@ public class ReportController implements Initializable {
 
     @FXML
     private void onDeleteQuery(ActionEvent event) {
-        int selectedIndex = blocList.getSelectionModel().getSelectedIndex();
-        blocList.getItems().remove(selectedIndex);
+        Integer selectedIndex = blocList.getSelectionModel().getSelectedIndex();
+        if (selectedIndex != null) {
+            blocList.getItems().remove(selectedIndex);
+        } else {
+            alert.Alerts.error("Requéte non selectionéee");
+        }
     }
 
     @FXML
     private void onAddBloc(ActionEvent event) {
-        observablesQueriesBlock.add(new QueriesBlock(blocList, rate));
-        blocsTable.setRoot(new RecursiveTreeItem<>(observablesQueriesBlock, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
+        QueriesBloc bloc = new QueriesBloc(blocList, rate);
+        observablesQueriesBlock.add(bloc);
+        executionSimulation.addBloc(bloc);
         alert.Alerts.done("Nouveau bloc a été ajouté");
     }
 
     public void createTableView() {
         blocsTable.setShowRoot(false);
         ObservableList<String> stylesheets = blocsTable.getStylesheets();
-        JFXTreeTableColumn<QueriesBlock, ?> queriesListColumn = new JFXTreeTableColumn<>("Bloc");
-        JFXTreeTableColumn<QueriesBlock, ?> rateColumn = new JFXTreeTableColumn<>("Pourcentage");
-        JFXTreeTableColumn<QueriesBlock, ?> timeColumn = new JFXTreeTableColumn<>("Temps d'éxécution");
+        JFXTreeTableColumn<QueriesBloc, JFXListView<String>> queriesListColumn = new JFXTreeTableColumn<>("Bloc");
+        JFXTreeTableColumn<QueriesBloc, String> rateColumn = new JFXTreeTableColumn<>("Pourcentage");
+        JFXTreeTableColumn<QueriesBloc, Double> timeColumn = new JFXTreeTableColumn<>("Temps d'éxécution");
         queriesListColumn.setPrefWidth(700);
         rateColumn.setPrefWidth(400);
         timeColumn.setPrefWidth(100);
@@ -102,8 +102,29 @@ public class ReportController implements Initializable {
         blocsTable.getColumns()
                 .addAll(queriesListColumn, rateColumn, timeColumn);
 
-        blocsTable.setRoot(
-                new RecursiveTreeItem<>(observablesQueriesBlock, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
+        blocsTable.setRoot(new RecursiveTreeItem<>(observablesQueriesBlock, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
+    }
+
+    @FXML
+    private void onSimulate(ActionEvent event) {
+        try {
+            executionSimulation.simulate();
+            alert.Alerts.done("Simulation est faite");
+        } catch (Exception e) {
+            alert.Alerts.error(e.getMessage());
+
+        }
+    }
+
+    @FXML
+    private void onNewSimulation(ActionEvent event) {
+        smulationEvolution.addSQLExecutionSimulation(executionSimulation);
+        executionSimulation = new SQLExecutionSimulation();
+    }
+
+    @FXML
+    private void onResetEvolution(ActionEvent event) {
+
     }
 
 }

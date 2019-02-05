@@ -97,7 +97,7 @@ public class TableView implements Serializable {
             col.setCellValueFactory((param) -> {
                 return param.getValue().getValue().getInstances().get(currentI);
             });
-            col.setPrefWidth(LuncherApp.primaryStage.getWidth() / table.getAttributes().size());
+            col.setPrefWidth(LuncherApp.getPrimaryStage().getWidth() / table.getAttributes().size());
             treeTableView.getColumns().add(col);
             i++;
         }

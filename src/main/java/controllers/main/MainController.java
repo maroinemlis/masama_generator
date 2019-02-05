@@ -6,10 +6,8 @@ import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import beans.SQLSchema;
-import com.jfoenix.controls.JFXProgressBar;
-import com.jfoenix.controls.JFXTabPane;
 import connection.SQLConnection;
-import static utils.FileUtil.readFileObject;
+import controllers.helper.HelperControllers;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -22,14 +20,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import static controllers.main.LuncherApp.primaryStage;
-import static utils.FileUtil.writeObjectInFile;
 import java.io.IOException;
-import controllers.helper.HelperControllers;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import utils.FileUtil;
 
 /**
  * FXML Controller class
@@ -180,8 +175,8 @@ public class MainController implements Initializable {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choisir le répertoire d'enregistrement");
             fileChooser.setInitialDirectory(new File("."));
-            File showSaveDialog = fileChooser.showSaveDialog(primaryStage);
-            writeObjectInFile(showSaveDialog.getAbsolutePath(), SQLSchema.getInstance());
+            File showSaveDialog = fileChooser.showOpenDialog(LuncherApp.getPrimaryStage());
+            FileUtil.writeObjectInFile(showSaveDialog.getAbsolutePath(), SQLSchema.getInstance());
             Alerts.done("Projet enregistré");
         } catch (Exception e) {
             Alerts.error(e.getMessage());
@@ -204,8 +199,8 @@ public class MainController implements Initializable {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choisir le répertoire d'enregistrement");
             fileChooser.setInitialDirectory(new File("."));
-            File showOpenDialog = fileChooser.showOpenDialog(primaryStage);
-            SQLSchema.setInstance((SQLSchema) readFileObject(showOpenDialog.getAbsolutePath()));
+            File showOpenDialog = fileChooser.showOpenDialog(LuncherApp.getPrimaryStage());
+            SQLSchema.setInstance((SQLSchema) FileUtil.readFileObject(showOpenDialog.getAbsolutePath()));
             tables = SQLSchema.getInstance().getTablesAsTablesView();
             tables.forEach(t -> t.updateTableViewInserts());
             createTablesView();

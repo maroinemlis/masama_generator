@@ -147,49 +147,6 @@ public final class SQLConnection {
         }
     }
 
-    public List<String> executeQuerySelecte(String nameTable, String nameAttribute) throws SQLException {
-        List<String> result = new ArrayList<>();
-        String query = "select " + nameAttribute + " from " + nameTable + ";";
-        ResultSet rs = null;
-        try {
-            Connection conn = this.connection;
-            Statement stmt = conn.createStatement();
-            rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                result.add(rs.getString(nameAttribute));
-            }
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            rs.close();
-        }
-        return result;
-    }
-
-    public void displaySelect(String query, Integer valPourc) throws ClassNotFoundException, SQLException {
-        ResultSet rs = null;
-        Connection conn = this.connection;
-
-        conn.setAutoCommit(false);
-        for (int i = 0; i < valPourc; i++) {
-            Statement stmt = conn.createStatement();
-            rs = stmt.executeQuery(query);
-        }
-        conn.commit();
-
-    }
-
-    public void displayUpdate(String query, Integer valPourc) throws ClassNotFoundException, SQLException {
-        Connection conn = this.connection;
-        conn.setAutoCommit(false);
-        for (int i = 0; i < valPourc; i++) {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(query);
-
-        }
-        conn.commit();
-    }
-
     public void execute(String query) throws SQLException {
         stm.execute(query);
     }

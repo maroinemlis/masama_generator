@@ -12,7 +12,11 @@ import controllers.helper.HelperControllers;
  */
 public class LuncherApp extends Application {
 
-    public static Stage primaryStage;
+    private static Stage primaryStage;
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -26,7 +30,7 @@ public class LuncherApp extends Application {
         //new TestClass_maryem().main();
         //new TestClass_asma().main();
         //new TestClass_abdNour().main();
-        this.primaryStage = primaryStage;
+        LuncherApp.primaryStage = primaryStage;
         startMainInterface();
     }
 

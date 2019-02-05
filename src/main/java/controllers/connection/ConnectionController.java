@@ -11,7 +11,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import connection.SQLConnection;
-import static controllers.main.LuncherApp.primaryStage;
+import controllers.main.LuncherApp;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -85,7 +85,7 @@ public class ConnectionController implements Initializable {
             } else if (r3.isSelected()) {
                 fileChooser.setTitle("Choisir un script SQL");
             }
-            File fileUrl = fileChooser.showOpenDialog(primaryStage);
+            File fileUrl = fileChooser.showOpenDialog(LuncherApp.getPrimaryStage());
             path.setText(fileUrl.getAbsolutePath());
         } catch (Exception e) {
             Alerts.error(e.getMessage());
@@ -105,7 +105,7 @@ public class ConnectionController implements Initializable {
             SQLSchema.getInstance().constructSchema();
             Alerts.done("Connexion réussie");
         } catch (Exception e) {
-            Alerts.error(e.getMessage());
+            Alerts.error("Un probléme de connexion");
         }
     }
 

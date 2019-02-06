@@ -7,7 +7,12 @@ package controllers.report;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
@@ -19,14 +24,16 @@ import javafx.scene.chart.PieChart.Data;
 public class SQLExecutionSimulation {
 
     private ArrayList<QueriesBloc> blocs = new ArrayList<>();
-    private int totalQueries = 0;
     private long totalTime = 0;
+    private long totalBlocExecution;
+    private final PieChart pieChart;
 
-    public void set(int totalQueries) {
-        this.totalQueries = totalQueries;
+    public void setTotalBlocExecution(long totalBlocExecution) {
+        this.totalBlocExecution = totalBlocExecution;
     }
 
-    public SQLExecutionSimulation() {
+    public SQLExecutionSimulation(PieChart pieChart) {
+        this.pieChart = pieChart;
     }
 
     public void addBloc(QueriesBloc bloc) {
@@ -37,27 +44,45 @@ public class SQLExecutionSimulation {
         blocs.remove(bloc);
     }
 
-    public void simulate() throws SQLException {
-        ArrayList<Integer> arr = new ArrayList<>(totalQueries);
-        for (int j = 0; j < blocs.size(); j++) {
-            int n = (int) (blocs.get(j).getRate() * totalQueries / 100);
-            for (int i = 0; i < n; i++) {
-                arr.add(j);
+    private List<Integer> generateRandomSequence() {
+        List<Integer> arr = new ArrayList<>((int) totalBlocExecution);
+        for (int i = 0; i < blocs.size(); i++) {
+            long n = (int) (blocs.get(i).getRate() * totalBlocExecution / 100);
+            for (int j = 0; j < n; j++) {
+                arr.add(i);
             }
         }
         Collections.shuffle(arr);
-        for (int i = 0; i < arr.size(); i++) {
-            totalTime += blocs.get(arr.get(i)).execute();
-        }
+        return arr;
     }
 
-    public void fillPieChart(PieChart pieChart) {
+    public long simulate() throws SQLException {
+        totalTime = 0;
+        for (QueriesBloc bloc : blocs) {
+            bloc.setTime(0);
+        }
+        List<Integer> arr = generateRandomSequence();
+        for (int i = 0; i < arr.size(); i++) {
+            blocs.get(arr.get(i)).execute();
+        }
+        for (QueriesBloc bloc : blocs) {
+            totalTime += bloc.getTime();
+        }
+        fillPieChart();
+        fillPieChart();
+
+        return totalTime;
+    }
+
+    public void fillPieChart() {
         ObservableList<PieChart.Data> d = pieChart.getData();
+        d.clear();
         int i = 0;
         for (QueriesBloc bloc : blocs) {
-            d.add(new Data("Bloc " + i, bloc.getTime() * 100 / totalTime));
+            double rate = bloc.getTime() * 1.0 / totalTime;
+            d.add(new Data("Bloc " + i + " " + (bloc.getTime() * 100) / totalTime + " %", rate));
+            i++;
         }
-
     }
 
     public void reset() {
@@ -65,7 +90,7 @@ public class SQLExecutionSimulation {
             b.reset();
         });
         blocs.clear();
-        totalQueries = 0;
         totalTime = 0;
     }
+
 }

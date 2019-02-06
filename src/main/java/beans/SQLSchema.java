@@ -44,7 +44,10 @@ public class SQLSchema implements Serializable {
                 }
             }
         }
-        sortedRootAttributes.sort((a1, a2) -> Integer.compare(a1.getTable().getHowMuch(), a2.getTable().getHowMuch()));
+        if (sortedRootAttributes.size() >= 2) {
+            sortedRootAttributes.sort((a1, a2) -> Integer.compare(a1.getTable().getHowMuch(), a2.getTable().getHowMuch()));
+
+        }
     }
 
     public static SQLSchema getInstance() {
@@ -70,6 +73,7 @@ public class SQLSchema implements Serializable {
         for (Table t : tables) {
             t.checkCirculairAttribute();
         }
+
         generateSortedRootAttributes();
     }
 
@@ -115,6 +119,7 @@ public class SQLSchema implements Serializable {
             String tableName = rs.getString("TABLE_NAME");
             Table table = new Table(tableName);
             tables.add(table);
+            System.out.println(tableName);
         }
     }
 

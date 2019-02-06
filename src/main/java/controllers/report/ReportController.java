@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
@@ -37,26 +38,27 @@ public class ReportController implements Initializable {
     @FXML
     private JFXSlider rate;
     @FXML
-    private JFXTextField queriesTotalNumber;
+    private JFXTextField totalBlocExecution;
     @FXML
     private JFXTextField totalTime;
 
     private ObservableList<QueriesBloc> observablesQueriesBlock = FXCollections.<QueriesBloc>observableArrayList();
-    ObservableList<PieChart.Data> pieChartData
-            = FXCollections.observableArrayList();
     @FXML
     private JFXTreeTableView<QueriesBloc> blocsTable;
     @FXML
     private PieChart pieChart;
     @FXML
     private JFXComboBox<String> historySimulation;
-    private SimulationEvolution smulationEvolution = new SimulationEvolution();
-    private SQLExecutionSimulation executionSimulation = new SQLExecutionSimulation();
+    private SimulationEvolution smulationEvolution;
+    private SQLExecutionSimulation executionSimulation;
+    @FXML
+    private AreaChart<Integer, Integer> chart;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        executionSimulation = new SQLExecutionSimulation(pieChart);
+        smulationEvolution = new SimulationEvolution();
         createTableView();
-        pieChart.setData(pieChartData);
         blocsTable.setRoot(new RecursiveTreeItem<>(observablesQueriesBlock, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
     }
 
@@ -108,18 +110,20 @@ public class ReportController implements Initializable {
     @FXML
     private void onSimulate(ActionEvent event) {
         try {
-            executionSimulation.simulate();
+            executionSimulation.setTotalBlocExecution(Long.parseLong(totalBlocExecution.getText()));
+            long time = executionSimulation.simulate();
+            blocsTable.refresh();
+            totalTime.setText(time + "");
             alert.Alerts.done("Simulation est faite");
         } catch (Exception e) {
-            alert.Alerts.error(e.getMessage());
-
+            alert.Alerts.error("err");
         }
     }
 
     @FXML
     private void onNewSimulation(ActionEvent event) {
         smulationEvolution.addSQLExecutionSimulation(executionSimulation);
-        executionSimulation = new SQLExecutionSimulation();
+        executionSimulation = new SQLExecutionSimulation(pieChart);
     }
 
     @FXML

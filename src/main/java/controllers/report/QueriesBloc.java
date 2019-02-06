@@ -28,15 +28,14 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
         this.rate.setValue(rate.getValue());
     }
 
-    public long execute() throws SQLException {
+    public void execute() throws SQLException {
         long t1 = System.currentTimeMillis();
         for (String query : list.getItems()) {
             SQLConnection.getInstance().execute(query);
+
         }
         long t2 = System.currentTimeMillis();
-        long t = t2 - t1;
-        time += t;
-        return t;
+        time += t2 - t1;
     }
 
     public JFXListView getQueriesListColumn() {
@@ -61,5 +60,9 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
 
     public void reset() {
         list.getItems().clear();
+    }
+
+    public void setTime(int i) {
+        time = i;
     }
 }

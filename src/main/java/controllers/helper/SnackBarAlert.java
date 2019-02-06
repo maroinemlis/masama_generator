@@ -40,7 +40,7 @@ public class SnackBarAlert {
         p = new BorderPane();
         box = new VBox();
         box.setAlignment(Pos.BASELINE_RIGHT);
-        closeButton = new JFXButton("Fermer");
+        closeButton = new JFXButton(" ");
         closeButton.getStyleClass().add("button-close");
         FontAwesomeIconView f = new FontAwesomeIconView(FontAwesomeIcon.TIMES);
         closeButton.setGraphic(f);

@@ -122,7 +122,7 @@ public class MainController implements Initializable {
         SchemaTab.setOnSelectionChanged(e -> {
             if (SQLConnection.getInstance().isNewConnection()) {
                 tables = SQLSchema.getInstance().getTablesAsTablesView();
-                currentTable = tables.get(0);
+                System.out.println(tables.size());
                 createTablesView();
                 SQLConnection.getInstance().isNewConnection(false);
             }

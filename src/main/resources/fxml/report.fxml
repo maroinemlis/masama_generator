@@ -23,7 +23,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
                         <Label layoutX="30.0" layoutY="25.0" text="Saisir une requete" />
-                        <TextArea fx:id="query" layoutX="30.0" layoutY="71.0" prefHeight="319.0" prefWidth="550.0" />
+                        <TextArea fx:id="query" layoutX="30.0" layoutY="71.0" prefHeight="319.0" prefWidth="550.0" text="select * from A" />
                         <JFXButton buttonType="RAISED" layoutX="30.0" layoutY="406.0" onAction="#onAddQuery" text="Ajouter dans le bloc" />
                         <JFXButton buttonType="RAISED" layoutX="417.0" layoutY="414.0" onAction="#onDeleteQuery" text="Suprimer du bloc" />
                         <JFXListView fx:id="blocList" layoutX="630.0" layoutY="71.0" prefHeight="217.0" prefWidth="595.0" />
@@ -41,9 +41,9 @@
                     <children>
                         <JFXTreeTableView fx:id="blocsTable" layoutX="33.0" layoutY="83.0" prefHeight="350.0" prefWidth="1200.0" stylesheets="@../styles/util.css" />
                         <Label layoutX="25.0" layoutY="30.0" text="Nombre total des réquetes" />
-                        <JFXTextField fx:id="queriesTotalNumber" layoutX="236.0" layoutY="20.0" />
+                        <JFXTextField fx:id="totalBlocExecution" layoutX="236.0" layoutY="20.0" text="500" />
                         <Label layoutX="446.0" layoutY="30.0" text="Temps total d'éxécution" />
-                        <JFXTextField fx:id="totalTime" disable="true" layoutX="676.0" layoutY="37.0" />
+                        <JFXTextField fx:id="totalTime" disable="true" layoutX="640.0" layoutY="24.0" />
                   <JFXButton buttonType="RAISED" layoutX="33.0" layoutY="452.0" onAction="#onSimulate" prefHeight="37.0" prefWidth="115.0" text="Simuler" />
                   <JFXButton buttonType="RAISED" layoutX="185.0" layoutY="452.0" onAction="#onNewSimulation" prefHeight="37.0" prefWidth="115.0" text="Nouveau" />
                   <JFXComboBox fx:id="historySimulation" layoutX="1062.0" layoutY="24.0" prefHeight="37.0" prefWidth="162.0" />
@@ -58,7 +58,7 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <PieChart fx:id="pieChart" layoutX="38.0" layoutY="52.0" title="Temps d'éxcution pour chaque bloc" />
-                  <AreaChart layoutX="629.0" layoutY="52.0" title="Evolution du temps">
+                  <AreaChart fx:id="chart" layoutX="629.0" layoutY="52.0" title="Evolution du temps">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>

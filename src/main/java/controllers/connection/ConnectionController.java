@@ -111,6 +111,7 @@ public class ConnectionController implements Initializable {
             SQLSchema.getInstance().constructSchema();
             Alerts.done("Connexion réussie");
         } catch (Exception e) {
+            System.out.println(e);
             Alerts.error("Un probléme de connexion");
         }
     }

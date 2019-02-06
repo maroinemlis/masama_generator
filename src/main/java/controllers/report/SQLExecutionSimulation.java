@@ -26,14 +26,16 @@ public class SQLExecutionSimulation {
     private ArrayList<QueriesBloc> blocs = new ArrayList<>();
     private long totalTime = 0;
     private long totalBlocExecution;
-    private final PieChart pieChart;
+    private PieChart pieChart;
 
     public void setTotalBlocExecution(long totalBlocExecution) {
         this.totalBlocExecution = totalBlocExecution;
     }
 
-    public SQLExecutionSimulation(PieChart pieChart) {
+    /* public SQLExecutionSimulation(PieChart pieChart) {
         this.pieChart = pieChart;
+    }*/
+    public SQLExecutionSimulation() {
     }
 
     public void addBloc(QueriesBloc bloc) {
@@ -69,7 +71,7 @@ public class SQLExecutionSimulation {
             totalTime += bloc.getTime();
         }
         fillPieChart();
-        fillPieChart();
+        addToChart();
 
         return totalTime;
     }
@@ -91,6 +93,10 @@ public class SQLExecutionSimulation {
         });
         blocs.clear();
         totalTime = 0;
+    }
+
+    private void addToChart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

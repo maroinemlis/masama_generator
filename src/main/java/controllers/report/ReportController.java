@@ -13,6 +13,7 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,9 +21,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -45,9 +53,11 @@ public class ReportController implements Initializable {
     private ObservableList<QueriesBloc> observablesQueriesBlock = FXCollections.<QueriesBloc>observableArrayList();
     @FXML
     private JFXTreeTableView<QueriesBloc> blocsTable;
+    /*@FXML
+    private PieChart pieChart;*/
+
     @FXML
-    private PieChart pieChart;
-    @FXML
+    private BarChart<String, Number> barChart;
     private JFXComboBox<String> historySimulation;
     private SimulationEvolution smulationEvolution;
     private SQLExecutionSimulation executionSimulation;
@@ -56,7 +66,7 @@ public class ReportController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        executionSimulation = new SQLExecutionSimulation(pieChart);
+        executionSimulation = new SQLExecutionSimulation();
         smulationEvolution = new SimulationEvolution();
         createTableView();
         blocsTable.setRoot(new RecursiveTreeItem<>(observablesQueriesBlock, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
@@ -115,6 +125,7 @@ public class ReportController implements Initializable {
             blocsTable.refresh();
             totalTime.setText(time + "");
             alert.Alerts.done("Simulation est faite");
+            fillBarChart(barChart);
         } catch (Exception e) {
             alert.Alerts.error("err");
         }
@@ -123,11 +134,32 @@ public class ReportController implements Initializable {
     @FXML
     private void onNewSimulation(ActionEvent event) {
         smulationEvolution.addSQLExecutionSimulation(executionSimulation);
-        executionSimulation = new SQLExecutionSimulation(pieChart);
+        executionSimulation = new SQLExecutionSimulation();
     }
 
     @FXML
     private void onResetEvolution(ActionEvent event) {
+
+    }
+
+    public void fillBarChart(BarChart bc) {
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setCategories(FXCollections.<String>observableArrayList(Arrays.asList(
+                "Bloc1", "Bloc2", "Bloc3")));
+        xAxis.setLabel("Blocs");
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Temps");
+        bc.setTitle("Temps d'execution");
+
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        series1.setName("Temps d'éxécution en ms");
+        series1.getData().add(new XYChart.Data<>("Bloc1", 46.0));
+
+        series1.getData().add(new XYChart.Data<>("Bloc2", 57.0));
+        series1.getData().add(new XYChart.Data("Bloc3", 33));
+        series1.getData().add(new XYChart.Data("Bloc4", 78));
+        series1.getData().add(new XYChart.Data("Bloc5", 12));
+        bc.getData().add(series1);
 
     }
 

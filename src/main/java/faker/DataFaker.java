@@ -22,7 +22,7 @@ public abstract class DataFaker implements Serializable {
 
     public DataFaker(Attribute attribute) {
         this.from = "1";
-        this.to = "100";
+        this.to = "1000000";
         this.generatorType = "'system";
         this.specificType = "'system";
         this.regex = "[a-zA-Z]";

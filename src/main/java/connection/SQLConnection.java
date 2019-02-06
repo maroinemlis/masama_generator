@@ -1,6 +1,7 @@
 package connection;
 
-import com.jfoenix.controls.JFXScrollPane;
+import beans.SQLSchema;
+import beans.Table;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -9,7 +10,6 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
@@ -147,5 +147,31 @@ public final class SQLConnection {
 
     public void execute(String query) throws SQLException {
         stm.executeUpdate(query);
+    }
+
+    private static void deleteData() throws SQLException {
+        List<Table> tables = SQLSchema.getInstance().getTables();
+        for (Table table : tables) {
+            String insert = "DELETE FROM " + table.getTableName();
+            getInstance().execute(insert);
+        }
+    }
+
+    public static void writeToDataBase() throws SQLException {
+        deleteData();
+        List<Table> tables = SQLSchema.getInstance().getTables();
+        for (Table table : tables) {
+            for (int j = 0; j < table.getHowMuch(); j++) {
+                int i = 0;
+                StringBuilder insert = new StringBuilder("INSERT INTO " + table.getTableName() + " VALUES(");
+                for (i = 0; i < table.getAttributes().size() - 1; i++) {
+                    insert.append(table.getAttributes().get(i).getInstances().get(j));
+                    insert.append(", ");
+                }
+                insert.append(table.getAttributes().get(i).getInstances().get(j));
+                insert.append(")");
+                getInstance().execute(insert.toString());
+            }
+        }
     }
 }

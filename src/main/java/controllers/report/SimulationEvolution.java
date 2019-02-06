@@ -6,6 +6,9 @@
 package controllers.report;
 
 import java.util.ArrayList;
+import java.util.List;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 
 /**
  *
@@ -13,15 +16,22 @@ import java.util.ArrayList;
  */
 public class SimulationEvolution {
 
-    private ArrayList<SQLExecutionSimulation> executionSimulations = new ArrayList<>();
-    private int i;
+    private List<SQLExecutionSimulation> executionSimulations = new ArrayList<>();
+    private LineChart chart;
+
+    public List<SQLExecutionSimulation> getExecutionSimulations() {
+        return executionSimulations;
+    }
+
+    public SimulationEvolution(LineChart chart) {
+        this.chart = chart;
+    }
 
     public void addSQLExecutionSimulation(SQLExecutionSimulation e) {
         this.executionSimulations.add(e);
-    }
-
-    public String toString() {
-        return "Simulation " + i;
+        XYChart.Series series = new XYChart.Series();
+        series.getData().add(new XYChart.Data("Simulation " + (executionSimulations.size() - 1), e.getTotalTime()));
+        chart.getData().add(series);
     }
 
     public void reset() {
@@ -30,4 +40,5 @@ public class SimulationEvolution {
         });
         executionSimulations.clear();
     }
+
 }

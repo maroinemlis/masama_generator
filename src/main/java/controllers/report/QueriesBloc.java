@@ -5,6 +5,7 @@
  */
 package controllers.report;
 
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -20,12 +21,14 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
     private JFXSlider rate;
     private long time = 0;
     private JFXListView<String> list;
+    private final JFXCheckBox updateCheckBox;
 
     public QueriesBloc(JFXListView<String> list, JFXSlider rate) {
         this.list = new JFXListView<>();
         this.list.getItems().addAll(list.getItems());
         this.rate = new JFXSlider();
         this.rate.setValue(rate.getValue());
+        this.updateCheckBox = new JFXCheckBox();
     }
 
     public void execute() throws SQLException {
@@ -64,5 +67,9 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
 
     public void setTime(int i) {
         time = i;
+    }
+
+    public JFXCheckBox getUpdate() {
+        return updateCheckBox;
     }
 }

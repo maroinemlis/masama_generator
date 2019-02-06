@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import beans.SQLSchema;
+import com.jfoenix.controls.JFXTabPane;
 import connection.SQLConnection;
 import controllers.helper.HelperControllers;
 import java.io.File;
@@ -63,6 +64,8 @@ public class MainController implements Initializable {
     private AnchorPane connectionBox;
     @FXML
     private AnchorPane optionVBox;
+    @FXML
+    private JFXTabPane tabPane;
 
     public void checkFields() {
         howMuch.textProperty().addListener((o, newValue, old) -> {
@@ -137,6 +140,7 @@ public class MainController implements Initializable {
             for (TableView t : tables) {
                 t.updateTableViewInserts();
             }
+            SQLConnection.getInstance().writeToDataBase();
         } catch (Exception e) {
             Alerts.error(e.getMessage());
         }
@@ -164,6 +168,7 @@ public class MainController implements Initializable {
     private void onConnection(ActionEvent event) {
         try {
             HelperControllers.showControlllerOnAlert("connection.fxml", "Connexion");
+            tabPane.getSelectionModel().selectNext();
         } catch (Exception ex) {
             Alerts.error(ex.getMessage());
         }

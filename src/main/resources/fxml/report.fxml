@@ -7,16 +7,16 @@
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
-<?import javafx.scene.chart.AreaChart?>
-<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<JFXTabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="1280.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.report.ReportController">
+<JFXTabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="1280.0" stylesheets="@../styles/light.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.report.ReportController">
     <tabs>
         <Tab text="Ajouter un bloc des réquetes">
             <content>
@@ -44,11 +44,11 @@
                         <JFXTextField fx:id="totalBlocExecution" layoutX="236.0" layoutY="20.0" text="500" />
                         <Label layoutX="446.0" layoutY="30.0" text="Temps total d'éxécution" />
                         <JFXTextField fx:id="totalTime" disable="true" layoutX="640.0" layoutY="24.0" />
-                  <JFXButton buttonType="RAISED" layoutX="33.0" layoutY="452.0" onAction="#onSimulate" prefHeight="37.0" prefWidth="115.0" text="Simuler" />
-                  <JFXButton buttonType="RAISED" layoutX="185.0" layoutY="452.0" onAction="#onNewSimulation" prefHeight="37.0" prefWidth="115.0" text="Nouveau" />
-                  <JFXComboBox fx:id="historySimulation" layoutX="1062.0" layoutY="24.0" prefHeight="37.0" prefWidth="162.0" />
-                  <Label layoutX="822.0" layoutY="30.0" text="Historique des simulations" />
-                  <JFXButton buttonType="RAISED" layoutX="1118.0" layoutY="445.0" onAction="#onResetEvolution" prefHeight="37.0" prefWidth="115.0" text="Réinitialiser" />
+                        <JFXButton buttonType="RAISED" layoutX="33.0" layoutY="452.0" onAction="#onSimulate" prefHeight="37.0" prefWidth="115.0" text="Simuler" />
+                        <JFXButton buttonType="RAISED" layoutX="185.0" layoutY="452.0" onAction="#onNewSimulation" prefHeight="37.0" prefWidth="115.0" text="Nouveau" />
+                        <JFXComboBox fx:id="historySimulation" layoutX="1062.0" layoutY="24.0" prefHeight="37.0" prefWidth="162.0" />
+                        <Label layoutX="822.0" layoutY="30.0" text="Historique des simulations" />
+                        <JFXButton buttonType="RAISED" layoutX="1118.0" layoutY="445.0" onAction="#onResetEvolution" prefHeight="37.0" prefWidth="115.0" text="Réinitialiser" />
                     </children>
                 </AnchorPane>
             </content>
@@ -56,29 +56,18 @@
         <Tab text="Visualisation sur le graphique">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-               <children>
-<<<<<<< HEAD
-                  <PieChart fx:id="pieChart" layoutX="38.0" layoutY="52.0" title="Temps d'éxcution pour chaque bloc" />
-                  <AreaChart fx:id="chart" layoutX="629.0" layoutY="52.0" title="Evolution du temps">
-=======
-                  <AreaChart layoutX="629.0" layoutY="52.0" title="Evolution du temps">
->>>>>>> 2b5bfd7e1613cb666093efe5823ef975f8263565
+                    <children>
+                        <PieChart fx:id="pieChart" layoutX="38.0" layoutY="52.0" opacity="0.77" title="Temps d'éxcution pour chaque bloc" />
+                  <LineChart fx:id="chart" layoutX="528.0" layoutY="52.0" prefHeight="400.0" prefWidth="737.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
                     </yAxis>
-                  </AreaChart>
-                  <BarChart fx:id="barChart" layoutX="26.0" layoutY="74.0" prefHeight="374.0" prefWidth="533.0" title="temps d'execution pour chaque bloc">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </BarChart>
-               </children></AnchorPane>
+                  </LineChart>
+                    </children>
+                </AnchorPane>
             </content>
         </Tab>
     </tabs>

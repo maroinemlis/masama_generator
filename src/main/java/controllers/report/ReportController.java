@@ -5,32 +5,24 @@ package controllers.report;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -49,27 +41,31 @@ public class ReportController implements Initializable {
     private JFXTextField totalBlocExecution;
     @FXML
     private JFXTextField totalTime;
-
-    private ObservableList<QueriesBloc> observablesQueriesBlock = FXCollections.<QueriesBloc>observableArrayList();
     @FXML
     private JFXTreeTableView<QueriesBloc> blocsTable;
-    /*@FXML
-    private PieChart pieChart;*/
-
     @FXML
-    private BarChart<String, Number> barChart;
+    private PieChart pieChart;
+    @FXML
+    private LineChart chart;
+    @FXML
     private JFXComboBox<String> historySimulation;
+
     private SimulationEvolution smulationEvolution;
     private SQLExecutionSimulation executionSimulation;
     @FXML
-    private AreaChart<Integer, Integer> chart;
+    private JFXTabPane tabPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        executionSimulation = new SQLExecutionSimulation();
-        smulationEvolution = new SimulationEvolution();
+        historySimulation.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
+            int i = historySimulation.getSelectionModel().getSelectedIndex();
+            executionSimulation = smulationEvolution.getExecutionSimulations().get(i);
+            totalBlocExecution.setText(executionSimulation.getTotalBlocExecution() + "");
+            executionSimulation.show();
+        });
+        smulationEvolution = new SimulationEvolution(chart);
+        executionSimulation = new SQLExecutionSimulation(blocsTable, pieChart);
         createTableView();
-        blocsTable.setRoot(new RecursiveTreeItem<>(observablesQueriesBlock, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
     }
 
     @FXML
@@ -79,10 +75,11 @@ public class ReportController implements Initializable {
 
     @FXML
     private void onDeleteQuery(ActionEvent event) {
-        Integer selectedIndex = blocList.getSelectionModel().getSelectedIndex();
-        if (selectedIndex != null) {
+        int selectedIndex = blocList.getSelectionModel().getSelectedIndex();
+        try {
             blocList.getItems().remove(selectedIndex);
-        } else {
+            blocList.refresh();
+        } catch (Exception e) {
             alert.Alerts.error("Requéte non selectionéee");
         }
     }
@@ -90,7 +87,6 @@ public class ReportController implements Initializable {
     @FXML
     private void onAddBloc(ActionEvent event) {
         QueriesBloc bloc = new QueriesBloc(blocList, rate);
-        observablesQueriesBlock.add(bloc);
         executionSimulation.addBloc(bloc);
         alert.Alerts.done("Nouveau bloc a été ajouté");
     }
@@ -98,11 +94,13 @@ public class ReportController implements Initializable {
     public void createTableView() {
         blocsTable.setShowRoot(false);
         ObservableList<String> stylesheets = blocsTable.getStylesheets();
+        JFXTreeTableColumn<QueriesBloc, JFXCheckBox> updateColumn = new JFXTreeTableColumn<>("");
         JFXTreeTableColumn<QueriesBloc, JFXListView<String>> queriesListColumn = new JFXTreeTableColumn<>("Bloc");
         JFXTreeTableColumn<QueriesBloc, String> rateColumn = new JFXTreeTableColumn<>("Pourcentage");
         JFXTreeTableColumn<QueriesBloc, Double> timeColumn = new JFXTreeTableColumn<>("Temps d'éxécution");
-        queriesListColumn.setPrefWidth(700);
-        rateColumn.setPrefWidth(400);
+        updateColumn.setPrefWidth(50);
+        queriesListColumn.setPrefWidth(600);
+        rateColumn.setPrefWidth(300);
         timeColumn.setPrefWidth(100);
 
         queriesListColumn.setCellValueFactory(
@@ -111,21 +109,20 @@ public class ReportController implements Initializable {
                 new TreeItemPropertyValueFactory("rateColumn"));
         timeColumn.setCellValueFactory(
                 new TreeItemPropertyValueFactory("timeColumn"));
+        updateColumn.setCellValueFactory(
+                new TreeItemPropertyValueFactory("update"));
         blocsTable.getColumns()
-                .addAll(queriesListColumn, rateColumn, timeColumn);
+                .addAll(updateColumn, queriesListColumn, rateColumn, timeColumn);
 
-        blocsTable.setRoot(new RecursiveTreeItem<>(observablesQueriesBlock, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
     }
 
     @FXML
     private void onSimulate(ActionEvent event) {
         try {
             executionSimulation.setTotalBlocExecution(Long.parseLong(totalBlocExecution.getText()));
-            long time = executionSimulation.simulate();
-            blocsTable.refresh();
-            totalTime.setText(time + "");
-            alert.Alerts.done("Simulation est faite");
-            fillBarChart(barChart);
+            executionSimulation.simulate();
+            totalTime.setText(executionSimulation.getTotalTime() + "");
+            tabPane.getSelectionModel().selectLast();
         } catch (Exception e) {
             alert.Alerts.error("err");
         }
@@ -134,33 +131,14 @@ public class ReportController implements Initializable {
     @FXML
     private void onNewSimulation(ActionEvent event) {
         smulationEvolution.addSQLExecutionSimulation(executionSimulation);
-        executionSimulation = new SQLExecutionSimulation();
+        historySimulation.getItems().add("Simulation " + smulationEvolution.getExecutionSimulations().size());
+        alert.Alerts.done("Simulation est faite");
+        executionSimulation = new SQLExecutionSimulation(blocsTable, pieChart);
     }
 
     @FXML
     private void onResetEvolution(ActionEvent event) {
-
-    }
-
-    public void fillBarChart(BarChart bc) {
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setCategories(FXCollections.<String>observableArrayList(Arrays.asList(
-                "Bloc1", "Bloc2", "Bloc3")));
-        xAxis.setLabel("Blocs");
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Temps");
-        bc.setTitle("Temps d'execution");
-
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        series1.setName("Temps d'éxécution en ms");
-        series1.getData().add(new XYChart.Data<>("Bloc1", 46.0));
-
-        series1.getData().add(new XYChart.Data<>("Bloc2", 57.0));
-        series1.getData().add(new XYChart.Data("Bloc3", 33));
-        series1.getData().add(new XYChart.Data("Bloc4", 78));
-        series1.getData().add(new XYChart.Data("Bloc5", 12));
-        bc.getData().add(series1);
-
+        executionSimulation.reset();
     }
 
 }

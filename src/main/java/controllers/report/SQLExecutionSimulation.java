@@ -5,17 +5,18 @@
  */
 package controllers.report;
 
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
+import javafx.scene.chart.XYChart;
 
 /**
  *
@@ -23,27 +24,30 @@ import javafx.scene.chart.PieChart.Data;
  */
 public class SQLExecutionSimulation {
 
-    private ArrayList<QueriesBloc> blocs = new ArrayList<>();
+    private ObservableList<QueriesBloc> blocs = FXCollections.<QueriesBloc>observableArrayList();
+    private JFXTreeTableView<QueriesBloc> blocsTable;
+    private PieChart pieChart;
     private long totalTime = 0;
     private long totalBlocExecution;
-    private PieChart pieChart;
+
+    public SQLExecutionSimulation(JFXTreeTableView<QueriesBloc> blocsTable, PieChart pieChart) {
+        this.pieChart = pieChart;
+        this.blocsTable = blocsTable;
+        show();
+    }
 
     public void setTotalBlocExecution(long totalBlocExecution) {
         this.totalBlocExecution = totalBlocExecution;
     }
 
-    /* public SQLExecutionSimulation(PieChart pieChart) {
-        this.pieChart = pieChart;
-    }*/
-    public SQLExecutionSimulation() {
-    }
-
     public void addBloc(QueriesBloc bloc) {
         blocs.add(bloc);
+        blocsTable.refresh();
     }
 
     public void removeBloc(QueriesBloc bloc) {
         blocs.remove(bloc);
+        blocsTable.refresh();
     }
 
     private List<Integer> generateRandomSequence() {
@@ -58,7 +62,7 @@ public class SQLExecutionSimulation {
         return arr;
     }
 
-    public long simulate() throws SQLException {
+    public void simulate() throws SQLException {
         totalTime = 0;
         for (QueriesBloc bloc : blocs) {
             bloc.setTime(0);
@@ -70,10 +74,8 @@ public class SQLExecutionSimulation {
         for (QueriesBloc bloc : blocs) {
             totalTime += bloc.getTime();
         }
+        blocsTable.refresh();
         fillPieChart();
-        addToChart();
-
-        return totalTime;
     }
 
     public void fillPieChart() {
@@ -95,8 +97,16 @@ public class SQLExecutionSimulation {
         totalTime = 0;
     }
 
-    private void addToChart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public long getTotalTime() {
+        return totalTime;
     }
 
+    public long getTotalBlocExecution() {
+        return totalBlocExecution;
+    }
+
+    public void show() {
+        blocsTable.setRoot(new RecursiveTreeItem<>(blocs, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
+        blocsTable.refresh();
+    }
 }

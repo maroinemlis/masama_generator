@@ -60,14 +60,14 @@
         </HBox>
     </top>
     <center>
-        <JFXTabPane BorderPane.alignment="CENTER"  >
+        <JFXTabPane fx:id="tabPane" BorderPane.alignment="CENTER">
             <tabs>
                 <Tab closable="false" text="Connexion et configuration">
                     <content>
                         <HBox fx:id="connectionVBox" prefHeight="200.0" prefWidth="100.0" />
                     </content>
                     <content>
-                        <SplitPane dividerPositions="0.4" prefHeight="200.0" prefWidth="200.0" mouseTransparent="false">
+                        <SplitPane dividerPositions="0.4" mouseTransparent="false" prefHeight="200.0" prefWidth="200.0">
                             <items>
                                 <AnchorPane fx:id="connectionBox" prefHeight="200.0" prefWidth="200.0" />
                                 <AnchorPane fx:id="optionVBox" prefHeight="200.0" prefWidth="200.0" />

@@ -16,6 +16,8 @@ public class TextDataFaker extends DataFaker {
 
     public TextDataFaker(Attribute att) {
         super(att);
+        this.from = "1";
+        this.to = "200";
     }
 
     @Override

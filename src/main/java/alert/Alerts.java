@@ -15,10 +15,17 @@ import javafx.scene.layout.Pane;
 
 /**
  *
+ *
+ *
  * @author Maroine
  */
 public class Alerts {
 
+    /**
+     * Show a red message error in the centre bottom of screen for few moment
+     *
+     * @param message the message to show
+     */
     public static void error(String message) {
         JFXSnackbar bar;
         try {
@@ -31,6 +38,11 @@ public class Alerts {
 
     }
 
+    /**
+     * Show a Green message in the centre bottom of screen for few moment
+     *
+     * @param message the message to show
+     */
     public static void done(String message) {
         JFXSnackbar bar;
         try {

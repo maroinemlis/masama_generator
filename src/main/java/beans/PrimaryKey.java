@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An object represente a primary key constraint for a table
+ * An object represent a primary key constraint for a table
  *
  * @author Maroine
  */
@@ -19,28 +19,21 @@ public class PrimaryKey implements Serializable {
     private List<Attribute> tuple = new ArrayList<>();
 
     /**
-     * Get the tuple Primary key
+     * Return the tuple Primary key. a tuple is a list of attribute
      *
-     * a tuple is a list of attribute
-     *
-     * @return List<Attribute>
+     * @return list represent primary keys of table
      */
     public List<Attribute> getTuple() {
         return tuple;
     }
 
     /**
-     * Add an atribute to the list(tuple) of primary key
+     * Add an attribute to the list(tuple) of primary keys. In case of table
+     * with one primary key then the list contain only one attribute
      *
-     * @param Attribute
+     * @param attribute a primary key of table
      */
-    public void addToPrimaryKey(Attribute a) {
-        tuple.add(a);
+    public void addToPrimaryKey(Attribute attribute) {
+        tuple.add(attribute);
     }
-
-    /**
-     * Return the description of primary key list in a string
-     *
-     * @return String
-     */
 }

@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * An object represent an SQL Connection, it serves to get the meta data infos
- * (bdMetaDate object)
+ * An object represent an SQL Connection, it serves to get the meta data
+ * informations (bdMetaDate object)
  *
  * @author Maroine
  */
@@ -33,6 +33,10 @@ public final class SQLConnection {
     private static SQLConnection singlotonSQLConnection = null;
     private Map<String, String[]> driverMapping;
 
+    /**
+     * Initialize for each database the name of Driver on name of jdbc
+     * corresponding
+     */
     public SQLConnection() {
         driverMapping = new HashMap<>();
         driverMapping.put("SQLite", new String[]{"org.sqlite.JDBC", "jdbc:sqlite:"});
@@ -43,6 +47,11 @@ public final class SQLConnection {
         driverMapping.put("Derby", new String[]{"org.apache.derby.jdbc.EmbeddedDriver", "jdbc:derby:"});
     }
 
+    /**
+     * Singleton allow to having a single instance of SQLConnection.
+     *
+     * @return instance of SQLConnection
+     */
     public static SQLConnection getInstance() {
         if (singlotonSQLConnection == null) {
             singlotonSQLConnection = new SQLConnection();
@@ -50,20 +59,30 @@ public final class SQLConnection {
         return singlotonSQLConnection;
     }
 
+    /**
+     * Check if the connection is already established.
+     *
+     * @return true if connection is established.
+     */
     public boolean isNewConnection() {
         return isNewConnection;
     }
 
+    /**
+     * Set the state of connection.
+     *
+     * @param isNewConnection represent the state of connection
+     */
     public void isNewConnection(boolean isNewConnection) {
         this.isNewConnection = isNewConnection;
     }
 
     /**
-     * read file of sql shema
+     * Read file of sql shema
      *
-     * @param fileUrl
-     * @param Charset
-     * @return String
+     * @param fileUrl the path of file
+     * @param Charset supported characters
+     * @return the SQL query inside the file
      */
     private String readFile(String fileUrl, Charset encoding)
             throws IOException {
@@ -72,9 +91,10 @@ public final class SQLConnection {
     }
 
     /**
-     * execute the SQL file
+     * Execute the SQL file
      *
-     * @param file
+     * @param file to execute
+     * @throws Exception if a database access error occurs
      */
     public void executeSQLFile(String file) throws Exception {
         String queries = readFile(file, StandardCharsets.UTF_8);
@@ -82,6 +102,7 @@ public final class SQLConnection {
     }
 
     /**
+     * Instance of DatabaseMetaData
      *
      * @return data base meta data instance
      */
@@ -90,11 +111,12 @@ public final class SQLConnection {
     }
 
     /**
+     * Change the state of connection and initialize instance of
+     * DatabaseMetaData and stm Statement.
      *
-     *
-     * @throw exception
+     * @throws SQLException
      */
-    private void connect() throws Exception {
+    private void connect() throws SQLException {
         isNewConnection = true;
         connection = DriverManager.getConnection(url, user, password);
         bdMetaDate = connection.getMetaData();
@@ -115,6 +137,16 @@ public final class SQLConnection {
      * @param user
      * @param password
      * @param sqlType
+     */
+    /**
+     * Define the url, user, password and the type of SGBD connection. the type
+     * of SGBD connection can be: SQLite, Postgresql, mySQL, SQLServer, Derby
+     *
+     * @param url the complete path do database
+     * @param user
+     * @param password
+     * @param sqlType
+     * @throws Exception
      */
     public void connect(String url, String user, String password, String sqlType) throws Exception {
         String[] driver = driverMapping.get(sqlType);
@@ -145,10 +177,21 @@ public final class SQLConnection {
         }
     }
 
+    /**
+     * Execute the SQL query
+     *
+     * @param query to execute
+     * @throws SQLException if a database access error occurs
+     */
     public void execute(String query) throws SQLException {
         stm.executeUpdate(query);
     }
 
+    /**
+     * Delete all data in the Database --unused
+     *
+     * @throws SQLException
+     */
     private static void deleteData() throws SQLException {
         List<Table> tables = SQLSchema.getInstance().getTables();
         for (Table table : tables) {
@@ -157,6 +200,11 @@ public final class SQLConnection {
         }
     }
 
+    /**
+     * Insert all data generated to database.
+     *
+     * @throws SQLException
+     */
     public static void writeToDataBase() throws SQLException {
         deleteData();
         List<Table> tables = SQLSchema.getInstance().getTables();

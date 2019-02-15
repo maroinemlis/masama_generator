@@ -23,10 +23,12 @@ public class ForeignKey implements Serializable {
     private int foreignKeyNumber;
 
     /**
-     * Construcor for class ForeignKey
+     * Initializes a newly created ForeignKey. If their are tuple of foreign key
+     * then the first take foreignKeyNumber = 1 and the second foreignKeyNumber
+     * = 2
      *
-     * @param references its type is Table
-     * @param foreignKeyNumber its type is int
+     * @param references the table referenced
+     * @param foreignKeyNumber the number of foreign key
      */
     public ForeignKey(Table references, int foreignKeyNumber) {
         this.references = references;
@@ -34,10 +36,10 @@ public class ForeignKey implements Serializable {
     }
 
     /**
-     * Add primary key and foreign key part of the two tupels
+     * Add primary key and foreign key part of the two tuples
      *
-     * @param fkTuplePart an Attribute
-     * @param pkTuplePart an Attribute
+     * @param fkTuplePart the foreign key
+     * @param pkTuplePart the primary key
      */
     public void addToTupels(Attribute fkTuplePart, Attribute pkTuplePart) {
         this.fkTuple.add(fkTuplePart);
@@ -45,38 +47,34 @@ public class ForeignKey implements Serializable {
     }
 
     /**
-     * Get the tuple of Foreign key
+     * Return the tuple (list of attribute) of Foreign key.
      *
-     * a tuple is a list of attribute
-     *
-     * @return List<Attribute>
+     * @return list of foreign keys attribute
      */
     public List<Attribute> getFkTuple() {
         return fkTuple;
     }
 
     /**
-     * Get the tuple Primary key
+     * Return the tuple (list of attribute) Primary key
      *
-     * a tuple is a list of attribute
-     *
-     * @return List<Attribute>
+     * @return list of primary keys attribute
      */
     public List<Attribute> getPkTuple() {
         return pkTuple;
     }
 
     /**
-     * Get the number(a unique id) of foreign key in the table
+     * Return the number(a unique id) of foreign key in the table
      *
-     * @return int
+     * @return the id of foreign key
      */
     public int getForeignKeyNumber() {
         return this.foreignKeyNumber;
     }
 
     /**
-     * get the table that the tuple Foreign key is referring to it
+     * Return the table that the tuple of Foreign key is referring to it
      *
      * @return Table
      */

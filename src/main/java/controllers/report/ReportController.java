@@ -125,6 +125,7 @@ public class ReportController implements Initializable {
             tabPane.getSelectionModel().selectLast();
         } catch (Exception e) {
             alert.Alerts.error("err");
+            System.err.println("err :" + e.getMessage());
         }
     }
 

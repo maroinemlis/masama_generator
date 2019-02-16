@@ -19,7 +19,7 @@ import java.util.Map;
  * An object represent an SQL Connection, it serves to get the meta data infos
  * (bdMetaDate object)
  *
- * @author Maroine
+ * @author Martem
  */
 public final class SQLConnection {
 

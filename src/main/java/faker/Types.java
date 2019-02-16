@@ -11,7 +11,7 @@ import java.util.TreeMap;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class Types {
 

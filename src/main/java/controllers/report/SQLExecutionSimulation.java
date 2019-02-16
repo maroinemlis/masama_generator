@@ -16,7 +16,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
-import javafx.scene.chart.XYChart;
 
 /**
  *
@@ -29,6 +28,15 @@ public class SQLExecutionSimulation {
     private PieChart pieChart;
     private long totalTime = 0;
     private long totalBlocExecution;
+    private int sumOfRates = 0;
+
+    public ObservableList<QueriesBloc> getBlocs() {
+        return blocs;
+    }
+
+    public int getSumOfRates() {
+        return sumOfRates;
+    }
 
     public SQLExecutionSimulation(JFXTreeTableView<QueriesBloc> blocsTable, PieChart pieChart) {
         this.pieChart = pieChart;
@@ -43,11 +51,16 @@ public class SQLExecutionSimulation {
     public void addBloc(QueriesBloc bloc) {
         blocs.add(bloc);
         blocsTable.refresh();
+        sumOfRates += (int) bloc.getRateColumn().getValue();
     }
 
-    public void removeBloc(QueriesBloc bloc) {
-        blocs.remove(bloc);
+    public int removeBlocs() {
+        blocs.removeIf(bloc -> {
+            sumOfRates -= (int) bloc.getRateColumn().getValue();
+            return bloc.getUpdate().isSelected();
+        });
         blocsTable.refresh();
+        return 100 - sumOfRates;
     }
 
     private List<Integer> generateRandomSequence() {
@@ -84,7 +97,7 @@ public class SQLExecutionSimulation {
         int i = 0;
         for (QueriesBloc bloc : blocs) {
             double rate = bloc.getTime() * 1.0 / totalTime;
-            d.add(new Data("Bloc " + i + " " + (bloc.getTime() * 100) / totalTime + " %", rate));
+            d.add(new Data("Bloc " + i + " = " + (bloc.getTime() * 100) / totalTime + " %", rate));
             i++;
         }
     }
@@ -108,5 +121,9 @@ public class SQLExecutionSimulation {
     public void show() {
         blocsTable.setRoot(new RecursiveTreeItem<>(blocs, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
         blocsTable.refresh();
+    }
+
+    void setSumOfRates(int i) {
+        this.sumOfRates = i;
     }
 }

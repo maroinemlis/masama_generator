@@ -42,7 +42,7 @@ public final class Table implements Serializable {
 
     public Table(String tableName) throws Exception {
         this.tableName = tableName;
-        this.howMuch = 1000;
+        this.howMuch = 10;
         fillAttributes();
         fillPrimaryKey();
     }

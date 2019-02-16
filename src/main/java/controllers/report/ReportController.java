@@ -19,15 +19,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 
 /**
  * FXML Controller class
  *
- * @author abidi asma + Maroine
+ * @author Asma
+ * @author Maroine
  */
 public class ReportController implements Initializable {
 
@@ -46,7 +48,7 @@ public class ReportController implements Initializable {
     @FXML
     private PieChart pieChart;
     @FXML
-    private LineChart chart;
+    private AreaChart<String, Number> chart;
     @FXML
     private JFXComboBox<String> historySimulation;
 
@@ -66,6 +68,9 @@ public class ReportController implements Initializable {
         smulationEvolution = new SimulationEvolution(chart);
         executionSimulation = new SQLExecutionSimulation(blocsTable, pieChart);
         createTableView();
+        blocList.setEditable(true);
+        blocList.setCellFactory(TextFieldListCell.forListView());
+
     }
 
     @FXML
@@ -86,9 +91,21 @@ public class ReportController implements Initializable {
 
     @FXML
     private void onAddBloc(ActionEvent event) {
-        QueriesBloc bloc = new QueriesBloc(blocList, rate);
-        executionSimulation.addBloc(bloc);
-        alert.Alerts.done("Nouveau bloc a été ajouté");
+        try {
+            QueriesBloc bloc = new QueriesBloc(blocList, rate, executionSimulation);
+            executionSimulation.addBloc(bloc);
+            rate.setMax(100 - executionSimulation.getSumOfRates());
+            alert.Alerts.done("Nouveau bloc a été ajouté");
+        } catch (Exception e) {
+            alert.Alerts.error(e.getMessage());
+        }
+
+    }
+
+    @FXML
+    private void onDeleteBocs(ActionEvent event) {
+        int n = executionSimulation.removeBlocs();
+        rate.setMax(n);
     }
 
     public void createTableView() {
@@ -123,22 +140,19 @@ public class ReportController implements Initializable {
             executionSimulation.simulate();
             totalTime.setText(executionSimulation.getTotalTime() + "");
             tabPane.getSelectionModel().selectLast();
+            smulationEvolution.addSQLExecutionSimulation(executionSimulation);
+            historySimulation.getItems().add("Simulation " + smulationEvolution.getExecutionSimulations().size());
+            executionSimulation = new SQLExecutionSimulation(blocsTable, pieChart);
         } catch (Exception e) {
             alert.Alerts.error("err");
+            e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void onNewSimulation(ActionEvent event) {
-        smulationEvolution.addSQLExecutionSimulation(executionSimulation);
-        historySimulation.getItems().add("Simulation " + smulationEvolution.getExecutionSimulations().size());
-        alert.Alerts.done("Simulation est faite");
-        executionSimulation = new SQLExecutionSimulation(blocsTable, pieChart);
     }
 
     @FXML
     private void onResetEvolution(ActionEvent event) {
         executionSimulation.reset();
+        rate.setMax(0);
     }
 
 }

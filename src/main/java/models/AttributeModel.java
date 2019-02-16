@@ -17,7 +17,7 @@ import javafx.scene.control.Control;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
 

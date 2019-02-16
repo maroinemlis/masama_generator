@@ -9,7 +9,7 @@ import beans.Attribute;
 
 /**
  *
- * @author Maroine
+ * @author Amirouche
  */
 public class BooleanDataFaker extends DataFaker {
 

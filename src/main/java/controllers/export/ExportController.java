@@ -30,7 +30,8 @@ import java.nio.file.Paths;
 /**
  * FXML Controller class
  *
- * @author tamac
+ * @author Saad
+ * @author Maroine
  */
 public class ExportController implements Initializable {
 
@@ -47,11 +48,6 @@ public class ExportController implements Initializable {
     @FXML
     private JFXButton save;
     private Path path;
-
-    void close() {
-        Stage stage = (Stage) save.getScene().getWindow();
-        stage.close();
-    }
 
     @FXML
     void onSave(ActionEvent event) throws Exception {
@@ -71,7 +67,6 @@ public class ExportController implements Initializable {
                 this.path = Paths.get(path.toAbsolutePath().toString() + ".xml");
                 exportOnXml();
             }
-            close();
             Alerts.done("Exportation réussite");
         } catch (Exception e) {
             Alerts.error("Erreur au niveau d'enregistrement");
@@ -138,12 +133,17 @@ public class ExportController implements Initializable {
                     insert += table.getAttributes().get(i).getInstances().get(j).replace("'", "\"") + ",\n";
                 }
                 insert += "\t  \"" + table.getAttributes().get(i).getName() + "\": ";
-                insert += table.getAttributes().get(i).getInstances().get(j).replace("'", "\"") + "\n\t}\n  ]";
-                if (k != tables.size() - 1) {
-                    insert += ",";
+                insert += table.getAttributes().get(i).getInstances().get(j).replace("'", "\"") + "\n\t}";
+                if (j != table.getHowMuch() - 1) {
+                    insert += "\t,";
                 }
                 Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
+            insert = "\t]";
+            if (k != tables.size() - 1) {
+                insert += ",";
+            }
+            Files.write(path, insert.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         }
         Files.write(path, "}".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 

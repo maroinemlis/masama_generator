@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 
 /**
  *
- * @author Maroine
+ * @author Saad
  */
 public class InstancesModel extends RecursiveTreeObject<InstancesModel> {
 

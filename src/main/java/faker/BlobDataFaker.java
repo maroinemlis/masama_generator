@@ -10,7 +10,7 @@ import static utils.Shared.faker;
 
 /**
  *
- * @author Maroine
+ * @author Amirouche
  */
 public class BlobDataFaker extends DataFaker {
 

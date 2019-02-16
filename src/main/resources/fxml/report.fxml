@@ -22,7 +22,7 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <Label layoutX="30.0" layoutY="25.0" text="Saisir une requete" />
+                        <Label layoutX="30.0" layoutY="25.0" text="Saisir une réquete" />
                         <TextArea fx:id="query" layoutX="30.0" layoutY="71.0" prefHeight="319.0" prefWidth="550.0" text="select * from A" />
                         <JFXButton buttonType="RAISED" layoutX="30.0" layoutY="406.0" onAction="#onAddQuery" text="Ajouter dans le bloc" />
                         <JFXButton buttonType="RAISED" layoutX="417.0" layoutY="414.0" onAction="#onDeleteQuery" text="Suprimer du bloc" />

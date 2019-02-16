@@ -155,4 +155,8 @@ public class ReportController implements Initializable {
         rate.setMax(0);
     }
 
+    @FXML
+    private void onNewSimulation(ActionEvent event) {
+    }
+
 }

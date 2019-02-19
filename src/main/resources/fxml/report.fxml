@@ -58,8 +58,8 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <PieChart fx:id="pieChart" layoutX="38.0" layoutY="52.0" opacity="0.77" title="Temps d'éxcution pour chaque bloc" />
-                        <AreaChart fx:id="chart" layoutX="478.0" layoutY="-2.0" prefHeight="504.0" prefWidth="802.0">
+                        <PieChart fx:id="pieChart" layoutX="14.0" layoutY="14.0" opacity="0.77" prefHeight="488.0" prefWidth="446.0" title="Temps d'éxcution pour chaque bloc" />
+                        <AreaChart fx:id="chart" layoutX="478.0" layoutY="-4.0" prefHeight="474.0" prefWidth="795.0">
                             <xAxis>
                                 <CategoryAxis prefHeight="11.0" prefWidth="647.0" side="BOTTOM" />
                             </xAxis>
@@ -67,9 +67,31 @@
                                 <NumberAxis side="LEFT" />
                             </yAxis>
                         </AreaChart>
+                  <Label fx:id="pes" layoutX="70.0" layoutY="14.0" />
                     </children>
                 </AnchorPane>
             </content>
         </Tab>
+      <Tab onSelectionChanged="#onAddVariables" text="Ajouter des variables génériques">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="48.0" layoutY="50.0" text="Nom de la variable" />
+                  <JFXTextField fx:id="variableName" layoutX="274.0" layoutY="44.0" />
+                  <Label layoutX="488.0" layoutY="63.0" text="Table de réference" />
+                  <JFXComboBox fx:id="referenceCombo" layoutX="706.0" layoutY="45.0" prefHeight="37.0" prefWidth="195.0" />
+                  <Label layoutX="48.0" layoutY="144.0" text="Attribut de réference" />
+                  <JFXComboBox fx:id="attributeCombo" layoutX="259.0" layoutY="127.0" prefHeight="37.0" prefWidth="195.0" />
+                  <JFXSlider fx:id="existanceRate" blockIncrement="1.0" layoutX="705.0" layoutY="149.0" prefHeight="14.0" prefWidth="196.0" value="50.0" />
+                  <Label layoutX="488.0" layoutY="144.0" text="Pourcentage d'existance" />
+                  <JFXButton buttonType="RAISED" layoutX="1027.0" layoutY="115.0" onAction="#onCreateVariable" prefHeight="37.0" prefWidth="115.0" text="Créer" />
+                  <JFXTreeTableView fx:id="variablesTable" layoutX="55.0" layoutY="198.0" prefHeight="225.0" prefWidth="1232.0" stylesheets="@../styles/util.css" />
+               </children>
+            </AnchorPane>
+         </content></Tab>
+      <Tab onSelectionChanged="#onIndex" text="Index">
+         <content>
+            <AnchorPane fx:id="indexPane" prefHeight="200.0" prefWidth="200.0" />
+         </content></Tab>
     </tabs>
 </JFXTabPane>

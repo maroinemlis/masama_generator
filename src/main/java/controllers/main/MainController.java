@@ -125,7 +125,6 @@ public class MainController implements Initializable {
         SchemaTab.setOnSelectionChanged(e -> {
             if (SQLConnection.getInstance().isNewConnection()) {
                 tables = SQLSchema.getInstance().getTablesAsTablesView();
-                System.out.println(tables.size());
                 createTablesView();
                 SQLConnection.getInstance().isNewConnection(false);
             }
@@ -142,6 +141,7 @@ public class MainController implements Initializable {
                 t.updateTableViewInserts();
             }
             SQLConnection.getInstance().writeToDataBase();
+            Alerts.done("Génération effectuée");
         } catch (Exception e) {
             Alerts.error(e.getMessage());
         }
@@ -172,13 +172,14 @@ public class MainController implements Initializable {
 
     @FXML
     private void onSave(ActionEvent event) {
+
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choisir le répertoire d'enregistrement");
             fileChooser.setInitialDirectory(new File("."));
-            File showSaveDialog = fileChooser.showOpenDialog(LuncherApp.getPrimaryStage());
+            File showSaveDialog = fileChooser.showSaveDialog(LuncherApp.getPrimaryStage());
             FileUtil.writeObjectInFile(showSaveDialog.getAbsolutePath(), SQLSchema.getInstance());
-            Alerts.done("Projet enregistré");
+            Alerts.done("Projet a été enregistré");
         } catch (Exception e) {
             Alerts.error(e.getMessage());
         }
@@ -205,6 +206,7 @@ public class MainController implements Initializable {
             tables = SQLSchema.getInstance().getTablesAsTablesView();
             tables.forEach(t -> t.updateTableViewInserts());
             createTablesView();
+            Alerts.done("Projet a été chargé");
         } catch (Exception e) {
             Alerts.error(e.getMessage());
         }

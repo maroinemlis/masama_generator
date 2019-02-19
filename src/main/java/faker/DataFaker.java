@@ -67,8 +67,7 @@ public abstract class DataFaker implements Serializable {
     }
 
     /**
-     * Return Real(Double) value in the interval [from , to] using th method
-     * betweenReal(from, to).
+     * Return Real(Double) value in the interval [from , to].
      *
      * @return double value between from and to
      */
@@ -76,8 +75,14 @@ public abstract class DataFaker implements Serializable {
         return from + Math.random() * to;
     }
 
+    /**
+     * @return value generated
+     */
     protected abstract String generateNewValue();
 
+    /**
+     *
+     */
     protected void generateUniqueValues() {
         int howMuchItRest = howMuchItRest();
         List<String> instances = attribute.getInstances();

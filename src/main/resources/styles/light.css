@@ -101,6 +101,20 @@
 
 
 /*Chart Styling*/
+
+.axis:left {-fx-border-color: -fx-primary;
+            -fx-background-color:  -fx-primary;
+
+}
+.axis:bottom{-fx-border-color: -fx-primary;
+             -fx-background-color:  -fx-primary;
+
+}
+
+.axis{
+    -fx-tick-label-fill: -fx-primarytext;
+}
+
 .chart-plot-background {
     -fx-background-color:  -fx-primary;
 }
@@ -112,7 +126,7 @@
 }
 .chart-alternative-row-fill {
     -fx-fill: -fx-primary;
-    -fx-stroke: transparent;
+    -fx-stroke: -fx-primary;
     -fx-stroke-width: 0;
 }
 

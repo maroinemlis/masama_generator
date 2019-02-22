@@ -219,14 +219,12 @@ public class SQLSchema implements Serializable {
         if (PreCondition.getInstance().checkSQLSchema()) {
             throw new Exception(PreCondition.getInstance().getErrorMessage());
         }
-
         long start = System.currentTimeMillis();
         resetGeneration();
         generateCaseOf(sortedRootAttributes);
         generateCaseOf(getEmptyAttributes());
         tables.forEach(t -> t.fixInstances());
         long end = System.currentTimeMillis();
-        System.out.println(end - start);
         generationTime = end - start;
     }
 

@@ -5,9 +5,10 @@
  */
 package controllers.report;
 
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
+import javafx.scene.control.Label;
 
 /**
  *
@@ -29,6 +31,16 @@ public class SQLExecutionSimulation {
     private long totalTime = 0;
     private long totalBlocExecution;
     private int sumOfRates = 0;
+    private static int size = 0;
+    private int id = 0;
+    private final Label pes;
+
+    public SQLExecutionSimulation clone() {
+        SQLExecutionSimulation c = new SQLExecutionSimulation(blocsTable, pieChart, pes);
+        c.blocs.addAll(blocs);
+        c.show();
+        return c;
+    }
 
     public ObservableList<QueriesBloc> getBlocs() {
         return blocs;
@@ -38,10 +50,13 @@ public class SQLExecutionSimulation {
         return sumOfRates;
     }
 
-    public SQLExecutionSimulation(JFXTreeTableView<QueriesBloc> blocsTable, PieChart pieChart) {
-        this.pieChart = pieChart;
+    public SQLExecutionSimulation(JFXTreeTableView<QueriesBloc> blocsTable, PieChart pieChart, Label pes) {
         this.blocsTable = blocsTable;
+        this.pieChart = pieChart;
+        this.pes = pes;
         show();
+        size++;
+        id = size;
     }
 
     public void setTotalBlocExecution(long totalBlocExecution) {
@@ -61,6 +76,11 @@ public class SQLExecutionSimulation {
         });
         blocsTable.refresh();
         return 100 - sumOfRates;
+    }
+
+    public void removeBlocs(boolean all) {
+        blocs.clear();
+        blocsTable.refresh();
     }
 
     private List<Integer> generateRandomSequence() {
@@ -92,13 +112,23 @@ public class SQLExecutionSimulation {
     }
 
     public void fillPieChart() {
+        pieChart.setTitle("Simulation numéro " + id);
         ObservableList<PieChart.Data> d = pieChart.getData();
         d.clear();
         int i = 0;
         for (QueriesBloc bloc : blocs) {
             double rate = bloc.getTime() * 1.0 / totalTime;
             d.add(new Data("Bloc " + i + " = " + (bloc.getTime() * 100) / totalTime + " %", rate));
-            i++;
+            Data data = pieChart.getData().get(pieChart.getData().size() - 1);
+            data.getNode().setOnMouseMoved((e) -> {
+                Point p = MouseInfo.getPointerInfo().getLocation();
+                pes.setTranslateX(p.getX());
+                pes.setTranslateY(p.getY());
+                pes.setText(data.getPieValue() + "%");
+            });
+            data.getNode().setOnMouseExited((e) -> {
+                pes.setText("");
+            });
         }
     }
 
@@ -108,6 +138,7 @@ public class SQLExecutionSimulation {
         });
         blocs.clear();
         totalTime = 0;
+        id = 0;
     }
 
     public long getTotalTime() {
@@ -125,5 +156,9 @@ public class SQLExecutionSimulation {
 
     void setSumOfRates(int i) {
         this.sumOfRates = i;
+    }
+
+    public int getId() {
+        return id;
     }
 }

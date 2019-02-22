@@ -31,6 +31,15 @@ public class Attribute implements Serializable {
     private Table table;
     private boolean isCircular = false;
     private boolean isGenerated = false;
+    private boolean isIndex;
+
+    public boolean isIndex() {
+        return isIndex;
+    }
+
+    public void isIndex(boolean isIndex) {
+        this.isIndex = isIndex;
+    }
 
     /**
      * Return true if the name attribute passed in parameter equal to the name

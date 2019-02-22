@@ -24,7 +24,7 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
     private JFXListView<String> list;
     private final JFXCheckBox updateCheckBox;
 
-    public QueriesBloc(JFXListView<String> list, JFXSlider rate, SQLExecutionSimulation executionSimulation) {
+    public QueriesBloc(JFXListView<String> list, JFXSlider rate) {
         this.list = new JFXListView<>();
         this.list.setEditable(true);
         this.list.setCellFactory(TextFieldListCell.forListView());
@@ -34,15 +34,6 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
         this.rate.setMax(100);
         this.rate.setValue(rate.getValue());
         this.updateCheckBox = new JFXCheckBox();
-        /*
-        this.rate.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (executionSimulation.getSumOfRates() - oldValue.intValue() + newValue.intValue() >= 100) {
-                this.rate.setValue(0);
-                this.rate.setDisable(false);
-            } else {
-                executionSimulation.setSumOfRates(executionSimulation.getSumOfRates() - oldValue.intValue() + newValue.intValue());
-            }
-        });*/
 
     }
 

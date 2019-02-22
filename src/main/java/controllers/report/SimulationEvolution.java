@@ -7,12 +7,7 @@ package controllers.report;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 
 /**
@@ -46,11 +41,10 @@ public class SimulationEvolution {
             chart.getData().add(series);
             series.setName("Bloc " + chart.getData().size());
         }
-        for (int i = 0; i < chart.getData().size(); i++) {
-            if (i < e.getBlocs().size()) {
-                QueriesBloc b = e.getBlocs().get(i);
-                chart.getData().get(i).getData().add(new XYChart.Data("Simulation " + executionSimulations.size(), b.getTime()));
-            }
+
+        for (int i = 0; i < e.getBlocs().size(); i++) {
+            QueriesBloc b = e.getBlocs().get(i);
+            chart.getData().get(i).getData().add(new XYChart.Data("" + executionSimulations.size(), b.getTime()));
         }
     }
 
@@ -59,7 +53,6 @@ public class SimulationEvolution {
             s.reset();
         });
         executionSimulations.clear();
-        chart.getData().removeIf(e -> e != null);
     }
 
 }

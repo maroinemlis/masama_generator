@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import javafx.scene.control.cell.TextFieldListCell;
 
 /**
+ * A class reprensent a bloc of SQL queries that can be executed in same time
+ * this class extends RecursiveTreeObject to have to ability to show it in a
+ * table view
  *
  * @author Maroine
  */
@@ -43,6 +46,11 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
 
     }
 
+    /**
+     * Execute all the bloc and calcute its time duration
+     *
+     * @throws SQLException
+     */
     public void execute() throws SQLException {
         long t1 = System.currentTimeMillis();
         for (String query : list.getItems()) {
@@ -55,34 +63,65 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
 
     }
 
+    /**
+     *
+     * @return the queries as a list view
+     */
     public JFXListView getQueriesListColumn() {
         return list;
     }
 
+    /**
+     *
+     * @return jfx silder object that represent the current rate
+     */
     public JFXSlider getRateColumn() {
         return rate;
     }
 
+    /**
+     *
+     * @return the total time of its execution
+     */
     public double getTimeColumn() {
         return time;
     }
 
+    /**
+     *
+     * @return the rate
+     */
     public double getRate() {
         return rate.getValue();
     }
 
+    /**
+     *
+     * @return the total time
+     */
     public long getTime() {
         return time;
     }
 
+    /**
+     * reset this bloc
+     */
     public void reset() {
         list.getItems().clear();
     }
 
+    /**
+     *
+     * @param i
+     */
     public void setTime(int i) {
         time = i;
     }
 
+    /**
+     *
+     * @return
+     */
     public JFXCheckBox getUpdate() {
         return updateCheckBox;
     }

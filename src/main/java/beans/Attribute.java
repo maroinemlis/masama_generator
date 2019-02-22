@@ -33,10 +33,19 @@ public class Attribute implements Serializable {
     private boolean isGenerated = false;
     private boolean isIndex;
 
+    /**
+     *
+     * @return if this attribute belongs to the index list
+     */
     public boolean isIndex() {
         return isIndex;
     }
 
+    /**
+     * set this attribute belong to the index list
+     *
+     * @param isIndex
+     */
     public void isIndex(boolean isIndex) {
         this.isIndex = isIndex;
     }

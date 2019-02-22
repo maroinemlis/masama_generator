@@ -67,6 +67,9 @@ public class MainController implements Initializable {
     @FXML
     private JFXTabPane tabPane;
 
+    /**
+     * Check all field data type
+     */
     public void checkFields() {
         howMuch.textProperty().addListener((o, newValue, old) -> {
             if (!newValue.matches("\\d*")) {
@@ -75,7 +78,13 @@ public class MainController implements Initializable {
         });
     }
 
-    private TableView getTableByName(String name) {
+    /**
+     * get tableview from a given sql schema table name
+     *
+     * @param name
+     * @return
+     */
+    public TableView getTableByName(String name) {
         for (TableView t : tables) {
             if (t.get().getTableName().equals(name)) {
                 return t;
@@ -84,6 +93,9 @@ public class MainController implements Initializable {
         return null;
     }
 
+    /**
+     * Create all the table views
+     */
     public void createTablesView() {
         tablesAccordion.getPanes().clear();
         tables.forEach(t
@@ -147,7 +159,10 @@ public class MainController implements Initializable {
         }
     }
 
-    private void refrechInserts() {
+    /**
+     * Refrsh inserts
+     */
+    public void refrechInserts() {
         insertsVBox.getChildren().clear();
         if (currentTable.getTableInserts() != null) {
             Label l = new Label("Table : " + currentTable.get().getTableName());
@@ -159,7 +174,7 @@ public class MainController implements Initializable {
     @FXML
     private void onExport(ActionEvent event) {
         try {
-            HelperControllers.showControlllerOnAlert("export.fxml", "Exporter");
+            HelperControllers.showControllerOnAlert("export.fxml", "Exporter");
         } catch (IOException ex) {
             Alerts.error(ex.getMessage());
         }
@@ -172,7 +187,6 @@ public class MainController implements Initializable {
 
     @FXML
     private void onSave(ActionEvent event) {
-
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choisir le répertoire d'enregistrement");
@@ -189,7 +203,7 @@ public class MainController implements Initializable {
     @FXML
     private void onOption(ActionEvent event) {
         try {
-            HelperControllers.showControlllerOnAlert("option.fxml", "Configuration");
+            HelperControllers.showControllerOnAlert("option.fxml", "Configuration");
         } catch (IOException ex) {
             Alerts.error(ex.getMessage());
         }

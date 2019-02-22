@@ -79,10 +79,14 @@ public class ExportController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }
 
-    private void exportOnSql() throws FileNotFoundException, IOException, Exception {
+    /**
+     * Export the current database data as SQL INSERT queries
+     *
+     * @throws Exception
+     */
+    public void exportOnSql() throws Exception {
         List<Table> tables = SQLSchema.getInstance().getTables();
         for (Table table : tables) {
             for (int j = 0; j < table.getHowMuch(); j++) {
@@ -99,7 +103,12 @@ public class ExportController implements Initializable {
         }
     }
 
-    private void exportOnXml() throws Exception {
+    /**
+     * Export the current database data as an XML documents
+     *
+     * @throws Exception
+     */
+    public void exportOnXml() throws Exception {
         List<Table> tables = SQLSchema.getInstance().getTables();
         for (Table table : tables) {
             for (int j = 0; j < table.getHowMuch(); j++) {
@@ -117,7 +126,12 @@ public class ExportController implements Initializable {
         }
     }
 
-    private void exportOnJson() throws Exception {
+    /**
+     * Export the current database data as an JSON documents
+     *
+     * @throws Exception
+     */
+    public void exportOnJson() throws Exception {
         List<Table> tables = SQLSchema.getInstance().getTables();
         Files.write(path, "{\n".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         int k;

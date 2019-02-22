@@ -15,6 +15,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * A class represent a generic variable that can be used fror queries string
+ * like from exemple if X the generic variable name then the user can type "
+ * SELECT * FROM A WHERE a = [X] "
  *
  * @author Maroine
  */
@@ -28,6 +31,10 @@ public class GenericVariable extends RecursiveTreeObject<GenericVariable> {
     private static ObservableList<GenericVariable> variblesList = FXCollections.<GenericVariable>observableArrayList();
     private List<String> instances;
 
+    /**
+     *
+     * @return all the possible instances from this generic variable
+     */
     public List<String> getInstances() {
         return instances;
     }

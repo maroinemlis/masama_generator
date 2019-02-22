@@ -29,6 +29,10 @@ public class SnackBarAlert {
     JFXSnackbar bar;
     private String title = "";
 
+    /**
+     *
+     * @return the singloton instance of the snackbar
+     */
     public static SnackBarAlert getInstance() {
         if (signlotonSnackBarAlert == null) {
             signlotonSnackBarAlert = new SnackBarAlert();
@@ -36,6 +40,9 @@ public class SnackBarAlert {
         return signlotonSnackBarAlert;
     }
 
+    /**
+     * Generate a new snackbar alert
+     */
     public SnackBarAlert() {
         p = new BorderPane();
         box = new VBox();
@@ -54,6 +61,12 @@ public class SnackBarAlert {
 
     }
 
+    /**
+     * Demande a new snackbar
+     *
+     * @param center
+     * @param title
+     */
     public void newSnackBarAlert(Parent center, String title) {
         if (title.equals(this.title)) {
             return;

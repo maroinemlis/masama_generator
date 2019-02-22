@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The object used for generates fake data.
+ * An abstract class define a generic sql data type.
  *
  * @author Maroine
  */
@@ -75,12 +75,15 @@ public abstract class DataFaker implements Serializable {
     }
 
     /**
+     * The most important method that will be defined for each concrete sql data
+     * type
+     *
      * @return value generated
      */
     protected abstract String generateNewValue();
 
     /**
-     *
+     * Fill the instance list with distinct values for an attribute
      */
     protected void generateUniqueValues() {
         int howMuchItRest = howMuchItRest();
@@ -94,6 +97,10 @@ public abstract class DataFaker implements Serializable {
         }
     }
 
+    /**
+     * Fill the instance list with a normal values for an attribute
+     *
+     */
     protected void generateSimpleValues() {
         for (int i = 0; i < nullsNumber; i++) {
             attribute.getInstances().add("NULL");
@@ -104,6 +111,9 @@ public abstract class DataFaker implements Serializable {
         }
     }
 
+    /**
+     * Fill the instance list with the appropriate values
+     */
     public void values() {
         if (attribute.isUnique() || attribute.isPrimary()) {
             generateUniqueValues();
@@ -112,6 +122,10 @@ public abstract class DataFaker implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return how many instance it rest to complete the generation
+     */
     public int howMuchItRest() {
         return attribute.getTable().getHowMuch() - attribute.getInstances().size();
     }

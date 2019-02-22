@@ -85,7 +85,6 @@ public class OptionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         howMuch.textProperty().addListener((ob, oldVal, newVal) -> {
             if (!newVal.matches("\\d*")) {
                 howMuch.setText(newVal.replaceAll("[^\\d]", ""));

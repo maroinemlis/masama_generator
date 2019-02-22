@@ -106,7 +106,7 @@ public class ReportController implements Initializable {
             int id = Integer.parseInt(n);
             executionSimulation = smulationEvolution.getExecutionSimulations().stream()
                     .filter(s -> s.getId() == id).findFirst().get();
-            totalBlocExecution.setText(executionSimulation.getTotalBlocExecution() + "");
+            totalBlocExecution.setText(executionSimulation.getTotalTime() + "");
             totalTime.setText(executionSimulation.getTotalTime() + "");
 
             executionSimulation.show();
@@ -231,11 +231,8 @@ public class ReportController implements Initializable {
             historySimulation.getItems().add("" + executionSimulation.getId());
         } catch (Exception e) {
             alert.Alerts.error("err");
-<<<<<<< HEAD
             System.err.println("err :" + e.getMessage());
-=======
             e.printStackTrace();
->>>>>>> a4db2b31d3053a719a364f8e076c5f7ab46755ee
         }
     }
 

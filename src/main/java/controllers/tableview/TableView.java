@@ -26,6 +26,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 
 /**
+ * A table view that represent a the view an sql schema table
  *
  * @author Maroine
  */
@@ -49,18 +50,35 @@ public class TableView implements Serializable {
 
     }
 
+    /**
+     *
+     * @return get the table instance of the view
+     */
     public Table get() {
         return table;
     }
 
+    /**
+     *
+     * @return get the jfx tree table view
+     */
     public JFXTreeTableView<AttributeModel> getTableView() {
         return tableView;
     }
 
+    /**
+     *
+     * @return get the table inserts view that contains the data
+     */
     public JFXTreeTableView<InstancesModel> getTableInserts() {
         return insertsView;
     }
 
+    /**
+     * Add n sql queries inserts on the view
+     *
+     * @param n
+     */
     public void addLine(int n) {
         int j;
         for (j = howMuchWeDisplayed; j < table.getAttributes().get(0).getInstances().size() && j < howMuchWeDisplayed + n; j++) {
@@ -76,6 +94,9 @@ public class TableView implements Serializable {
         insertsView.refresh();
     }
 
+    /**
+     * Update the table view for each scroll
+     */
     public void updateTableViewInserts() {
         observablesInserts.clear();
         howMuchWeDisplayed = 0;
@@ -87,6 +108,11 @@ public class TableView implements Serializable {
         });
     }
 
+    /**
+     *
+     * @return create and retruen a jfx tree table view for the sql inserts of
+     * this table
+     */
     public JFXTreeTableView<InstancesModel> createTableViewInserts() {
         JFXTreeTableView<InstancesModel> treeTableView = new JFXTreeTableView<>();
         treeTableView.setShowRoot(false);
@@ -107,6 +133,10 @@ public class TableView implements Serializable {
         return treeTableView;
     }
 
+    /**
+     *
+     * @return create and return the table defintion as a table view
+     */
     public JFXTreeTableView<AttributeModel> createTableView() {
         JFXTreeTableView<AttributeModel> treeTableView = new JFXTreeTableView<>();
         treeTableView.setShowRoot(false);
@@ -144,9 +174,4 @@ public class TableView implements Serializable {
         return treeTableView;
     }
 
-    void updateAttributes() {
-        for (AttributeModel a : observablesAttributes) {
-            a.update();
-        }
-    }
 }

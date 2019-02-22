@@ -11,6 +11,7 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 
 /**
+ * A class represent all the simulations done
  *
  * @author Maroine
  */
@@ -20,6 +21,10 @@ public class SimulationEvolution {
     private AreaChart<String, Number> chart;
     int maxNumberOfBlocs = 0;
 
+    /**
+     *
+     * @return the list of all the simulation
+     */
     public List<SQLExecutionSimulation> getExecutionSimulations() {
         return executionSimulations;
 
@@ -29,11 +34,21 @@ public class SimulationEvolution {
         this.chart = chart;
     }
 
+    /**
+     * Add a simulation
+     *
+     * @param e
+     */
     public void addSQLExecutionSimulation(SQLExecutionSimulation e) {
         executionSimulations.add(e);
         fillChart(e);
     }
 
+    /**
+     * Fill the simulation e on the chart evolution
+     *
+     * @param e
+     */
     public void fillChart(SQLExecutionSimulation e) {
         maxNumberOfBlocs = e.getBlocs().size() > maxNumberOfBlocs ? e.getBlocs().size() : maxNumberOfBlocs;
         while (maxNumberOfBlocs > chart.getData().size()) {
@@ -48,6 +63,9 @@ public class SimulationEvolution {
         }
     }
 
+    /**
+     * Reset all the simulation evolution
+     */
     public void reset() {
         executionSimulations.forEach(s -> {
             s.reset();

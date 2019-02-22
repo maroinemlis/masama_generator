@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
+ * A singoton class that defines the all possible type and its references of the
+ * java faker api
  *
  * @author Maroine
  */
@@ -18,6 +20,10 @@ public class Types {
     public TreeMap<String, List<String>> TYPES_MAPPING = new TreeMap();
     private static Types types = null;
 
+    /**
+     *
+     * @return the singloton instance
+     */
     public static Types getInstances() {
         if (types == null) {
             types = new Types();

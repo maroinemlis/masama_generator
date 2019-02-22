@@ -22,6 +22,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 
 /**
+ * A class the represet an SQL simulation of a multiple blocs
  *
  * @author Maroine
  */
@@ -38,6 +39,7 @@ public class SQLExecutionSimulation {
     private final Label pes;
     private AreaChart<Number, Number> chartBlocs;
 
+    @Override
     public SQLExecutionSimulation clone() {
         SQLExecutionSimulation c = new SQLExecutionSimulation(blocsTable, pieChart, pes, chartBlocs);
         c.blocs.addAll(blocs);
@@ -45,10 +47,18 @@ public class SQLExecutionSimulation {
         return c;
     }
 
+    /**
+     *
+     * @return the list observale of the a queriesBloc
+     */
     public ObservableList<QueriesBloc> getBlocs() {
         return blocs;
     }
 
+    /**
+     *
+     * @return the sum of the rates (always less than 100)
+     */
     public int getSumOfRates() {
         return sumOfRates;
     }
@@ -63,16 +73,30 @@ public class SQLExecutionSimulation {
         id = size;
     }
 
+    /**
+     * set the total execution of all the blocs
+     *
+     * @param totalBlocExecution
+     */
     public void setTotalBlocExecution(long totalBlocExecution) {
         this.totalBlocExecution = totalBlocExecution;
     }
 
+    /**
+     * add a new bloc to this simulation
+     *
+     * @param bloc
+     */
     public void addBloc(QueriesBloc bloc) {
         blocs.add(bloc);
         blocsTable.refresh();
         sumOfRates += (int) bloc.getRateColumn().getValue();
     }
 
+    /**
+     *
+     * @return remove all the selected bloc from the table view
+     */
     public int removeBlocs() {
         blocs.removeIf(bloc -> {
             sumOfRates -= (int) bloc.getRateColumn().getValue();
@@ -82,12 +106,22 @@ public class SQLExecutionSimulation {
         return 100 - sumOfRates;
     }
 
+    /**
+     * Clear all the blocs
+     *
+     * @param all
+     */
     public void removeBlocs(boolean all) {
         blocs.clear();
         blocsTable.refresh();
     }
 
-    private List<Integer> generateRandomSequence() {
+    /**
+     *
+     * @return a list of numbers that represent the order execution of the
+     * blocs, its kind of randomness
+     */
+    public List<Integer> generateRandomSequence() {
         List<Integer> arr = new ArrayList<>((int) totalBlocExecution);
         for (int i = 0; i < blocs.size(); i++) {
             long n = (int) (blocs.get(i).getRate() * totalBlocExecution / 100);
@@ -99,6 +133,11 @@ public class SQLExecutionSimulation {
         return arr;
     }
 
+    /**
+     * Start to simulate
+     *
+     * @throws SQLException
+     */
     public void simulate() throws SQLException {
         totalTime = 0;
         for (QueriesBloc bloc : blocs) {
@@ -117,6 +156,9 @@ public class SQLExecutionSimulation {
         fillAreaChart();
     }
 
+    /**
+     * Fill the pie chart with the data
+     */
     public void fillPieChart() {
         pieChart.setTitle("Simulation numéro " + id);
         ObservableList<PieChart.Data> d = pieChart.getData();
@@ -139,6 +181,9 @@ public class SQLExecutionSimulation {
         }
     }
 
+    /**
+     * Fill the evolution chart of this simulation for each bloc
+     */
     public void fillAreaChart() {
         chartBlocs.setTitle("Simulation numéro " + id);
         chartBlocs.getData().clear();
@@ -156,6 +201,9 @@ public class SQLExecutionSimulation {
         }
     }
 
+    /**
+     * reset this simulation
+     */
     public void reset() {
         blocs.forEach(b -> {
             b.reset();
@@ -165,23 +213,26 @@ public class SQLExecutionSimulation {
         id = 0;
     }
 
+    /**
+     *
+     * @return the total time for this simulation
+     */
     public long getTotalTime() {
         return totalTime;
     }
 
-    public long getTotalBlocExecution() {
-        return totalBlocExecution;
-    }
-
+    /**
+     * Show the simulation
+     */
     public void show() {
         blocsTable.setRoot(new RecursiveTreeItem<>(blocs, (recursiveTreeObject) -> recursiveTreeObject.getChildren()));
         blocsTable.refresh();
     }
 
-    void setSumOfRates(int i) {
-        this.sumOfRates = i;
-    }
-
+    /**
+     *
+     * @return the id of the simulation
+     */
     public int getId() {
         return id;
     }

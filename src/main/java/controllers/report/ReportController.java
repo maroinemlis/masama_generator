@@ -27,6 +27,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -34,6 +35,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 /**
  * FXML Controller class
@@ -61,7 +63,13 @@ public class ReportController implements Initializable {
     @FXML
     private PieChart pieChart;
     @FXML
-    private AreaChart<String, Number> chart;
+    private AreaChart<String, Number> chartSim;
+
+    NumberAxis xAxis = new NumberAxis();
+    NumberAxis yAxis = new NumberAxis();
+
+    private AreaChart<Number, Number> chartBlocs
+            = new AreaChart<>(xAxis, yAxis);
     @FXML
     private JFXComboBox<String> historySimulation;
     @FXML
@@ -83,6 +91,8 @@ public class ReportController implements Initializable {
 
     @FXML
     private Pane indexPane;
+    @FXML
+    private VBox chartContainer;
 
     @FXML
     private void onCreateVariable(ActionEvent event) {
@@ -91,6 +101,7 @@ public class ReportController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        chartContainer.getChildren().add(chartBlocs);
         historySimulation.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> {
             int id = Integer.parseInt(n);
             executionSimulation = smulationEvolution.getExecutionSimulations().stream()
@@ -101,8 +112,8 @@ public class ReportController implements Initializable {
             executionSimulation.show();
             executionSimulation.fillPieChart();
         });
-        smulationEvolution = new SimulationEvolution(chart);
-        executionSimulation = new SQLExecutionSimulation(blocsTable, pieChart, pes);
+        smulationEvolution = new SimulationEvolution(chartSim);
+        executionSimulation = new SQLExecutionSimulation(blocsTable, pieChart, pes, chartBlocs);
         createTableView();
         blocList.setEditable(true);
         blocList.setCellFactory(TextFieldListCell.forListView());
@@ -228,16 +239,12 @@ public class ReportController implements Initializable {
     private void onResetEvolution(ActionEvent event) {
         smulationEvolution.reset();
         pieChart.getData().clear();
-        chart.getData().clear();
+        chartSim.getData().clear();
+        chartBlocs.getData().clear();
         blocsTable.refresh();
         executionSimulation.removeBlocs(true);
         rate.setMax(100);
         blocList.getItems().clear();
-
-    }
-
-    @FXML
-    private void onNewSimulation(ActionEvent event) {
     }
 
     @FXML

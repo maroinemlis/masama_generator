@@ -15,8 +15,10 @@ import java.util.Collections;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 
 /**
@@ -34,9 +36,10 @@ public class SQLExecutionSimulation {
     private static int size = 0;
     private int id = 0;
     private final Label pes;
+    private AreaChart<Number, Number> chartBlocs;
 
     public SQLExecutionSimulation clone() {
-        SQLExecutionSimulation c = new SQLExecutionSimulation(blocsTable, pieChart, pes);
+        SQLExecutionSimulation c = new SQLExecutionSimulation(blocsTable, pieChart, pes, chartBlocs);
         c.blocs.addAll(blocs);
         c.show();
         return c;
@@ -50,10 +53,11 @@ public class SQLExecutionSimulation {
         return sumOfRates;
     }
 
-    public SQLExecutionSimulation(JFXTreeTableView<QueriesBloc> blocsTable, PieChart pieChart, Label pes) {
+    public SQLExecutionSimulation(JFXTreeTableView<QueriesBloc> blocsTable, PieChart pieChart, Label pes, AreaChart<Number, Number> chartBlocs) {
         this.blocsTable = blocsTable;
         this.pieChart = pieChart;
         this.pes = pes;
+        this.chartBlocs = chartBlocs;
         show();
         size++;
         id = size;
@@ -99,6 +103,7 @@ public class SQLExecutionSimulation {
         totalTime = 0;
         for (QueriesBloc bloc : blocs) {
             bloc.setTime(0);
+            bloc.getAllTime().clear();
         }
         List<Integer> arr = generateRandomSequence();
         for (int i = 0; i < arr.size(); i++) {
@@ -109,13 +114,14 @@ public class SQLExecutionSimulation {
         }
         blocsTable.refresh();
         fillPieChart();
+        fillAreaChart();
     }
 
     public void fillPieChart() {
         pieChart.setTitle("Simulation numéro " + id);
         ObservableList<PieChart.Data> d = pieChart.getData();
         d.clear();
-        int i = 0;
+        int i = 1;
         for (QueriesBloc bloc : blocs) {
             double rate = bloc.getTime() * 1.0 / totalTime;
             d.add(new Data("Bloc " + i + " = " + (bloc.getTime() * 100) / totalTime + " %", rate));
@@ -129,6 +135,24 @@ public class SQLExecutionSimulation {
             data.getNode().setOnMouseExited((e) -> {
                 pes.setText("");
             });
+            i++;
+        }
+    }
+
+    public void fillAreaChart() {
+        chartBlocs.setTitle("Simulation numéro " + id);
+        chartBlocs.getData().clear();
+        int i = 1;
+        //chartBlocs.getXAxis().setTickLabelGap(totalBlocExecution + 1 / 10);
+        for (QueriesBloc bloc : blocs) {
+
+            XYChart.Series series = new XYChart.Series();
+            series.setName("Bloc " + i);
+            for (int j = 0; j < bloc.getAllTime().size(); j++) {
+                series.getData().add(new XYChart.Data(j, bloc.getAllTime().get(j)));
+            }
+            chartBlocs.getData().addAll(series);
+            i++;
         }
     }
 

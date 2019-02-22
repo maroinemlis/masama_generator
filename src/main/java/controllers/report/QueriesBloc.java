@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import connection.SQLConnection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javafx.scene.control.cell.TextFieldListCell;
 
 /**
@@ -23,6 +24,11 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
     private long time = 0;
     private JFXListView<String> list;
     private final JFXCheckBox updateCheckBox;
+    private ArrayList<Long> allTimes = new ArrayList<>();
+
+    public ArrayList<Long> getAllTime() {
+        return allTimes;
+    }
 
     public QueriesBloc(JFXListView<String> list, JFXSlider rate) {
         this.list = new JFXListView<>();
@@ -45,6 +51,9 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
         }
         long t2 = System.currentTimeMillis();
         time += t2 - t1;
+        //allTimes.add(t2 - t1);
+        allTimes.add(time);
+
     }
 
     public JFXListView getQueriesListColumn() {

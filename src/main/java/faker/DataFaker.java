@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * The object used for generates fake data.
  *
  * @author Maroine
  */
@@ -19,6 +20,10 @@ public abstract class DataFaker implements Serializable {
     protected Attribute attribute;
     protected int nullsNumber = 0;
 
+    /**
+     *
+     * @param attribute
+     */
     public DataFaker(Attribute attribute) {
         this.from = "1";
         this.to = "1000000";
@@ -28,25 +33,55 @@ public abstract class DataFaker implements Serializable {
         this.attribute = attribute;
     }
 
+    /**
+     * Return Integer value in the interval [from , to] using th method
+     * between(from, to).
+     *
+     * @return
+     */
     protected int between() {
         return between(Integer.parseInt(from), Integer.parseInt(to));
     }
 
+    /**
+     * Return Integer value in the interval [from , to].
+     *
+     * @param from minimum value
+     * @param to maximum value
+     * @return integer value between from and to
+     */
     protected int between(int from, int to) {
         return faker.random().nextInt(from, to);
     }
 
+    /**
+     * Return Real(Double) value in the interval [from , to] using th method
+     * betweenReal(from, to).
+     *
+     * @return double value between from and to
+     */
     protected double betweenReal() {
         return betweenReal(Double.parseDouble(from), Double.parseDouble(to));
 
     }
 
+    /**
+     * Return Real(Double) value in the interval [from , to].
+     *
+     * @return double value between from and to
+     */
     protected double betweenReal(double from, double to) {
         return from + Math.random() * to;
     }
 
+    /**
+     * @return value generated
+     */
     protected abstract String generateNewValue();
 
+    /**
+     *
+     */
     protected void generateUniqueValues() {
         int howMuchItRest = howMuchItRest();
         List<String> instances = attribute.getInstances();

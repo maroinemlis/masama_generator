@@ -231,7 +231,11 @@ public class ReportController implements Initializable {
             historySimulation.getItems().add("" + executionSimulation.getId());
         } catch (Exception e) {
             alert.Alerts.error("err");
+<<<<<<< HEAD
+            System.err.println("err :" + e.getMessage());
+=======
             e.printStackTrace();
+>>>>>>> a4db2b31d3053a719a364f8e076c5f7ab46755ee
         }
     }
 

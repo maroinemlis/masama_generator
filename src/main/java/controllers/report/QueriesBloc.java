@@ -47,7 +47,6 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
         long t1 = System.currentTimeMillis();
         for (String query : list.getItems()) {
             SQLConnection.getInstance().execute(query);
-
         }
         long t2 = System.currentTimeMillis();
         time += t2 - t1;

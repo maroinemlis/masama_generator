@@ -1,0 +1,115 @@
+{
+  "A": [
+
+		{
+		  "a1": "uyADCaWzETjTpfzlNozMfrSdixnUCuOaGksrPfKzKwDowJfHSUQfXZxLwMsstUtEXEVJcTqqduISsKvPaVLaqhHDPcDaxgEnXDouwvJKUsrcenRRAeKSqpFGGIVbPhPqtHUGMkWSPrAFakgGLuipNCRncxYuiWzqulPKqQjWvMRzQg",
+		  "a2": 132055
+	}		,
+		{
+		  "a1": "QByGmIbAJRihWgGCEFbMQVFiVSRIKdLCjKajgSsPBKbvypUHnOiEGBfrWwUMFMffZQuTugcMtneGGFtwapWDuKlsqzkrIllyBiaqEAQpfCRozdBrWzXe",
+		  "a2": 199230
+	}		,
+		{
+		  "a1": "wvQaDdgOnwcTdKAlfkujHOEMALlRjcEBgURRqOqhYTGaEDxZRmJmuysyMFjrKYCqpqkbTInnxidgjiyZqGKevwFJFYPSRqWEXswgtHVvXhebZUdgBe",
+		  "a2": 316329
+	}		,
+		{
+		  "a1": "DUwtugQxvbUZPMNfxVdmCOVwMOHUzElXxURAUsdFckvmHNULLsqBjicjjGxZcYWGgBLZbTCYsLqEbRRHoxVwrKUfGIMFwu",
+		  "a2": 276073
+	}		,
+		{
+		  "a1": "hkEvImpwNSUUEPFwRBoBwGaXDlhHwksXlGmmDpO",
+		  "a2": 391164
+	}		,
+		{
+		  "a1": "TnVhAZhfTYoKWIeOSNvgTMtiqCIpQpVDIcEEIpZfextiLCnLsuaLAogWujBfPZhnFxhscVcPGeodZQSKCxXsbUiVgDkJJ",
+		  "a2": 363448
+	}		,
+		{
+		  "a1": "gvLZfjCALyCqlZNXZHncUDbRkIdvvAaNpaSjOvDNHsSvUdragZJLIjAWLAMWRhyilyiuMuaugDefvAfdUwvNJmsNvLZfwRHNeinetxKRWnPwksNqUnIvJzzgaFWcYgnqEcvMKMbmOOpPhZphvsYrUvIzyCLRHecXhKJaoWDmuiyeriyhiWApOVIDbKaq",
+		  "a2": 538294
+	}		,
+		{
+		  "a1": "uczJlxtvaJBEZimRxxuvGdGImGoEGEpbAdeQlkWJMFkaiASwXdVZeDbWjZZaLBjCzoCSYqyduHzbXKwezDseQEUqEeZIsswTfLBYWtfwaURhUCZhjxTcjETRhWXHunfbVmxHdLsagNOxxADnBrX",
+		  "a2": 605997
+	}		,
+		{
+		  "a1": "RaQOfcFxC",
+		  "a2": 688681
+	}		,
+		{
+		  "a1": "UcfHMlNYdcMKpjCVMmFRdkOEwdHYsahwltitMqADjdWfjVSQnp",
+		  "a2": 710505
+	}	],  "B": [
+
+		{
+		  "b1": "uyADCaWzETjTpfzlNozMfrSdixnUCuOaGksrPfKzKwDowJfHSUQfXZxLwMsstUtEXEVJcTqqduISsKvPaVLaqhHDPcDaxgEnXDouwvJKUsrcenRRAeKSqpFGGIVbPhPqtHUGMkWSPrAFakgGLuipNCRncxYuiWzqulPKqQjWvMRzQg",
+		  "b2": 132055
+	}		,
+		{
+		  "b1": "QByGmIbAJRihWgGCEFbMQVFiVSRIKdLCjKajgSsPBKbvypUHnOiEGBfrWwUMFMffZQuTugcMtneGGFtwapWDuKlsqzkrIllyBiaqEAQpfCRozdBrWzXe",
+		  "b2": 199230
+	}		,
+		{
+		  "b1": "wvQaDdgOnwcTdKAlfkujHOEMALlRjcEBgURRqOqhYTGaEDxZRmJmuysyMFjrKYCqpqkbTInnxidgjiyZqGKevwFJFYPSRqWEXswgtHVvXhebZUdgBe",
+		  "b2": 316329
+	}		,
+		{
+		  "b1": "DUwtugQxvbUZPMNfxVdmCOVwMOHUzElXxURAUsdFckvmHNULLsqBjicjjGxZcYWGgBLZbTCYsLqEbRRHoxVwrKUfGIMFwu",
+		  "b2": 276073
+	}		,
+		{
+		  "b1": "hkEvImpwNSUUEPFwRBoBwGaXDlhHwksXlGmmDpO",
+		  "b2": 391164
+	}		,
+		{
+		  "b1": "TnVhAZhfTYoKWIeOSNvgTMtiqCIpQpVDIcEEIpZfextiLCnLsuaLAogWujBfPZhnFxhscVcPGeodZQSKCxXsbUiVgDkJJ",
+		  "b2": 363448
+	}		,
+		{
+		  "b1": "gvLZfjCALyCqlZNXZHncUDbRkIdvvAaNpaSjOvDNHsSvUdragZJLIjAWLAMWRhyilyiuMuaugDefvAfdUwvNJmsNvLZfwRHNeinetxKRWnPwksNqUnIvJzzgaFWcYgnqEcvMKMbmOOpPhZphvsYrUvIzyCLRHecXhKJaoWDmuiyeriyhiWApOVIDbKaq",
+		  "b2": 538294
+	}		,
+		{
+		  "b1": "uczJlxtvaJBEZimRxxuvGdGImGoEGEpbAdeQlkWJMFkaiASwXdVZeDbWjZZaLBjCzoCSYqyduHzbXKwezDseQEUqEeZIsswTfLBYWtfwaURhUCZhjxTcjETRhWXHunfbVmxHdLsagNOxxADnBrX",
+		  "b2": 605997
+	}		,
+		{
+		  "b1": "RaQOfcFxC",
+		  "b2": 688681
+	}		,
+		{
+		  "b1": "UcfHMlNYdcMKpjCVMmFRdkOEwdHYsahwltitMqADjdWfjVSQnp",
+		  "b2": 710505
+	}	],  "C": [
+
+		{
+		  "c1": "uyADCaWzETjTpfzlNozMfrSdixnUCuOaGksrPfKzKwDowJfHSUQfXZxLwMsstUtEXEVJcTqqduISsKvPaVLaqhHDPcDaxgEnXDouwvJKUsrcenRRAeKSqpFGGIVbPhPqtHUGMkWSPrAFakgGLuipNCRncxYuiWzqulPKqQjWvMRzQg"
+	}		,
+		{
+		  "c1": "QByGmIbAJRihWgGCEFbMQVFiVSRIKdLCjKajgSsPBKbvypUHnOiEGBfrWwUMFMffZQuTugcMtneGGFtwapWDuKlsqzkrIllyBiaqEAQpfCRozdBrWzXe"
+	}		,
+		{
+		  "c1": "wvQaDdgOnwcTdKAlfkujHOEMALlRjcEBgURRqOqhYTGaEDxZRmJmuysyMFjrKYCqpqkbTInnxidgjiyZqGKevwFJFYPSRqWEXswgtHVvXhebZUdgBe"
+	}		,
+		{
+		  "c1": "DUwtugQxvbUZPMNfxVdmCOVwMOHUzElXxURAUsdFckvmHNULLsqBjicjjGxZcYWGgBLZbTCYsLqEbRRHoxVwrKUfGIMFwu"
+	}		,
+		{
+		  "c1": "hkEvImpwNSUUEPFwRBoBwGaXDlhHwksXlGmmDpO"
+	}		,
+		{
+		  "c1": "TnVhAZhfTYoKWIeOSNvgTMtiqCIpQpVDIcEEIpZfextiLCnLsuaLAogWujBfPZhnFxhscVcPGeodZQSKCxXsbUiVgDkJJ"
+	}		,
+		{
+		  "c1": "gvLZfjCALyCqlZNXZHncUDbRkIdvvAaNpaSjOvDNHsSvUdragZJLIjAWLAMWRhyilyiuMuaugDefvAfdUwvNJmsNvLZfwRHNeinetxKRWnPwksNqUnIvJzzgaFWcYgnqEcvMKMbmOOpPhZphvsYrUvIzyCLRHecXhKJaoWDmuiyeriyhiWApOVIDbKaq"
+	}		,
+		{
+		  "c1": "uczJlxtvaJBEZimRxxuvGdGImGoEGEpbAdeQlkWJMFkaiASwXdVZeDbWjZZaLBjCzoCSYqyduHzbXKwezDseQEUqEeZIsswTfLBYWtfwaURhUCZhjxTcjETRhWXHunfbVmxHdLsagNOxxADnBrX"
+	}		,
+		{
+		  "c1": "RaQOfcFxC"
+	}		,
+		{
+		  "c1": "UcfHMlNYdcMKpjCVMmFRdkOEwdHYsahwltitMqADjdWfjVSQnp"
+	}	]}

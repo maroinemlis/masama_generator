@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class HelperControllers {
 

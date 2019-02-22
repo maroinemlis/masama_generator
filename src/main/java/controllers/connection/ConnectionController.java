@@ -26,7 +26,7 @@ import javafx.stage.FileChooser;
 /**
  * FXML Controller class
  *
- * @author Maroine
+ * @author Maryem
  */
 public class ConnectionController implements Initializable {
 

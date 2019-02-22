@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import connection.SQLConnection;
 import java.sql.SQLException;
+import javafx.scene.control.cell.TextFieldListCell;
 
 /**
  *
@@ -23,12 +24,26 @@ public class QueriesBloc extends RecursiveTreeObject<QueriesBloc> {
     private JFXListView<String> list;
     private final JFXCheckBox updateCheckBox;
 
-    public QueriesBloc(JFXListView<String> list, JFXSlider rate) {
+    public QueriesBloc(JFXListView<String> list, JFXSlider rate, SQLExecutionSimulation executionSimulation) {
         this.list = new JFXListView<>();
+        this.list.setEditable(true);
+        this.list.setCellFactory(TextFieldListCell.forListView());
         this.list.getItems().addAll(list.getItems());
         this.rate = new JFXSlider();
+        this.rate.setMin(0);
+        this.rate.setMax(100);
         this.rate.setValue(rate.getValue());
         this.updateCheckBox = new JFXCheckBox();
+        /*
+        this.rate.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (executionSimulation.getSumOfRates() - oldValue.intValue() + newValue.intValue() >= 100) {
+                this.rate.setValue(0);
+                this.rate.setDisable(false);
+            } else {
+                executionSimulation.setSumOfRates(executionSimulation.getSumOfRates() - oldValue.intValue() + newValue.intValue());
+            }
+        });*/
+
     }
 
     public void execute() throws SQLException {

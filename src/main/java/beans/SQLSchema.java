@@ -10,6 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pre_condition.PreCondition;
 
+/**
+ *
+ * @author Maroine
+ */
 public class SQLSchema implements Serializable {
 
     private List<Table> tables = new ArrayList<>();

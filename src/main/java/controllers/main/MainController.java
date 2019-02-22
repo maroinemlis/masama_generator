@@ -30,7 +30,7 @@ import utils.FileUtil;
 /**
  * FXML Controller class
  *
- * @author amirouche
+ * @author All - abdenour
  */
 public class MainController implements Initializable {
 
@@ -136,6 +136,7 @@ public class MainController implements Initializable {
     private void onGenerate(ActionEvent event) {
         try {
             SQLSchema.getInstance().startToGenerateInstances();
+            tabPane.getSelectionModel().select(1);
             generationTime.setText(SQLSchema.getInstance().getGenerationTime() + " ms");
             for (TableView t : tables) {
                 t.updateTableViewInserts();
@@ -166,12 +167,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void onConnection(ActionEvent event) {
-        try {
-            HelperControllers.showControlllerOnAlert("connection.fxml", "Connexion");
-            tabPane.getSelectionModel().selectNext();
-        } catch (Exception ex) {
-            Alerts.error(ex.getMessage());
-        }
+        tabPane.getSelectionModel().select(0);
     }
 
     @FXML

@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  *
- * @author tamac
+ * @author Maroine
  */
 public class TaskAsync {
 

@@ -23,7 +23,8 @@ import javafx.scene.control.Label;
 /**
  * FXML Controller class
  *
- * @author asma
+ * @author Asma
+ * @author Saad
  */
 public class OptionController implements Initializable {
 

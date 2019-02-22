@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Maroine
+ */
 * {
     -fx-primary : #424242;
     -fx-secondary :#3fa2c6;
@@ -97,17 +101,27 @@
 
 
 /*Chart Styling*/
-.data0.chart-pie{
-    -fx-pie-color: -fx-secondary;
-    -fx-border-color: derive(-fx-secondary, -30%);
+.chart-plot-background {
+    -fx-background-color:  -fx-primary;
 }
-.data1.chart-pie{
-    -fx-pie-color: derive(-fx-primary, 30%);
-    -fx-border-color: derive(-fx-primary, 30%);
+.chart-vertical-grid-lines {
+    -fx-stroke: -fx-primary;
 }
-.chart-pie-label
+.chart-horizontal-grid-lines {
+    -fx-stroke: -fx-primary;
+}
+.chart-alternative-row-fill {
+    -fx-fill: -fx-primary;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+
+.chart-label
 {
-    -fx-fill : derive(-fx-secondary, -5%);
+    -fx-fill : -fx-primarytext;
+}
+.chart-legend {
+    -fx-background-color:-fx-primary;
 }
 
 

@@ -186,6 +186,26 @@ public final class SQLConnection {
     public void execute(String query) throws SQLException {
         stm.executeUpdate(query);
     }
+    
+    /**
+     * Create and execute sql index request
+     *
+     * @throws SQLException
+     */
+    public void checkIndex() throws SQLException{
+        for(Table table : SQLSchema.getInstance().getTables()){
+            if(!table.getIndex().isEmpty()){
+                String dropQuery = "DROP INDEX IF EXISTS index_"+table.getTableName();
+                String query ="CREATE INDEX index_"+table.getTableName()+" ON "+table.getTableName()+" (";
+                int i=0;
+                for(i=0; i<table.getIndex().size() - 1; i++){
+                    query+=table.getIndex().get(i).getName()+", ";
+                }
+                query+=table.getIndex().get(i).getName()+")";
+                execute(dropQuery);     execute(query);
+            }
+        }
+    }
 
     /**
      * Delete all data in the Database --unused

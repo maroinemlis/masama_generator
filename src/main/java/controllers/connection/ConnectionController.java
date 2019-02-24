@@ -53,6 +53,12 @@ public class ConnectionController implements Initializable {
     @FXML
     private JFXTextField path;
 
+    /**
+     * Initialize the connection Setting to the database
+     *
+     * @param url link of database
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         driver.getItems().setAll("SQLite", "Derby");
@@ -79,6 +85,11 @@ public class ConnectionController implements Initializable {
         }));
     }
 
+    /**
+     * Open the Chooser to select the sql File
+     *
+     * @param event
+     */
     @FXML
     private void onChose(ActionEvent event) {
         try {
@@ -96,6 +107,11 @@ public class ConnectionController implements Initializable {
 
     }
 
+    /**
+     * Initialize the Connection.
+     *
+     * @param event
+     */
     @FXML
     private void onConnect(ActionEvent event) {
         SQLSchema.setInstance(null);
@@ -116,6 +132,11 @@ public class ConnectionController implements Initializable {
         }
     }
 
+    /**
+     * Return the type of Connection.
+     *
+     * @return
+     */
     private String getCnxType() {
         return driver.getSelectionModel().getSelectedItem();
     }

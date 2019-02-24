@@ -26,7 +26,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 
 /**
- * A table view that represent a the view an sql schema table
+ * A table view that represent a Table in sql
  *
  * @author Maroine
  */
@@ -39,10 +39,20 @@ public class TableView implements Serializable {
     private ObservableList<AttributeModel> observablesAttributes = FXCollections.observableArrayList();
     private int howMuchWeDisplayed = 0;
 
+    /**
+     * Return
+     *
+     * @return
+     */
     public List<List<StringProperty>> getLines() {
         return observablesInserts.stream().map(t -> t.getInstances()).collect(Collectors.toList());
     }
 
+    /**
+     * Initialize the Table Instance
+     *
+     * @param table
+     */
     public TableView(Table table) {
         this.table = table;
         tableView = createTableView();
@@ -51,6 +61,7 @@ public class TableView implements Serializable {
     }
 
     /**
+     * Return the table instance of the view
      *
      * @return get the table instance of the view
      */
@@ -59,6 +70,7 @@ public class TableView implements Serializable {
     }
 
     /**
+     * Return JFXTreeTableView instance.
      *
      * @return get the jfx tree table view
      */
@@ -67,8 +79,9 @@ public class TableView implements Serializable {
     }
 
     /**
+     * Return the table inserts view that contains the data
      *
-     * @return get the table inserts view that contains the data
+     * @return the table inserts view that contains the data
      */
     public JFXTreeTableView<InstancesModel> getTableInserts() {
         return insertsView;
@@ -109,9 +122,10 @@ public class TableView implements Serializable {
     }
 
     /**
+     * Create and return a JFXTreeTableView tree table view for the sql inserts
+     * of this table
      *
-     * @return create and retruen a jfx tree table view for the sql inserts of
-     * this table
+     * @return a jfx tree table view for the Sql inserts of this table
      */
     public JFXTreeTableView<InstancesModel> createTableViewInserts() {
         JFXTreeTableView<InstancesModel> treeTableView = new JFXTreeTableView<>();
@@ -134,8 +148,9 @@ public class TableView implements Serializable {
     }
 
     /**
+     * Create and return the table definition as a table view
      *
-     * @return create and return the table defintion as a table view
+     * @return return the table definition as a table view
      */
     public JFXTreeTableView<AttributeModel> createTableView() {
         JFXTreeTableView<AttributeModel> treeTableView = new JFXTreeTableView<>();

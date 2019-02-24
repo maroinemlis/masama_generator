@@ -15,6 +15,11 @@ public class TestClass_amirouche {
     private SQLExecutionSimulation executionSimulation;
 
     public void main() throws Exception {
+        //documantation of package contollers. :
+        //      --main
+        //      --report
+        //      --
+
         //todo: quand on fait une nouvelle connection (dans la interface) il prand tj l'ancien connection
         //todo: replace the code in beans.SQLSchema.resetGeneration() withe the commanted code
         //is unique ne march pas

@@ -8,6 +8,7 @@ package utils;
 import com.github.javafaker.Faker;
 
 /**
+ * One instance of faker object shared in all application
  *
  * @author Maroine
  */

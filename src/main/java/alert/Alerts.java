@@ -22,7 +22,7 @@ import javafx.scene.layout.Pane;
 public class Alerts {
 
     /**
-     * Show a red message error in the centre bottom of screen for few moment
+     * Show a red message error in the center bottom of screen for few moment
      *
      * @param message the message to show
      */
@@ -39,7 +39,7 @@ public class Alerts {
     }
 
     /**
-     * Show a Green message in the centre bottom of screen for few moment
+     * Show a Green message in the center bottom of screen for few moment
      *
      * @param message the message to show
      */

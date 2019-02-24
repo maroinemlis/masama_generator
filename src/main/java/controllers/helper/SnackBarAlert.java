@@ -62,7 +62,7 @@ public class SnackBarAlert {
     }
 
     /**
-     * Demande a new snackbar
+     * Demand a new snackbar
      *
      * @param center
      * @param title

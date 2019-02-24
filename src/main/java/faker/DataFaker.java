@@ -21,6 +21,7 @@ public abstract class DataFaker implements Serializable {
     protected int nullsNumber = 0;
 
     /**
+     * Initialize the default settings for the attribute
      *
      * @param attribute
      */
@@ -123,6 +124,8 @@ public abstract class DataFaker implements Serializable {
     }
 
     /**
+     * Return How many instance (value to generate) it rest to complete the
+     * generation
      *
      * @return how many instance it rest to complete the generation
      */
@@ -130,10 +133,23 @@ public abstract class DataFaker implements Serializable {
         return attribute.getTable().getHowMuch() - attribute.getInstances().size();
     }
 
+    /**
+     * Set the Regex to use in generation
+     *
+     * @param regex
+     */
     public void setRegex(String regex) {
         this.regex = regex;
     }
 
+    /**
+     * Set the setting for the attribute
+     *
+     * @param from minimum value
+     * @param to maximum value
+     * @param generatorType the type of data to generate
+     * @param specificType
+     */
     public void setConfiguration(String from, String to, String generatorType, String specificType) {
         this.from = from;
         this.to = to;
@@ -141,22 +157,48 @@ public abstract class DataFaker implements Serializable {
         this.specificType = specificType;
     }
 
+    /**
+     * Return the minimum value of intervale
+     *
+     * @return
+     */
     public String getFrom() {
         return from;
     }
 
+    /**
+     * Return the maximum value of intervale
+     *
+     * @return
+     */
     public String getTo() {
         return to;
     }
 
+    /**
+     * Set the minimum value of intervale
+     *
+     * @param from
+     */
     public void setFrom(String from) {
         this.from = from;
     }
 
+    /**
+     * Set the maximum value of intervale
+     *
+     * @param to
+     */
     public void setTo(String to) {
         this.to = to;
     }
 
+    /**
+     *
+     * @param from
+     * @param to
+     * @param nullsRate
+     */
     public void setFromToNullsRate(String from, String to, int nullsRate) {
         this.from = from;
         this.to = to;

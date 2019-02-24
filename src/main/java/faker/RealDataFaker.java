@@ -9,6 +9,7 @@ import beans.Attribute;
 import beans.SQLSchema;
 
 /**
+ * Generate values for Double type.
  *
  * @author Maroine
  */
@@ -18,6 +19,9 @@ public class RealDataFaker extends DataFaker {
         super(att);
     }
 
+    /**
+     * Generate Unique Double value
+     */
     @Override
     protected void generateUniqueValues() {
         if (SQLSchema.getInstance().isPreData()) {
@@ -38,6 +42,11 @@ public class RealDataFaker extends DataFaker {
 
     }
 
+    /**
+     * Generate Double value
+     *
+     * @return
+     */
     @Override
     protected String generateNewValue() {
         return betweenReal() + "";

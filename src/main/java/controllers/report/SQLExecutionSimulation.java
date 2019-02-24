@@ -7,6 +7,7 @@ package controllers.report;
 
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
+import connection.SQLConnection;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.sql.SQLException;
@@ -140,6 +141,7 @@ public class SQLExecutionSimulation {
      */
     public void simulate() throws SQLException {
         totalTime = 0;
+        SQLConnection.getInstance().checkIndex();
         for (QueriesBloc bloc : blocs) {
             bloc.setTime(0);
             bloc.getAllTime().clear();

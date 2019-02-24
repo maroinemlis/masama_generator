@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * An object represent a table.
@@ -109,6 +110,15 @@ public final class Table implements Serializable {
             }
         }
         return null;
+    }
+    
+    /**
+     * Get List of Attributes index. All index of specific Table
+     *
+     * @return List of Index of this Table
+     */
+    public List<Attribute> getIndex(){
+        return attributes.stream().filter(a -> a.isIndex()).collect(Collectors.toList());
     }
 
     /**

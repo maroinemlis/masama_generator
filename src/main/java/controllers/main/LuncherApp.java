@@ -15,10 +15,20 @@ public class LuncherApp extends Application {
 
     private static Stage primaryStage;
 
+    /**
+     * Return the main Stage
+     *
+     * @return
+     */
     public static Stage getPrimaryStage() {
         return primaryStage;
     }
 
+    /**
+     * The first method to run when launching the application
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
@@ -36,6 +46,11 @@ public class LuncherApp extends Application {
         startMainInterface();
     }
 
+    /**
+     * Initialize and Start the main interface
+     *
+     * @throws Exception
+     */
     public void startMainInterface() throws Exception {
         HelperControllers.setClassResources(this);
         root = HelperControllers.getNodeController("main.fxml");

@@ -13,6 +13,11 @@ import java.util.concurrent.CompletableFuture;
  */
 public class TaskAsync {
 
+    /**
+     *
+     *
+     * @param c
+     */
     public TaskAsync(Runnable c) {
         CompletableFuture<Void> future = CompletableFuture.runAsync(c);
     }

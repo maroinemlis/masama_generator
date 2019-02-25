@@ -45,6 +45,11 @@ public class OptionController implements Initializable {
     @FXML
     private JFXSlider nullsRate;
 
+    /**
+     * Update the Setting of generation Algorithm
+     *
+     * @param event
+     */
     @FXML
     private void onUpdate(ActionEvent event) {
         try {
@@ -83,6 +88,11 @@ public class OptionController implements Initializable {
         }
     }
 
+    /**
+     *
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         howMuch.textProperty().addListener((ob, oldVal, newVal) -> {

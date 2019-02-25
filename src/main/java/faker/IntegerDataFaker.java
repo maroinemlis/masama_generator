@@ -9,6 +9,7 @@ import beans.Attribute;
 import beans.SQLSchema;
 
 /**
+ * Generate values for Digital type.
  *
  * @author Maroine
  */
@@ -18,6 +19,9 @@ public class IntegerDataFaker extends DataFaker {
         super(attribute);
     }
 
+    /**
+     * Generate unique values of digital numbers
+     */
     @Override
     protected void generateUniqueValues() {
         if (SQLSchema.getInstance().isPreData()) {
@@ -36,6 +40,11 @@ public class IntegerDataFaker extends DataFaker {
         }
     }
 
+    /**
+     * generate digital value
+     *
+     * @return
+     */
     @Override
     protected String generateNewValue() {
         return between() + "";

@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 /**
@@ -21,6 +22,11 @@ public class PreCondition extends Exception {
 
     private static PreCondition singlotonPreCondition = null;
 
+    /**
+     * Return instance of PreCondition
+     *
+     * @return
+     */
     public static PreCondition getInstance() {
         if (singlotonPreCondition == null) {
             singlotonPreCondition = new PreCondition();
@@ -28,14 +34,33 @@ public class PreCondition extends Exception {
         return singlotonPreCondition;
     }
 
+    /**
+     * Return the message error
+     *
+     * @return message error
+     */
     public String getErrorMessage() {
         return errorMessage;
     }
 
+    /**
+     * Return True if it is possible to generate values with this setting else
+     * return false.
+     *
+     * @return True if it is possible to generate values.
+     * @throws ParseException
+     * @throws SQLException
+     */
     public boolean checkSQLSchema() throws ParseException, SQLException {
         return isAttrCirculairesEquals() && isForingAndKPrimeryChecked() && isIntervalesChecked();
     }
 
+    /**
+     * Check if the all number of value to generate for attributes in the same
+     * circular shema are equivalent.
+     *
+     * @return
+     */
     private boolean isAttrCirculairesEquals() {
         List<Attribute> circularAttributs = new ArrayList<>();
         for (Table table : SQLSchema.getInstance().getTables()) {
@@ -53,6 +78,13 @@ public class PreCondition extends Exception {
         return true;
     }
 
+    /**
+     * Check if howMuch value is equivalent in circular schema
+     *
+     * @param attribute
+     * @param _this
+     * @return
+     */
     private boolean isHowMuchChecked(Attribute attribute, Attribute _this) {
         boolean result = true;
         for (Attribute reference : attribute.getReferences()) {
@@ -68,6 +100,12 @@ public class PreCondition extends Exception {
         return result;
     }
 
+    /**
+     * Check if the unique foreign key attributes have less value then the
+     * referenced attribute.
+     *
+     * @return
+     */
     private boolean isForingAndKPrimeryChecked() {
         for (Table table : SQLSchema.getInstance().getTables()) {
             for (Attribute attribute : table.getAttributes()) {
@@ -85,6 +123,12 @@ public class PreCondition extends Exception {
         return true;
     }
 
+    /**
+     * Check if it is possible to generate enough value in the given interval.
+     *
+     * @return true if it is possible to generate enough value
+     * @throws ParseException
+     */
     private boolean isIntervalesChecked() throws ParseException {
         for (Table table : SQLSchema.getInstance().getTables()) {
             for (Attribute attribute : table.getAttributes()) {
@@ -121,11 +165,11 @@ public class PreCondition extends Exception {
     }
 
     /**
-     * return true if it is possible to generate unique values TODO ): Bug :
-     * check this only if the son is unique or primary key
+     * Check if it is possible to generate enough Integer value in the given
+     * interval.
      *
-     * @param attribute
-     * @return boolean
+     * @param attribute the attribute to check
+     * @return true if it is possible to generate enough Integer value
      */
     private boolean checkInt(Attribute attribute) {
         double from = Integer.valueOf(attribute.getDataFaker().getFrom());
@@ -138,8 +182,11 @@ public class PreCondition extends Exception {
     }
 
     /**
-     * @param attribute, nbrRowsToGenerate
-     * @return boolean
+     * Check if it is possible to generate enough Date value in the given
+     * interval.
+     *
+     * @param attribute
+     * @return true if it is possible to generate enough Date value
      */
     private boolean checkDate(Attribute attribute) throws ParseException {
         String from = attribute.getDataFaker().getFrom();
@@ -153,22 +200,25 @@ public class PreCondition extends Exception {
     }
 
     /**
-     * @param from ,to
-     * @return Integer
+     * Return number of day between to dates
+     *
+     * @param from the first date
+     * @param to second date
+     * @return number of day between to dates
+     * @throws DateTimeParseException if the text cannot be parsed.
      */
-    private long numberDaysBetween(String from, String to) throws ParseException {
+    private long numberDaysBetween(String from, String to) throws DateTimeParseException {
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
         return DAYS.between(fromDate, toDate);
     }
 
     /**
-     * to generate the method check if the attribute.getDataFaker().getTO() is
-     * superior then attribute.getDataFaker().getFrom() || example : 4
-     * caractères || A à Z = 26 Lettres donc 26*26*26*26
+     * Check if it is possible to generate enough value in the given interval.
      *
-     * @param attribute ,nbrRowsToGenerate
-     * @return boolean
+     * @param attribute
+     * @return true if it is possible to generate enough value in the given
+     * interval.
      */
     private boolean checkString(Attribute attribute) {
         boolean result = true;

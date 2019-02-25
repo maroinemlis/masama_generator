@@ -8,7 +8,6 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import beans.Attribute;
 import beans.Table;
-import com.jfoenix.controls.JFXListView;
 import faker.Types;
 import java.time.LocalDate;
 import java.util.List;

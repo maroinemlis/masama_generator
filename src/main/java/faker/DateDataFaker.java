@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * Generate values for Date type
  *
  * @author Maroine
  */
@@ -19,12 +20,22 @@ public class DateDataFaker extends DataFaker {
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
 
+    /**
+     * Initialize the default minimum and maximum value of date.
+     *
+     * @param att
+     */
     public DateDataFaker(Attribute att) {
         super(att);
         this.from = "2015-01-01";
         this.to = "2018-05-01";
     }
 
+    /**
+     * Generate date value between min(from) and max(to).
+     *
+     * @return
+     */
     @Override
     public String generateNewValue() {
         Date date = null;

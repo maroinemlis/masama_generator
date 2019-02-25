@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * A singoton class that defines the all possible type and its references of the
- * java faker api
+ * A singloton class that defines the all possible type and its references of
+ * the java faker API
  *
  * @author Maroine
  */
@@ -31,6 +31,9 @@ public class Types {
         return types;
     }
 
+    /**
+     * The all Types in the library java faker API
+     */
     private Types() {
         TYPES_MAPPING.put("'system", Arrays.asList("'system"));
         TYPES_MAPPING.put("address", Arrays.asList("buildingNumber", "city", "cityName",

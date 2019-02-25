@@ -3,10 +3,10 @@
  * @author Maroine
  */
 * {
-    -fx-primary : #424242;
+    -fx-primary : white;
     -fx-secondary :#3fa2c6;
-    -fx-primarytext : #B2B2B2;
-    -fx-secondarytext : white;
+    -fx-primarytext : black;
+    -fx-secondarytext : grey;
     -fx-blue: #1976D2;
     -fx-red: #FF0000;
     -fx-color-1:#1976D2;
@@ -41,7 +41,7 @@
 }
 
 .button:hover{
-    -fx-background-color: derive(-fx-primary, 20%);
+    -fx-background-color: derive(-fx-secondarytext, 20%);
     -fx-text-fill: -fx-primary;
 }
 

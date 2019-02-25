@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import javafx.scene.control.Control;
 
 /**
+ * A class repsent a model for an attribute to be shown in jfx tree table
  *
  * @author Maroine
  */
@@ -38,6 +39,11 @@ public class AttributeModel extends RecursiveTreeObject<AttributeModel> {
     String generatorTypeString = "'system";
     String specificTypeString = "'system";
 
+    /**
+     * set the attribute view modification disable
+     *
+     * @param selected
+     */
     public void setDisable(boolean selected) {
         if (!attribute.getReferences().isEmpty()) {
             return;

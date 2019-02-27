@@ -34,8 +34,8 @@ public class IntegerDataFaker extends DataFaker {
             int a = 0;
             for (int i = 0; i < attribute.getTable().getHowMuch(); i++) {
                 a = between(1, gap);
-                j += a;
                 attribute.getInstances().add((j + a) + "");
+                j += a;
             }
         }
     }

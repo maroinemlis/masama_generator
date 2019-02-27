@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import pre_condition.PreCondition;
 
 /**
+ * A singloton pattern class to present an SQL schema
  *
  * @author Maroine
  */
@@ -69,10 +70,8 @@ public class SQLSchema implements Serializable {
     }
 
     /**
-     * Initializes a newly created SQLSchema if it is not already initialized.
      *
-     * @return the newly instance if singletonSQLSchema is null else return the
-     * old instance.
+     * @return the singloton instance.
      */
     public static SQLSchema getInstance() {
         if (singletonSQLSchema == null) {

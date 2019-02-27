@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An object represent a attribute.
+ * An object represent an attribut for a table.
  *
  * @author Maroine
  */

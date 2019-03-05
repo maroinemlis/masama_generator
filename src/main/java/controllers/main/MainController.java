@@ -25,6 +25,7 @@ import java.io.IOException;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import pre_condition.PreCondition;
 import utils.FileUtil;
 
 /**
@@ -155,7 +156,7 @@ public class MainController implements Initializable {
             SQLConnection.getInstance().writeToDataBase();
             Alerts.done("Génération effectuée");
         } catch (Exception e) {
-            Alerts.error(e.getMessage());
+            Alerts.error(PreCondition.getInstance().getErrorMessage());
         }
     }
 

@@ -33,6 +33,7 @@ public final class SQLConnection {
     private static DatabaseMetaData bdMetaDate;
     private static SQLConnection singlotonSQLConnection = null;
     private Map<String, String[]> driverMapping;
+    private static String file = null;
 
     /**
      * Initialize for each database the name of Driver on name of jdbc
@@ -87,6 +88,7 @@ public final class SQLConnection {
      */
     private String readFile(String fileUrl, Charset encoding)
             throws IOException {
+        this.file = fileUrl;
         byte[] encoded = Files.readAllBytes(Paths.get(fileUrl));
         return new String(encoded, encoding);
     }
@@ -214,12 +216,14 @@ public final class SQLConnection {
      *
      * @throws SQLException
      */
-    private static void deleteData() throws SQLException {
+    private static void deleteData() throws Exception {
         List<Table> tables = SQLSchema.getInstance().getTables();
         for (Table table : tables) {
-            String insert = "DELETE FROM " + table.getTableName();
+            String insert = "DROP TABLE " + table.getTableName();
             getInstance().execute(insert);
         }
+        SQLConnection.getInstance().executeSQLFile(file);
+
     }
 
     /**
@@ -227,7 +231,7 @@ public final class SQLConnection {
      *
      * @throws SQLException
      */
-    public static void writeToDataBase() throws SQLException {
+    public static void writeToDataBase() throws Exception {
         deleteData();
         List<Table> tables = SQLSchema.getInstance().getTables();
         for (Table table : tables) {

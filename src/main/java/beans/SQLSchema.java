@@ -215,7 +215,7 @@ public class SQLSchema implements Serializable {
         if (SQLSchema.getInstance().getTables().isEmpty()) {
             throw new Exception("Connexion non établie");
         }
-        if (PreCondition.getInstance().checkSQLSchema()) {
+        if (PreCondition.getInstance().checkSQLSchema() == false) {
             throw new Exception(PreCondition.getInstance().getErrorMessage());
         }
         long start = System.currentTimeMillis();

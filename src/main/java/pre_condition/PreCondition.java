@@ -111,10 +111,9 @@ public class PreCondition extends Exception {
             for (Attribute attribute : table.getAttributes()) {
                 for (Attribute reference : attribute.getReferences()) {
                     if ((attribute.isPrimary() || attribute.isUnique())
-                            && attribute.getTable().getHowMuch() < reference.getTable().getHowMuch()) {
+                            && attribute.getTable().getHowMuch() > reference.getTable().getHowMuch()) {
                         errorMessage = "Le nombre de génération de " + reference + " ne peut pas étre plus que "
                                 + attribute + " car il s'agit d'un atrribut unique ou primary";
-
                         return false;
                     }
                 }
@@ -130,38 +129,41 @@ public class PreCondition extends Exception {
      * @throws ParseException
      */
     private boolean isIntervalesChecked() throws ParseException {
+        Attribute a = null;
         for (Table table : SQLSchema.getInstance().getTables()) {
             for (Attribute attribute : table.getAttributes()) {
+                a = attribute;
                 if (attribute.isUnique() || attribute.isPrimary()) {
-                    boolean checked = true;
                     switch (attribute.getDataType()) {
                         case "INT":
                         case "INTEGER":
                         case "NUMBER":
                             if (!checkInt(attribute)) {
-                                checked = false;
+                                errorMessage = "L'interval des valeurs de " + a
+                                        + " est insuffusant pour générer " + a.getTable().getHowMuch();
+                                return false;
                             }
                             break;
                         case "DATE":
                             if (!checkDate(attribute)) {
-                                checked = false;
+                                errorMessage = "L'interval des valeurs de " + a
+                                        + " est insuffusant pour générer " + a.getTable().getHowMuch();
+                                return false;
+
                             }
                             break;
                         case "TEXT":
                             if (!checkString(attribute)) {
-                                checked = false;
+                                errorMessage = "L'interval des valeurs de " + a
+                                        + " est insuffusant pour générer " + a.getTable().getHowMuch();
+                                return false;
                             }
-                            break;
-                    }
-                    if (checked) {
-                        errorMessage = "L'interval des valeurs de " + attribute
-                                + " est insuffusant pour générer " + attribute.getTable().getHowMuch();
-                        return false;
                     }
                 }
             }
         }
         return true;
+
     }
 
     /**
@@ -172,8 +174,8 @@ public class PreCondition extends Exception {
      * @return true if it is possible to generate enough Integer value
      */
     private boolean checkInt(Attribute attribute) {
-        double from = Integer.valueOf(attribute.getDataFaker().getFrom());
-        double to = Integer.valueOf(attribute.getDataFaker().getTo());
+        int from = Integer.parseInt(attribute.getDataFaker().getFrom());
+        int to = Integer.parseInt(attribute.getDataFaker().getTo());
         if (attribute.getTable().getHowMuch() <= (to - from)) {
             return true;
         } else {

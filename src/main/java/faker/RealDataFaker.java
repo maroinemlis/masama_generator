@@ -24,22 +24,19 @@ public class RealDataFaker extends DataFaker {
      */
     @Override
     protected void generateUniqueValues() {
-        if (SQLSchema.getInstance().isPreData()) {
-            super.generateUniqueValues();
-        } else {
-            double from = Double.parseDouble(this.from);
-            double to = Double.parseDouble(this.to);
-            double gap = (to - from) / attribute.getTable().getHowMuch();
-            double j = from;
-            double a = 0;
-            for (int i = 0; i < attribute.getTable().getHowMuch(); i++) {
-                do {
-                    a = betweenReal(0, gap);
-                } while (a != 0);
-                j += a;
-            }
+        //super.generateUniqueValues();
+        double from = Double.parseDouble(this.from);
+        double to = Double.parseDouble(this.to);
+        double gap = (to - from) / attribute.getTable().getHowMuch();
+        double j = from;
+        double a = 0;
+        for (int i = 0; i < attribute.getTable().getHowMuch(); i++) {
+            do {
+                a = betweenReal(0, gap);
+            } while (a == 0);
+            j += a;
+            attribute.getInstances().add(j + "");
         }
-
     }
 
     /**

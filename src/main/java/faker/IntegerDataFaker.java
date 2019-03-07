@@ -30,11 +30,12 @@ public class IntegerDataFaker extends DataFaker {
             int from = Integer.parseInt(this.from);
             int to = Integer.parseInt(this.to);
             int gap = (to - from) / attribute.getTable().getHowMuch();
+            gap++;
             int j = from;
             int a = 0;
             for (int i = 0; i < attribute.getTable().getHowMuch(); i++) {
+                attribute.getInstances().add(j + "");
                 a = between(1, gap);
-                attribute.getInstances().add((j + a) + "");
                 j += a;
             }
         }
